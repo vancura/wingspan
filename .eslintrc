@@ -1,0 +1,14 @@
+{
+    "globals": {
+        "require": false,
+        "document": false,
+        "window": false,
+        "game": true,
+        "signals": true,
+        "Cocoon": false,
+        "Phaser": false,
+        "BootState": true,
+        "GameState": true,
+        "PreloadState": true
+    }
+}
