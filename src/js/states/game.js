@@ -9,13 +9,18 @@
     };
 
 
+    GameState.GRAVITY = 50;
+    GameState.ROTATION_STEP = 100;
+    GameState.TRAIL_DISTANCE = 10;
+
+
     GameState.prototype = {
 
 
         init: function () {
             this.physics.startSystem(Phaser.Physics.BOX2D);
             this.physics.box2d.setBoundsToWorld();
-            //this.physics.box2d.gravity.y = 200;
+            this.physics.box2d.gravity.y = GameState.GRAVITY;
             this.physics.box2d.restitution = 0.4;
         },
 
@@ -26,6 +31,7 @@
 
             this.plane = this.add.sprite(this.world.centerX, this.world.centerY, "game", "plane.png");
             this.plane.anchor.set(0.5, 0.5);
+            this.plane.scale.set(0.5);
             this.plane.angle = 90;
 
             this.physics.box2d.enable(this.plane);
@@ -50,13 +56,13 @@
         update: function () {
             if (this.plane) {
                 if (this.leftButton.isDown && !this.rightButton.isDown) {
-                    this.plane.body.rotateLeft(50);
+                    this.plane.body.rotateLeft(GameState.ROTATION_STEP);
                 }
                 else if (!this.leftButton.isDown && this.rightButton.isDown) {
-                    this.plane.body.rotateRight(50);
+                    this.plane.body.rotateRight(GameState.ROTATION_STEP);
                 }
 
-                this.plane.body.thrust(200);
+                this.plane.body.thrust(150);
 
                 var pos = this.getTrailsPosition();
 
@@ -75,12 +81,12 @@
         getTrailsPosition: function () {
             var d = this.plane.rotation * -1 - 90 * (Math.PI / 180);
 
-            var mx1 = Math.sin(d) * -20 + this.plane.x;
-            var my1 = Math.cos(d) * -20 + this.plane.y;
-            var mx2 = Math.sin(d) * 20 + this.plane.x;
-            var my2 = Math.cos(d) * 20 + this.plane.y;
+            var x1 = Math.sin(d) * -GameState.TRAIL_DISTANCE + this.plane.x;
+            var y1 = Math.cos(d) * -GameState.TRAIL_DISTANCE + this.plane.y;
+            var x2 = Math.sin(d) * GameState.TRAIL_DISTANCE + this.plane.x;
+            var y2 = Math.cos(d) * GameState.TRAIL_DISTANCE + this.plane.y;
 
-            return [mx1, my1, mx2, my2];
+            return [x1, y1, x2, y2];
         }
 
 
