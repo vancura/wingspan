@@ -10,13 +10,13 @@
 
 
     GameState.WORLD_GRAVITY = 20;
-    GameState.WORLD_OVERFLOW = -20;
+    GameState.WORLD_OVERFLOW = -10;
     GameState.PLANE_THRUST = 90;
     GameState.PLANE_LINEAR_DAMPING = 1;
     GameState.PLANE_ANGULAR_DAMPING_FACTOR = 20;
     GameState.PLANE_KEYBOARD_ROTATION_STEP = 70;
     GameState.PLANE_MOUSE_ROTATION_STEP = 100;
-    GameState.PLANE_TRAIL_DISTANCE = 5;
+    GameState.PLANE_MAX_TRAIL_DISTANCE = 15;
     GameState.PLANE_CONTROL_DEGREE_STEP = 0.02;
 
 
@@ -105,8 +105,8 @@
                     this.plane.body.thrust(GameState.PLANE_THRUST);
                 }
 
-                // draw trails
-                this.drawTrails();
+                // draw trails, calculate the distance multiplier
+                this.drawTrails(1 - Math.abs(rot / 70));
 
                 // switch the plane frame based on the rotation
                 if (Math.abs(rot) > 0) {
@@ -122,15 +122,17 @@
 
         /**
          * Get trail positions.
+         * @param multiplier Distance multiplier (used when rotating)
          * @return Array of trail positions [x1, y1, x2, y2]
          */
-        getTrailPositions: function () {
+        getTrailPositions: function (multiplier) {
             var d = this.plane.rotation * -1 - 90 * (Math.PI / 180);
+            var m = (typeof multiplier === "undefined") ? 1 : multiplier;
 
-            var x1 = Math.sin(d) * -GameState.PLANE_TRAIL_DISTANCE + this.plane.x;
-            var y1 = Math.cos(d) * -GameState.PLANE_TRAIL_DISTANCE + this.plane.y;
-            var x2 = Math.sin(d) * GameState.PLANE_TRAIL_DISTANCE + this.plane.x;
-            var y2 = Math.cos(d) * GameState.PLANE_TRAIL_DISTANCE + this.plane.y;
+            var x1 = Math.sin(d) * (GameState.PLANE_MAX_TRAIL_DISTANCE * -m) + this.plane.x;
+            var y1 = Math.cos(d) * (GameState.PLANE_MAX_TRAIL_DISTANCE * -m) + this.plane.y;
+            var x2 = Math.sin(d) * (GameState.PLANE_MAX_TRAIL_DISTANCE * m) + this.plane.x;
+            var y2 = Math.cos(d) * (GameState.PLANE_MAX_TRAIL_DISTANCE * m) + this.plane.y;
 
             return [x1, y1, x2, y2];
         },
@@ -185,9 +187,10 @@
 
         /**
          * Draw trails.
+         * @param multiplier Distance multiplier (used when rotating)
          */
-        drawTrails: function () {
-            var pos = this.getTrailPositions();
+        drawTrails: function (multiplier) {
+            var pos = this.getTrailPositions(multiplier);
 
             this.trailGraphics1.lineStyle(1, 0xFF0000, 0.5);
             this.trailGraphics1.lineTo(pos[0], pos[1]);
