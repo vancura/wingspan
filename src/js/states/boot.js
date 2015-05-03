@@ -14,7 +14,7 @@
         init: function () {
             this.game.renderer.renderSession.roundPixels = false;
 
-            this.stage.backgroundColor = 0x000000;
+            this.stage.backgroundColor = 0xf6f6f6;
             this.stage.smoothed = true;
             this.stage.disableVisibilityChange = false;
 

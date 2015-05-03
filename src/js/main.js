@@ -11,12 +11,12 @@
 
     if (Cocoon.nativeAvailable) {
         Cocoon.Utils.setAntialias(false);
-        Cocoon.Device.setOrientation(Cocoon.Device.Orientations.PORTRAIT);
+        Cocoon.Device.setOrientation(Cocoon.Device.Orientations.LANDSCAPE);
     }
 
 
     game = new Phaser.Game({
-        width: 1024,
+        width: "100%",
         height: 768,
         renderer: Phaser.AUTO,
         parent: document.getElementById("app"),
