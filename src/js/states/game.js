@@ -9,9 +9,9 @@
     };
 
 
-    GameState.WORLD_GRAVITY = 40;
+    GameState.WORLD_GRAVITY = 45;
     GameState.WORLD_OVERFLOW = -10;
-    GameState.PLANE_MAX_THRUST = 90;
+    GameState.PLANE_MAX_THRUST = 110;
     GameState.PLANE_THRUST_MULTIPLIER_UP = 1.9; // thrust multiplier when thrust button down
     GameState.PLANE_THRUST_MULTIPLIER_DOWN = 0.5; // thrust multiplier when backpedal button down
     GameState.PLANE_THRUST_MULTIPLIER_NONE = 0.995; // thrust step when both thrust and backpedal buttons released
@@ -123,7 +123,7 @@
 
                 // apply current thrust
                 this.currentPlaneThrust = Phaser.Math.clamp(this.currentPlaneThrust, 0.1, GameState.PLANE_MAX_THRUST);
-                console.log(this.currentPlaneThrust);
+                //console.log(this.currentPlaneThrust);
                 this.plane.body.thrust(this.currentPlaneThrust);
 
                 // draw trails, calculate the distance multiplier
