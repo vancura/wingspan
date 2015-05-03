@@ -10,6 +10,7 @@
 
 
     GameState.WORLD_GRAVITY = 20;
+    GameState.WORLD_OVERFLOW = -20;
     GameState.PLANE_THRUST = 90;
     GameState.PLANE_LINEAR_DAMPING = 1;
     GameState.PLANE_ANGULAR_DAMPING_FACTOR = 20;
@@ -33,7 +34,7 @@
             this.planeControlDegree = 0;
 
             this.physics.startSystem(Phaser.Physics.BOX2D);
-            this.physics.box2d.setBoundsToWorld();
+            this.physics.box2d.setBoundsToWorld(true, true, false, true);
             this.physics.box2d.gravity.y = GameState.WORLD_GRAVITY;
             this.physics.box2d.restitution = 0.4;
         },
@@ -134,14 +135,17 @@
          * Create the plane.
          */
         createPlane: function () {
-            this.plane = this.add.sprite(this.world.centerX, this.world.centerY, "game", "plane.png");
+            var startX = this.world.centerX;
+            var startY = GameState.WORLD_OVERFLOW;
+
+            this.plane = this.add.sprite(startX, startY, "game", "plane.png");
             this.plane.anchor.set(0.5, 0.5);
             this.plane.scale.set(0.5);
-            this.plane.angle = 90;
 
             this.physics.box2d.enable(this.plane);
 
             this.plane.body.setCircle(this.plane.width / 2);
+            this.plane.body.angle = 180;
 
             this.plane.body.linearDamping = GameState.PLANE_LINEAR_DAMPING;
         },
