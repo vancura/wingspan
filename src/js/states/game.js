@@ -110,7 +110,9 @@
 
                 // switch the plane frame based on the rotation
                 if (Math.abs(rot) > 0) {
-                    this.plane.frameName = "plane1/p" + (Math.round(Math.abs(rot) / 15) + 1) + ".png";
+                    var frameName = "plane1/p" + (Math.round(Math.abs(rot) / 10) + 1) + ".png";
+                    // console.log(frameName);
+                    this.plane.frameName = frameName;
                 }
             }
         },
