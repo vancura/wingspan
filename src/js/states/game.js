@@ -43,31 +43,9 @@
          * Create.
          */
         create: function () {
-            this.trailGraphics1 = this.add.graphics(0, 0);
-            this.trailGraphics2 = this.add.graphics(0, 0);
-
-            this.plane = this.add.sprite(this.world.centerX, this.world.centerY, "game", "plane.png");
-            this.plane.anchor.set(0.5, 0.5);
-            this.plane.scale.set(0.5);
-            this.plane.angle = 90;
-
-            this.physics.box2d.enable(this.plane);
-
-            this.plane.body.setCircle(this.plane.width / 2);
-
-            this.plane.body.linearDamping = GameState.PLANE_LINEAR_DAMPING;
-
-            var pos = this.getTrailsPosition();
-
-            this.trailGraphics1.moveTo(pos[0], pos[1]);
-            this.trailGraphics2.moveTo(pos[2], pos[3]);
-
-            this.leftButton = this.input.keyboard.addKey(Phaser.Keyboard.A);
-            this.rightButton = this.input.keyboard.addKey(Phaser.Keyboard.D);
-            this.thrustButton = this.input.keyboard.addKey(Phaser.Keyboard.W);
-
-            this.input.onDown.add(this.onDown, this);
-            this.input.onUp.add(this.onUp, this);
+            this.createPlane();
+            this.createTrails();
+            this.createControls();
         },
 
 
@@ -140,7 +118,7 @@
          * Get trail positions.
          * @return Array of trail positions [x1, y1, x2, y2]
          */
-        getTrailsPosition: function () {
+        getTrailPositions: function () {
             var d = this.plane.rotation * -1 - 90 * (Math.PI / 180);
 
             var x1 = Math.sin(d) * -GameState.PLANE_TRAIL_DISTANCE + this.plane.x;
@@ -153,10 +131,54 @@
 
 
         /**
+         * Create the plane.
+         */
+        createPlane: function () {
+            this.plane = this.add.sprite(this.world.centerX, this.world.centerY, "game", "plane.png");
+            this.plane.anchor.set(0.5, 0.5);
+            this.plane.scale.set(0.5);
+            this.plane.angle = 90;
+
+            this.physics.box2d.enable(this.plane);
+
+            this.plane.body.setCircle(this.plane.width / 2);
+
+            this.plane.body.linearDamping = GameState.PLANE_LINEAR_DAMPING;
+        },
+
+
+        /**
+         * Create trails.
+         */
+        createTrails: function () {
+            var pos = this.getTrailPositions();
+
+            this.trailGraphics1 = this.add.graphics(0, 0);
+            this.trailGraphics2 = this.add.graphics(0, 0);
+
+            this.trailGraphics1.moveTo(pos[0], pos[1]);
+            this.trailGraphics2.moveTo(pos[2], pos[3]);
+        },
+
+
+        /**
+         * Create controls.
+         */
+        createControls: function () {
+            this.leftButton = this.input.keyboard.addKey(Phaser.Keyboard.A);
+            this.rightButton = this.input.keyboard.addKey(Phaser.Keyboard.D);
+            this.thrustButton = this.input.keyboard.addKey(Phaser.Keyboard.W);
+
+            this.input.onDown.add(this.onDown, this);
+            this.input.onUp.add(this.onUp, this);
+        },
+
+
+        /**
          * Draw trails.
          */
         drawTrails: function () {
-            var pos = this.getTrailsPosition();
+            var pos = this.getTrailPositions();
 
             this.trailGraphics1.lineStyle(1, 0xFF0000, 0.5);
             this.trailGraphics1.lineTo(pos[0], pos[1]);
