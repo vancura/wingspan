@@ -19,6 +19,12 @@
 
 
         create: function () {
+            this.plane = this.add.sprite(this.world.centerX, this.world.centerY, "game", "plane.png");
+            this.plane.anchor.set(0.5, 0.5);
+
+            this.physics.box2d.enable(this.plane);
+
+            this.plane.body.setCircle(this.plane.width / 2.8);
         },
 
 
