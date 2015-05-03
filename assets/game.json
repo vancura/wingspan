@@ -1,20 +1,60 @@
 {"frames": {
 
-"plane.png":
+"plane1/p1.png":
 {
-	"frame": {"x":2,"y":2,"w":59,"h":45},
+	"frame": {"x":2,"y":2,"w":64,"h":44},
 	"rotated": false,
-	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":59,"h":45},
-	"sourceSize": {"w":59,"h":45}
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":11,"w":64,"h":44},
+	"sourceSize": {"w":64,"h":64}
+},
+"plane1/p2.png":
+{
+	"frame": {"x":68,"y":2,"w":54,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":11,"w":54,"h":44},
+	"sourceSize": {"w":64,"h":64}
+},
+"plane1/p3.png":
+{
+	"frame": {"x":124,"y":2,"w":41,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":11,"w":41,"h":44},
+	"sourceSize": {"w":64,"h":64}
+},
+"plane1/p4.png":
+{
+	"frame": {"x":167,"y":2,"w":20,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":22,"y":11,"w":20,"h":44},
+	"sourceSize": {"w":64,"h":64}
+},
+"plane1/p5.png":
+{
+	"frame": {"x":207,"y":2,"w":14,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":25,"y":11,"w":14,"h":44},
+	"sourceSize": {"w":64,"h":64}
+},
+"plane1/p6.png":
+{
+	"frame": {"x":189,"y":2,"w":16,"h":44},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":25,"y":11,"w":16,"h":44},
+	"sourceSize": {"w":64,"h":64}
 }},
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker",
 	"version": "1.0",
 	"image": "game.png",
 	"format": "RGBA8888",
-	"size": {"w":63,"h":49},
+	"size": {"w":223,"h":48},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:77112983fe374bee0985b6f858e0fb17:2df99f95ebf551a019e6c72a965f15ed:fc2835210f98bae8e8c1b7f0a84c9321$"
+	"smartupdate": "$TexturePacker:SmartUpdate:9e98439958ea75fd48042724ec972010:beb065f601b3097b577fe652a5245e36:fc2835210f98bae8e8c1b7f0a84c9321$"
 }
 }
