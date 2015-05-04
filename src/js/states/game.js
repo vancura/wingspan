@@ -51,9 +51,11 @@
          * Create.
          */
         create: function () {
+            this.createControls();
+            this.createGroundBack();
             this.createPlane();
             this.createTrails();
-            this.createControls();
+            this.createGroundFront();
         },
 
 
@@ -169,6 +171,7 @@
             var startY = GameState.WORLD_OVERFLOW;
 
             this.plane = this.add.sprite(startX, startY, "game", "plane1/p1.png");
+            this.plane.name = "plane";
             this.plane.anchor.set(0.5, 0.5);
             this.plane.scale.set(0.5);
 
@@ -190,6 +193,9 @@
             this.trailGraphics1 = this.add.graphics(0, 0);
             this.trailGraphics2 = this.add.graphics(0, 0);
 
+            this.trailGraphics1.name = "trail1";
+            this.trailGraphics2.name = "trail2";
+
             this.trailGraphics1.moveTo(pos[0], pos[1]);
             this.trailGraphics2.moveTo(pos[2], pos[3]);
         },
@@ -206,6 +212,68 @@
 
             this.input.onDown.add(this.onDown, this);
             this.input.onUp.add(this.onUp, this);
+        },
+
+
+        /**
+         * Create ground in back.
+         */
+        createGroundBack: function () {
+            this.groundGroup4 = this.add.group();
+            this.groundGroup4.name = "groundGroup4";
+
+            this.groundGroup3 = this.add.group();
+            this.groundGroup3.name = "groundGroup2";
+
+            this.groundGroup2 = this.add.group();
+            this.groundGroup2.name = "groundGroup2";
+
+            var x = 0;
+            while (x < this.world.width) {
+                var l2 = this.groundGroup2.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+                var l3 = this.groundGroup3.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+                var l4 = this.groundGroup4.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+
+                l2.tint = 0x252d33;
+                l3.tint = 0x4b565f;
+                l4.tint = 0x8d9499;
+
+                x += 256;
+            }
+
+            var g2 = this.groundGroup2.create(0, 0, "game", "ground-grad.png");
+            var g3 = this.groundGroup3.create(0, 0, "game", "ground-grad.png");
+            var g4 = this.groundGroup4.create(0, 0, "game", "ground-grad.png");
+
+            g2.width = g3.width = g4.width = this.world.width;
+
+            g2.alpha = 0.3;
+            g3.alpha = 0.5;
+            g4.alpha = 0.7;
+
+            this.groundGroup2.y = this.world.height - 100 - 30;
+            this.groundGroup3.y = this.world.height - 100 - 50;
+            this.groundGroup4.y = this.world.height - 100 - 65;
+        },
+
+
+        /**
+         * Create ground in front.
+         */
+        createGroundFront: function () {
+            this.groundGroup1 = this.add.group();
+            this.groundGroup1.name = "groundGroup1";
+
+            var x = 0;
+            while (x < this.world.width) {
+                var l1 = this.groundGroup1.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+
+                l1.tint = 0x000000;
+
+                x += 256;
+            }
+
+            this.groundGroup1.y = this.world.height - 100;
         },
 
 
