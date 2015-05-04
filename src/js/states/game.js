@@ -55,6 +55,7 @@
             this.createGroundBack();
             this.createPlane();
             this.createTrails();
+            this.createFire();
             this.createGroundFront();
         },
 
@@ -177,10 +178,21 @@
 
             this.physics.box2d.enable(this.plane);
 
-            this.plane.body.setCircle(this.plane.width / 2);
+            this.fireSensor = this.plane.body.setCircle(this.plane.width / 2);
+
+            this.fireSensor.SetSensor(true);
+            this.plane.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
+
             this.plane.body.angle = 180;
 
             this.plane.body.linearDamping = GameState.PLANE_LINEAR_DAMPING;
+        },
+
+
+        /**
+         * Restart after crash.
+         */
+        restart: function () {
         },
 
 
@@ -198,6 +210,16 @@
 
             this.trailGraphics1.moveTo(pos[0], pos[1]);
             this.trailGraphics2.moveTo(pos[2], pos[3]);
+        },
+
+
+        /**
+         * Create fire.
+         */
+        createFire: function () {
+            this.fire = this.add.sprite(0, this.world.height, "game", "fire.png");
+            this.fire.anchor.set(0.5, 1);
+            this.fire.alpha = 0;
         },
 
 
@@ -311,6 +333,21 @@
          */
         onUp: function () {
             this.mouseStep = 0;
+        },
+
+
+        /**
+         * Plane crash event handler.
+         */
+        onPlaneCrashed: function (e) {
+            this.fire.x = e.x;
+            this.fire.alpha = 1;
+
+            var tween = this.add.tween(this.fire);
+            tween.to({alpha: 0}, 1000);
+            tween.start();
+
+            this.restart();
         }
 
 
