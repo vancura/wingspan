@@ -56,6 +56,7 @@
             this.createPlane();
             this.createTrails();
             this.createFire();
+            this.createWeapon();
             this.createGroundFront();
         },
 
@@ -64,7 +65,7 @@
          * Render.
          */
         render: function () {
-            //this.game.debug.box2dWorld();
+            this.game.debug.box2dWorld();
 
             //if (this.plane) {
             //this.debug.bodyInfo(this.plane, this.plane.x + 20, this.plane.y + 20);
@@ -138,6 +139,9 @@
                     //console.log(frameName);
                     this.plane.frameName = frameName;
                 }
+
+                // shoot
+                this.weapon.fire(this.plane);
             }
         },
 
@@ -178,10 +182,10 @@
 
             this.physics.box2d.enable(this.plane);
 
-            this.fireSensor = this.plane.body.setCircle(this.plane.width / 2);
+            // this.fireSensor = this.plane.body.setCircle(this.plane.width / 2);
 
-            this.fireSensor.SetSensor(true);
-            this.plane.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
+            // this.fireSensor.SetSensor(true);
+            // this.plane.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
 
             this.plane.body.angle = 180;
 
@@ -220,6 +224,14 @@
             this.fire = this.add.sprite(0, this.world.height, "game", "fire.png");
             this.fire.anchor.set(0.5, 1);
             this.fire.alpha = 0;
+        },
+
+
+        /**
+         * Create weapon.
+         */
+        createWeapon: function () {
+            this.weapon = new Weapon(this.game);
         },
 
 

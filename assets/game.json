@@ -2,11 +2,11 @@
 
 "bullet.png":
 {
-	"frame": {"x":1020,"y":2,"w":1,"h":7},
+	"frame": {"x":1014,"y":48,"w":7,"h":1},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":1,"h":7},
-	"sourceSize": {"w":1,"h":7}
+	"spriteSourceSize": {"x":0,"y":0,"w":7,"h":1},
+	"sourceSize": {"w":7,"h":1}
 },
 "fire.png":
 {
@@ -159,6 +159,6 @@
 	"format": "RGBA8888",
 	"size": {"w":1024,"h":1024},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:607fb7ddcf081866c955c77253542ecb:b7960c6a1fb73b02988daabcb9e26626:fc2835210f98bae8e8c1b7f0a84c9321$"
+	"smartupdate": "$TexturePacker:SmartUpdate:af088063504494d907d3e9910c39c2ae:a786f80e2c97f6a1fe1cb046c0d9db92:fc2835210f98bae8e8c1b7f0a84c9321$"
 }
 }

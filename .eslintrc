@@ -9,6 +9,8 @@
         "Phaser": false,
         "BootState": true,
         "GameState": true,
-        "PreloadState": true
+        "PreloadState": true,
+        "Bullet": true,
+        "Weapon": true
     }
 }
