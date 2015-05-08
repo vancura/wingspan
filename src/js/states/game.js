@@ -83,8 +83,7 @@
                 if (this.leftButton.isDown && !this.rightButton.isDown) {
                     // rotating left, increase rotation degree until it's +1
                     this.currentPlaneControlDegree += GameState.PLANE_CONTROL_DEGREE_STEP;
-                }
-                else if (!this.leftButton.isDown && this.rightButton.isDown) {
+                } else if (!this.leftButton.isDown && this.rightButton.isDown) {
                     // rotating right, decrease rotation degree until it's -1
                     this.currentPlaneControlDegree -= GameState.PLANE_CONTROL_DEGREE_STEP;
                 }
@@ -114,12 +113,10 @@
                 if (this.thrustButton.isDown) {
                     // thrust button down, thrust up
                     this.currentPlaneThrust *= GameState.PLANE_THRUST_MULTIPLIER_UP;
-                }
-                else if (this.backpedalButton.isDown) {
+                } else if (this.backpedalButton.isDown) {
                     // backpedal button down, thrust down
                     this.currentPlaneThrust *= GameState.PLANE_THRUST_MULTIPLIER_DOWN;
-                }
-                else {
+                } else {
                     // thrust button released and no backpedal down,
                     // slowly decrease thrust
                     this.currentPlaneThrust *= GameState.PLANE_THRUST_MULTIPLIER_NONE;
@@ -333,8 +330,7 @@
         onDown: function (e) {
             if (e.x < this.world.centerX) {
                 this.mouseStep = GameState.PLANE_MOUSE_ROTATION_STEP;
-            }
-            else {
+            } else {
                 this.mouseStep = -GameState.PLANE_MOUSE_ROTATION_STEP;
             }
         },
@@ -356,6 +352,7 @@
             this.fire.alpha = 1;
 
             var tween = this.add.tween(this.fire);
+
             tween.to({alpha: 0}, 1000);
             tween.start();
 
@@ -367,4 +364,3 @@
 
 
 }());
-

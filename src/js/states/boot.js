@@ -11,6 +11,10 @@
 
     BootState.prototype = {
 
+
+        /**
+         * Init.
+         */
         init: function () {
             this.game.renderer.renderSession.roundPixels = false;
 
@@ -28,6 +32,10 @@
         },
 
 
+        /**
+         * Create.
+         * @return {[type]} [description]
+         */
         create: function () {
             this.game.state.start("Preload");
         }
@@ -37,4 +45,3 @@
 
 
 }());
-

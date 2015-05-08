@@ -12,6 +12,9 @@
     PreloadState.prototype = {
 
 
+        /**
+         * Preload.
+         */
         preload: function () {
             // CodePen
             // this.load.baseURL = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1397/';
@@ -21,6 +24,9 @@
         },
 
 
+        /**
+         * Create.
+         */
         create: function () {
             this.game.state.start("Game");
         }
@@ -30,4 +36,3 @@
 
 
 }());
-

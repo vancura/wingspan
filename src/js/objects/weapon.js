@@ -1,10 +1,16 @@
 /**
- * Shots.
+ * Weapon.
  */
 (function () {
     "use strict";
 
 
+    /**
+     * Weapon constructor.
+     * @param game Game reference
+     * @return The weapon
+     * @constructor
+     */
     Weapon = function (game) {
         Phaser.Group.call(this, game, game.world, "Shot", false, true, Phaser.Physics.ARCADE);
 
@@ -25,6 +31,10 @@
     Weapon.prototype.constructor = Weapon;
 
 
+    /**
+     * Fire with the weapon.
+     * @param source Sprite source
+     */
     Weapon.prototype.fire = function (source) {
         if (this.game.time.time >= game.rnd.between(this.nextFire - 10, this.nextFire)) {
             var d = this.flip ? game.rnd.between(-7, -3) : game.rnd.between(3, 7);
@@ -42,4 +52,3 @@
 
 
 }());
-

@@ -5,6 +5,11 @@
     "use strict";
 
 
+    /**
+     * Bullet constructor.
+     * @param game Game reference
+     * @constructor
+     */
     Bullet = function (game) {
         Phaser.Sprite.call(this, game, 0, 0, "game", "bullet.png");
 
@@ -22,6 +27,13 @@
     Bullet.prototype.constructor = Bullet;
 
 
+    /**
+     * Fire the bullet.
+     * @param x X position
+     * @param y Y position
+     * @param angle Angle in degrees
+     * @param speed Speed
+     */
     Bullet.prototype.fire = function (x, y, angle, speed) {
         this.reset(x, y);
         this.scale.set(1);
@@ -35,6 +47,13 @@
     };
 
 
+    // PRIVATE
+    // -------
+
+
+    /**
+     * Update.
+     */
     Bullet.prototype.update = function () {
         if (this.tracking) {
             this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);
@@ -48,4 +67,3 @@
 
 
 }());
-

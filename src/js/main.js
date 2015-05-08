@@ -3,23 +3,25 @@
 
 
     // TODO: Move signals?
+    /*
     signals = {
         onGoingLeft: new Phaser.Signal(),
         onGoingRight: new Phaser.Signal()
     };
+    */
 
 
     var w, h;
 
-
     if (Cocoon.nativeAvailable) {
+        // Cocoon
         Cocoon.Utils.setAntialias(false);
         Cocoon.Device.setOrientation(Cocoon.Device.Orientations.LANDSCAPE);
 
         w = window.innerWidth * window.devicePixelRatio;
         h = window.innerHeight * window.devicePixelRatio;
-    }
-    else {
+    } else {
+        // Everything else
         w = window.innerWidth;
         h = window.innerHeight / 1.2;
     }
