@@ -11,6 +11,7 @@
         "GameState": true,
         "PreloadState": true,
         "Bullet": true,
-        "Weapon": true
+        "Weapon": true,
+        "Plane": true
     }
 }

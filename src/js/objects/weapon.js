@@ -8,7 +8,6 @@
     /**
      * Weapon constructor.
      * @param game Game reference
-     * @return The weapon
      * @constructor
      */
     Weapon = function (game) {
@@ -22,8 +21,6 @@
         for (var i = 0; i < 64 * 4; i++) {
             this.add(new Bullet(game), true);
         }
-
-        return this;
     };
 
 
