@@ -2,13 +2,9 @@
     "use strict";
 
 
-    // TODO: Move signals?
-    /*
     signals = {
-        onGoingLeft: new Phaser.Signal(),
-        onGoingRight: new Phaser.Signal()
+        onCrashBottom: new Phaser.Signal()
     };
-    */
 
 
     var w, h;

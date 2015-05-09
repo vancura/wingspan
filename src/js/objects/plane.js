@@ -176,9 +176,20 @@
 
     /**
      * Plane crash event handler.
+     * @param e This body
+     * @param f The body that was contacted
+     * @param g The fixture in this body
+     * @param h The fixture in the other body that was contacted
+     * @param i A boolean to say whether it was a begin or end event
+     * @param j The contact object itself
      */
-    Plane.prototype.onPlaneCrashed = function () {
-        // TODO: Signal
+    Plane.prototype.onPlaneCrashed = function (e, f, g, h, i, j) {
+        // console.log(e, f, g, h, i, j);
+
+        if (this.y > this.game.world.height - 100) {
+            // crash on the bottom
+            signals.onCrashBottom.dispatch();
+        }
     };
 
 

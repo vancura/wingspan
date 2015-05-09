@@ -35,9 +35,8 @@
             this.createTrails();
             this.createFire();
             this.createGroundFront();
-
-            this.originalWidth = this.world.width;
-            this.game.world.setBounds(0, 0, this.originalWidth * 1.2, this.world.height);
+            this.createParallax();
+            this.createSignals();
         },
 
 
@@ -270,6 +269,23 @@
 
 
         /**
+         * Create the parallax effect.
+         */
+        createParallax: function () {
+            this.originalWidth = this.world.width;
+            this.game.world.setBounds(0, 0, this.originalWidth * 1.2, this.world.height);
+        },
+
+
+        /**
+         * Create signals.
+         */
+        createSignals: function() {
+            signals.onCrashBottom.add(this.onPlaneCrashed, this);
+        },
+
+
+        /**
          * Draw trails.
          * @param plane Plane to draw a trail for
          * @param multiplier Distance multiplier (used when rotating)
@@ -291,8 +307,8 @@
         /**
          * Plane crash event handler.
          */
-        onPlaneCrashed: function (e) {
-            this.fire.x = e.x;
+        onPlaneCrashed: function () {
+            this.fire.x = this.planeList[0].x;
             this.fire.alpha = 1;
 
             var tween = this.add.tween(this.fire);
