@@ -25,6 +25,8 @@
             this.physics.box2d.setBoundsToWorld(true, true, false, true);
             this.physics.box2d.gravity.y = GameState.WORLD_GRAVITY;
             this.physics.box2d.restitution = 0.4;
+
+            this.planeList = [];
         },
 
 
@@ -45,7 +47,7 @@
          * Render.
          */
         render: function () {
-            //this.game.debug.box2dWorld();
+            this.game.debug.box2dWorld();
         },
 
 
@@ -53,42 +55,31 @@
          * Update.
          */
         update: function () {
-            if (this.plane1) {
-                if (this.leftButtonPlane1.isDown && !this.rightButtonPlane1.isDown) {
-                    this.plane1.rotateLeft();
-                } else if (!this.leftButtonPlane1.isDown && this.rightButtonPlane1.isDown) {
-                    this.plane1.rotateRight();
+            for (var a = 0; a < this.planeList.length; a++) {
+                var plane = this.planeList[a];
+
+                // turn sideways
+                if (this.leftButton.isDown && !this.rightButton.isDown) {
+                    plane.rotateLeft();
+                } else if (!this.leftButton.isDown && this.rightButton.isDown) {
+                    plane.rotateRight();
                 }
 
-                if (this.thrustButtonPlane1.isDown) {
-                    this.plane1.thrust();
-                } else if (this.backpedalButtonPlane1.isDown) {
-                    this.plane1.backPedal();
+                // thrust or backpedal
+                // after a while revert to original power
+                if (this.thrustButton.isDown) {
+                    plane.thrust();
+                } else if (this.backpedalButton.isDown) {
+                    plane.backPedal();
                 } else {
-                    this.plane1.leave();
+                    plane.leave();
                 }
 
                 // draw trails, calculate the distance multiplier
-                this.drawTrails(this.plane1, 1 - Math.abs(this.plane1.degree / 70));
-            }
-
-            if (this.plane2) {
-                if (this.leftButtonPlane2.isDown && !this.rightButtonPlane2.isDown) {
-                    this.plane2.rotateLeft();
-                } else if (!this.leftButtonPlane2.isDown && this.rightButtonPlane2.isDown) {
-                    this.plane2.rotateRight();
+                if(a === 0) {
+                    // TODO: More trails
+                    this.drawTrails(plane, 1 - Math.abs(plane.degree / 70), 0xFF0000);
                 }
-
-                if (this.thrustButtonPlane2.isDown) {
-                    this.plane2.thrust();
-                } else if (this.backpedalButtonPlane2.isDown) {
-                    this.plane2.backPedal();
-                } else {
-                    this.plane2.leave();
-                }
-
-                // draw trails, calculate the distance multiplier
-                this.drawTrails(this.plane2, 1 - Math.abs(this.plane2.degree / 70));
             }
         },
 
@@ -121,13 +112,16 @@
          */
         createPlanes: function () {
             var startX = this.world.centerX;
-            var startY = GameState.WORLD_OVERFLOW;
+            var startY = GameState.WORLD_OVERFLOW + 100;
 
-            this.plane1 = new Plane(this.game, startX * 0.8, startY);
-            this.plane2 = new Plane(this.game, startX * 1.2, startY);
+            for (var a = 0; a < 2; a++) {
+                var x = startX + (a - 1) * 200;
+                var plane = new Plane(this.game, x, startY);
 
-            this.add.existing(this.plane1);
-            this.add.existing(this.plane2);
+                this.add.existing(plane);
+
+                this.planeList.push(plane);
+            }
         },
 
 
@@ -142,23 +136,16 @@
          * Create trails.
          */
         createTrails: function () {
-            var pos1 = this.getTrailPositions(this.plane1);
-            var pos2 = this.getTrailPositions(this.plane2);
+            var pos = this.getTrailPositions(this.planeList[0]); // TODO: More lines
 
-            this.trailGraphicsPlane1_1 = this.add.graphics(0, 0);
-            this.trailGraphicsPlane1_2 = this.add.graphics(0, 0);
-            this.trailGraphicsPlane2_1 = this.add.graphics(0, 0);
-            this.trailGraphicsPlane2_2 = this.add.graphics(0, 0);
+            this.trailGraphicsLeft = this.add.graphics(0, 0);
+            this.trailGraphicsRight = this.add.graphics(0, 0);
 
-            this.trailGraphicsPlane1_1.name = "trail1_1";
-            this.trailGraphicsPlane1_2.name = "trail1_2";
-            this.trailGraphicsPlane2_1.name = "trail2_1";
-            this.trailGraphicsPlane2_2.name = "trail2_2";
+            this.trailGraphicsLeft.name = "trailLeft";
+            this.trailGraphicsRight.name = "trailRight";
 
-            this.trailGraphicsPlane1_1.moveTo(pos1[0], pos1[1]);
-            this.trailGraphicsPlane1_2.moveTo(pos1[2], pos1[3]);
-            this.trailGraphicsPlane2_1.moveTo(pos2[0], pos2[1]);
-            this.trailGraphicsPlane2_2.moveTo(pos2[2], pos2[3]);
+            this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
+            this.trailGraphicsRight.moveTo(pos[2], pos[3]);
         },
 
 
@@ -176,15 +163,10 @@
          * Create controls.
          */
         createControls: function () {
-            this.leftButtonPlane1 = this.input.keyboard.addKey(Phaser.Keyboard.A);
-            this.rightButtonPlane1 = this.input.keyboard.addKey(Phaser.Keyboard.D);
-            this.thrustButtonPlane1 = this.input.keyboard.addKey(Phaser.Keyboard.W);
-            this.backpedalButtonPlane1 = this.input.keyboard.addKey(Phaser.Keyboard.S);
-
-            this.leftButtonPlane2 = this.input.keyboard.addKey(Phaser.Keyboard.J);
-            this.rightButtonPlane2 = this.input.keyboard.addKey(Phaser.Keyboard.L);
-            this.thrustButtonPlane2 = this.input.keyboard.addKey(Phaser.Keyboard.I);
-            this.backpedalButtonPlane2 = this.input.keyboard.addKey(Phaser.Keyboard.K);
+            this.leftButton = this.input.keyboard.addKey(Phaser.Keyboard.A);
+            this.rightButton = this.input.keyboard.addKey(Phaser.Keyboard.D);
+            this.thrustButton = this.input.keyboard.addKey(Phaser.Keyboard.W);
+            this.backpedalButton = this.input.keyboard.addKey(Phaser.Keyboard.S);
         },
 
 
@@ -252,25 +234,18 @@
 
         /**
          * Draw trails.
+         * @param plane Plane to draw a trail for
          * @param multiplier Distance multiplier (used when rotating)
+         * @param color Color of the trail
          */
-        drawTrails: function (plane, multiplier) {
+        drawTrails: function (plane, multiplier, color) {
             var pos = this.getTrailPositions(plane, multiplier);
 
-            if (plane === this.plane1) {
-                this.trailGraphicsPlane1_1.lineStyle(1, 0xFF0000, 0.5);
-                this.trailGraphicsPlane1_1.lineTo(pos[0], pos[1]);
+            this.trailGraphicsLeft.lineStyle(1, color, 0.5);
+            this.trailGraphicsLeft.lineTo(pos[0], pos[1]);
 
-                this.trailGraphicsPlane1_2.lineStyle(1, 0xFF0000, 0.5);
-                this.trailGraphicsPlane1_2.lineTo(pos[2], pos[3]);
-            }
-            else {
-                this.trailGraphicsPlane2_1.lineStyle(1, 0x0000FF, 0.5);
-                this.trailGraphicsPlane2_1.lineTo(pos[0], pos[1]);
-
-                this.trailGraphicsPlane2_2.lineStyle(1, 0x0000FF, 0.5);
-                this.trailGraphicsPlane2_2.lineTo(pos[2], pos[3]);
-            }
+            this.trailGraphicsRight.lineStyle(1, color, 0.5);
+            this.trailGraphicsRight.lineTo(pos[2], pos[3]);
         },
 
 
