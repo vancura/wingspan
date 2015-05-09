@@ -163,6 +163,7 @@
             this.fire = this.add.sprite(0, this.world.height, "game", "fire.png");
             this.fire.anchor.set(0.5, 1);
             this.fire.alpha = 0;
+            this.fire.name = "fire";
         },
 
 
@@ -179,13 +180,16 @@
 
         /**
          * Create ground in back.
+         * It needs to be called separately to allow proper z-sorting.
+         * TODO: Humanization
+         * TODO: Parallax
          */
         createGroundBack: function () {
             this.groundGroup4 = this.add.group();
             this.groundGroup4.name = "groundGroup4";
 
             this.groundGroup3 = this.add.group();
-            this.groundGroup3.name = "groundGroup2";
+            this.groundGroup3.name = "groundGroup3";
 
             this.groundGroup2 = this.add.group();
             this.groundGroup2.name = "groundGroup2";
@@ -221,6 +225,9 @@
 
         /**
          * Create ground in front.
+         * It needs to be called separately to allow proper z-sorting.
+         * TODO: Humanization
+         * TODO: Parallax
          */
         createGroundFront: function () {
             this.groundGroup1 = this.add.group();

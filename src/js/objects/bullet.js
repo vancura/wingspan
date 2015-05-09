@@ -19,6 +19,7 @@
         this.exists = false;
         this.tracking = false;
         this.scaleSpeed = 0;
+        this.name = "bullet";
     };
 
 

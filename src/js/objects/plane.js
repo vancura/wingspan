@@ -96,7 +96,7 @@
             // store the degree
             this.degree = rot;
 
-            // shoot
+            // weapon
             if (Settings.IS_PLANE_WEAPON_ENABLED) {
                 this.weapon.fire(this);
             }

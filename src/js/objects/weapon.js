@@ -11,7 +11,7 @@
      * @constructor
      */
     Weapon = function (game) {
-        Phaser.Group.call(this, game, game.world, "Shot", false, true, Phaser.Physics.ARCADE);
+        Phaser.Group.call(this, game, game.world, "weapon", false, true, Phaser.Physics.ARCADE);
 
         this.isInited = false;
         this.nextFire = 0;
