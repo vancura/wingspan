@@ -35,6 +35,9 @@
             this.createTrails();
             this.createFire();
             this.createGroundFront();
+
+            this.originalWidth = this.world.width;
+            this.game.world.setBounds(0, 0, this.originalWidth * 1.2, this.world.height);
         },
 
 
@@ -45,6 +48,8 @@
             if (Settings.IS_BOX2D_DEBUG_ENABLED) {
                 this.game.debug.box2dWorld();
             }
+
+            this.game.debug.cameraInfo(game.camera, 500, 32);
         },
 
 
@@ -80,13 +85,15 @@
 
                 // calculate parallax,
                 // only for the first plane
-                if(a === 0) {
+                if (a === 0) {
                     var p = 1 / (this.world.width / plane.x);
 
                     this.groundGroup1.x = Math.round((this.world.width - this.groundGroup1.width) * p);
                     this.groundGroup2.x = Math.round((this.world.width - this.groundGroup2.width) * p);
                     this.groundGroup3.x = Math.round((this.world.width - this.groundGroup3.width) * p);
                     this.groundGroup4.x = Math.round((this.world.width - this.groundGroup4.width) * p);
+
+                    this.game.camera.x = (this.world.width - this.originalWidth) * p;
                 }
             }
         },
