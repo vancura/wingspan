@@ -19,17 +19,6 @@
     };
 
 
-    Plane.IS_WEAPON_ENABLED = false;
-
-    Plane.MAX_THRUST = 110;
-    Plane.THRUST_MULTIPLIER_UP = 1.9; // thrust multiplier when thrust button down
-    Plane.THRUST_MULTIPLIER_DOWN = 0.5; // thrust multiplier when backpedal button down
-    Plane.THRUST_MULTIPLIER_NONE = 0.995; // thrust step when both thrust and backpedal buttons released
-    Plane.ANGULAR_DAMPING_FACTOR = 20;
-    Plane.KEYBOARD_ROTATION_STEP = 70;
-    Plane.CONTROL_DEGREE_STEP = 0.02;
-
-
     Plane.prototype = Object.create(Phaser.Sprite.prototype);
     Plane.prototype.constructor = Plane;
 
@@ -57,7 +46,7 @@
         this.body.linearDamping = 1;
 
         // create a weapon
-        if (Plane.IS_WEAPON_ENABLED) {
+        if (Settings.IS_PLANE_WEAPON_ENABLED) {
             this.weapon = new Weapon(game);
             this.weapon.init();
         }
@@ -86,7 +75,7 @@
             }
 
             // calculate new rotation
-            var rot = Plane.KEYBOARD_ROTATION_STEP * this.currentControlDegree;
+            var rot = Settings.PLANE_KEYBOARD_ROTATION_STEP * this.currentControlDegree;
 
             // tweak based on plane speed
             // the faster plane goes the more difficult is to control it
@@ -94,7 +83,7 @@
             var vel = Math.sqrt(this.body.velocity.x * this.body.velocity.x + this.body.velocity.y * this.body.velocity.y);
 
             // apply the angular damping from velocity calculated above
-            this.body.angularDamping = vel / Plane.ANGULAR_DAMPING_FACTOR / this.currentControlDegree;
+            this.body.angularDamping = vel / Settings.PLANE_ANGULAR_DAMPING_FACTOR / this.currentControlDegree;
 
             // and finally rotate the plane
             this.body.rotateLeft(rot);
@@ -108,7 +97,7 @@
             this.degree = rot;
 
             // shoot
-            if (Plane.IS_WEAPON_ENABLED) {
+            if (Settings.IS_PLANE_WEAPON_ENABLED) {
                 this.weapon.fire(this);
             }
         }
@@ -120,7 +109,7 @@
      */
     Plane.prototype.rotateLeft = function () {
         if (this.isInited) {
-            this.currentControlDegree += Plane.CONTROL_DEGREE_STEP;
+            this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP;
         }
     };
 
@@ -130,7 +119,7 @@
      */
     Plane.prototype.rotateRight = function () {
         if (this.isInited) {
-            this.currentControlDegree -= Plane.CONTROL_DEGREE_STEP;
+            this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP;
         }
     };
 
@@ -140,8 +129,8 @@
      */
     Plane.prototype.thrust = function () {
         if (this.isInited) {
-            this.currentThrust *= Plane.THRUST_MULTIPLIER_UP;
-            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Plane.MAX_THRUST);
+            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
+            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
             this.body.thrust(this.currentThrust);
         }
@@ -153,8 +142,8 @@
      */
     Plane.prototype.backPedal = function () {
         if (this.isInited) {
-            this.currentThrust *= Plane.THRUST_MULTIPLIER_DOWN;
-            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Plane.MAX_THRUST);
+            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
+            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
             this.body.thrust(this.currentThrust);
         }
@@ -167,8 +156,8 @@
      */
     Plane.prototype.leave = function () {
         if (this.isInited) {
-            this.currentThrust *= Plane.THRUST_MULTIPLIER_NONE;
-            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Plane.MAX_THRUST);
+            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_NONE;
+            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
             this.body.thrust(this.currentThrust);
         }

@@ -30,7 +30,7 @@
         this.anchor.set(0.5);
 
         this.isInited = true;
-    }
+    };
 
 
     /**

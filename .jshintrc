@@ -28,6 +28,7 @@
         "signals": true,
         "Cocoon": false,
         "Phaser": false,
+        "Settings": true,
         "BootState": true,
         "GameState": true,
         "PreloadState": true,

@@ -35,7 +35,7 @@
         }
 
         this.isInited = true;
-    }
+    };
 
 
     /**

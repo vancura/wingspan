@@ -9,14 +9,6 @@
     };
 
 
-    GameState.IS_BOX2D_DEBUG_ENABLED = false;
-    GameState.IS_TRAILS_RENDERING_ENABLED = false;
-
-    GameState.WORLD_GRAVITY = 45;
-    GameState.WORLD_OVERFLOW = -10;
-    GameState.MAX_TRAIL_DISTANCE = 15;
-
-
     GameState.prototype = {
 
 
@@ -26,7 +18,7 @@
         init: function () {
             this.physics.startSystem(Phaser.Physics.BOX2D);
             this.physics.box2d.setBoundsToWorld(true, true, false, true);
-            this.physics.box2d.gravity.y = GameState.WORLD_GRAVITY;
+            this.physics.box2d.gravity.y = Settings.WORLD_GRAVITY;
             this.physics.box2d.restitution = 0.4;
 
             this.planeList = [];
@@ -50,7 +42,7 @@
          * Render.
          */
         render: function () {
-            if (GameState.IS_BOX2D_DEBUG_ENABLED) {
+            if (Settings.IS_BOX2D_DEBUG_ENABLED) {
                 this.game.debug.box2dWorld();
             }
         },
@@ -102,14 +94,14 @@
         getTrailPositions: function (plane, multiplier) {
             var out = null;
 
-            if (GameState.IS_TRAILS_RENDERING_ENABLED) {
+            if (Settings.IS_TRAILS_RENDERING_ENABLED) {
                 var d = plane.rotation * -1 - 90 * (Math.PI / 180);
                 var m = (typeof multiplier === "undefined") ? 1 : multiplier;
 
-                var x1 = Math.sin(d) * (GameState.MAX_TRAIL_DISTANCE * -m) + plane.x;
-                var y1 = Math.cos(d) * (GameState.MAX_TRAIL_DISTANCE * -m) + plane.y;
-                var x2 = Math.sin(d) * (GameState.MAX_TRAIL_DISTANCE * m) + plane.x;
-                var y2 = Math.cos(d) * (GameState.MAX_TRAIL_DISTANCE * m) + plane.y;
+                var x1 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.x;
+                var y1 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.y;
+                var x2 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.x;
+                var y2 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.y;
 
                 out = [x1, y1, x2, y2];
             }
@@ -123,7 +115,7 @@
          */
         createPlanes: function () {
             var startX = this.world.centerX;
-            var startY = GameState.WORLD_OVERFLOW + 100;
+            var startY = Settings.WORLD_OVERFLOW + 100;
 
             for (var a = 0; a < 2; a++) {
                 var x = startX + (a - 1) * 200;
@@ -149,7 +141,7 @@
          * Create trails.
          */
         createTrails: function () {
-            if (GameState.IS_TRAILS_RENDERING_ENABLED) {
+            if (Settings.IS_TRAILS_RENDERING_ENABLED) {
                 var pos = this.getTrailPositions(this.planeList[0]); // TODO: More lines
 
                 this.trailGraphicsLeft = this.add.graphics(0, 0);
@@ -254,7 +246,7 @@
          * @param color Color of the trail
          */
         drawTrails: function (plane, multiplier, color) {
-            if (GameState.IS_TRAILS_RENDERING_ENABLED) {
+            if (Settings.IS_TRAILS_RENDERING_ENABLED) {
                 var pos = this.getTrailPositions(plane, multiplier);
 
                 this.trailGraphicsLeft.lineStyle(1, color, 0.5);
