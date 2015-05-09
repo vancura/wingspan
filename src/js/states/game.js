@@ -77,6 +77,17 @@
                     // TODO: More trails
                     this.drawTrails(plane, 1 - Math.abs(plane.degree / 70), 0xFF0000);
                 }
+
+                // calculate parallax,
+                // only for the first plane
+                if(a === 0) {
+                    var p = 1 / (this.world.width / plane.x);
+
+                    this.groundGroup1.x = Math.round((this.world.width - this.groundGroup1.width) * p);
+                    this.groundGroup2.x = Math.round((this.world.width - this.groundGroup2.width) * p);
+                    this.groundGroup3.x = Math.round((this.world.width - this.groundGroup3.width) * p);
+                    this.groundGroup4.x = Math.round((this.world.width - this.groundGroup4.width) * p);
+                }
             }
         },
 
@@ -115,7 +126,7 @@
          */
         createPlanes: function () {
             var startX = this.world.centerX;
-            var startY = Settings.WORLD_OVERFLOW + 100;
+            var startY = Settings.WORLD_OVERFLOW;
 
             for (var a = 0; a < Settings.PLANE_COUNT; a++) {
                 var x = startX + (a - 1) * 200;
@@ -181,8 +192,6 @@
         /**
          * Create ground in back.
          * It needs to be called separately to allow proper z-sorting.
-         * TODO: Humanization
-         * TODO: Parallax
          */
         createGroundBack: function () {
             this.groundGroup4 = this.add.group();
@@ -194,17 +203,28 @@
             this.groundGroup2 = this.add.group();
             this.groundGroup2.name = "groundGroup2";
 
-            var x = 0;
-            while (x < this.world.width) {
-                var l2 = this.groundGroup2.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                var l3 = this.groundGroup3.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                var l4 = this.groundGroup4.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+            // add level 1 layer
+            var i = 0;
+            while (i < Math.ceil(this.world.width / 256)) {
+                var l = this.groundGroup4.create(i * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+                l.tint = 0x8d9499;
+                i++;
+            }
 
-                l2.tint = 0x252d33;
-                l3.tint = 0x4b565f;
-                l4.tint = 0x8d9499;
+            // add level 2 layer
+            var j = 0;
+            while (j < Math.ceil(this.world.width / 256) + 1) {
+                var m = this.groundGroup3.create(j * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+                m.tint = 0x4b565f;
+                j++;
+            }
 
-                x += 256;
+            // add level 3 layer
+            var k = 0;
+            while (k < Math.ceil(this.world.width / 256) + 2) {
+                var n = this.groundGroup2.create(k * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+                n.tint = 0x252d33;
+                k++;
             }
 
             var g2 = this.groundGroup2.create(0, 0, "game", "ground-grad.png");
@@ -226,20 +246,16 @@
         /**
          * Create ground in front.
          * It needs to be called separately to allow proper z-sorting.
-         * TODO: Humanization
-         * TODO: Parallax
          */
         createGroundFront: function () {
             this.groundGroup1 = this.add.group();
             this.groundGroup1.name = "groundGroup1";
 
-            var x = 0;
-            while (x < this.world.width) {
-                var l1 = this.groundGroup1.create(x, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-
-                l1.tint = 0x000000;
-
-                x += 256;
+            var i = 0;
+            while (i < Math.ceil(this.world.width / 256) + 3) {
+                var l = this.groundGroup1.create(i * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+                l.tint = 0x000000;
+                i++;
             }
 
             this.groundGroup1.y = this.world.height - 100;
