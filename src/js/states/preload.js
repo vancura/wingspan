@@ -21,6 +21,7 @@
             // this.load.crossOrigin = 'anonymous';
 
             this.load.atlasJSONHash("game", "assets/game.png", "assets/game.json");
+            this.load.audio("engineLoop", "assets/audio/PropEngineLoop1_02.wav");
         },
 
 

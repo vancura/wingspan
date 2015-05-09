@@ -56,6 +56,12 @@
         this.fireSensor.SetSensor(true);
         this.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
 
+        // sound
+        if (Settings.IS_SOUND_ENABLED) {
+            this.fx = this.game.add.audio("engineLoop");
+            this.fx.play("", 0, 0.5, true);
+        }
+
         // done
         this.isInited = true;
     };

@@ -8,6 +8,7 @@ var Settings = {
     IS_BOX2D_DEBUG_ENABLED: false,
     IS_TRAILS_RENDERING_ENABLED: false,
     IS_PLANE_WEAPON_ENABLED: false,
+    IS_SOUND_ENABLED: false,
 
     WORLD_GRAVITY: 45,
     WORLD_OVERFLOW: -10,
