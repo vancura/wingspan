@@ -5,7 +5,7 @@ var Bullet, Weapon, Plane;
 
 
 var Settings = {
-    IS_BOX2D_DEBUG_ENABLED: false,
+    IS_BOX2D_DEBUG_ENABLED: true,
     IS_TRAILS_RENDERING_ENABLED: false,
     IS_PLANE_WEAPON_ENABLED: false,
     IS_SOUND_ENABLED: false,
@@ -14,6 +14,7 @@ var Settings = {
     WORLD_OVERFLOW: -10,
     MAX_TRAIL_DISTANCE: 15,
 
+    PLANE_COUNT: 1,
     MAX_PLANE_THRUST: 110,
     PLANE_THRUST_MULTIPLIER_UP: 1.9, // thrust multiplier when thrust button down
     PLANE_THRUST_MULTIPLIER_DOWN: 0.5, // thrust multiplier when backpedal button down

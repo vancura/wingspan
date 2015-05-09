@@ -117,7 +117,7 @@
             var startX = this.world.centerX;
             var startY = Settings.WORLD_OVERFLOW + 100;
 
-            for (var a = 0; a < 2; a++) {
+            for (var a = 0; a < Settings.PLANE_COUNT; a++) {
                 var x = startX + (a - 1) * 200;
                 var plane = new Plane(this.game, x, startY);
 
