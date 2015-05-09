@@ -9,6 +9,9 @@
     };
 
 
+    GameState.IS_BOX2D_DEBUG_ENABLED = false;
+    GameState.IS_TRAILS_RENDERING_ENABLED = false;
+
     GameState.WORLD_GRAVITY = 45;
     GameState.WORLD_OVERFLOW = -10;
     GameState.MAX_TRAIL_DISTANCE = 15;
@@ -47,7 +50,9 @@
          * Render.
          */
         render: function () {
-            this.game.debug.box2dWorld();
+            if (GameState.IS_BOX2D_DEBUG_ENABLED) {
+                this.game.debug.box2dWorld();
+            }
         },
 
 
@@ -76,7 +81,7 @@
                 }
 
                 // draw trails, calculate the distance multiplier
-                if(a === 0) {
+                if (a === 0) {
                     // TODO: More trails
                     this.drawTrails(plane, 1 - Math.abs(plane.degree / 70), 0xFF0000);
                 }
@@ -95,15 +100,21 @@
          * @return Array of trail positions [x1, y1, x2, y2]
          */
         getTrailPositions: function (plane, multiplier) {
-            var d = plane.rotation * -1 - 90 * (Math.PI / 180);
-            var m = (typeof multiplier === "undefined") ? 1 : multiplier;
+            var out = null;
 
-            var x1 = Math.sin(d) * (GameState.MAX_TRAIL_DISTANCE * -m) + plane.x;
-            var y1 = Math.cos(d) * (GameState.MAX_TRAIL_DISTANCE * -m) + plane.y;
-            var x2 = Math.sin(d) * (GameState.MAX_TRAIL_DISTANCE * m) + plane.x;
-            var y2 = Math.cos(d) * (GameState.MAX_TRAIL_DISTANCE * m) + plane.y;
+            if (GameState.IS_TRAILS_RENDERING_ENABLED) {
+                var d = plane.rotation * -1 - 90 * (Math.PI / 180);
+                var m = (typeof multiplier === "undefined") ? 1 : multiplier;
 
-            return [x1, y1, x2, y2];
+                var x1 = Math.sin(d) * (GameState.MAX_TRAIL_DISTANCE * -m) + plane.x;
+                var y1 = Math.cos(d) * (GameState.MAX_TRAIL_DISTANCE * -m) + plane.y;
+                var x2 = Math.sin(d) * (GameState.MAX_TRAIL_DISTANCE * m) + plane.x;
+                var y2 = Math.cos(d) * (GameState.MAX_TRAIL_DISTANCE * m) + plane.y;
+
+                out = [x1, y1, x2, y2];
+            }
+
+            return out;
         },
 
 
@@ -121,6 +132,8 @@
                 this.add.existing(plane);
 
                 this.planeList.push(plane);
+
+                plane.init();
             }
         },
 
@@ -136,16 +149,18 @@
          * Create trails.
          */
         createTrails: function () {
-            var pos = this.getTrailPositions(this.planeList[0]); // TODO: More lines
+            if (GameState.IS_TRAILS_RENDERING_ENABLED) {
+                var pos = this.getTrailPositions(this.planeList[0]); // TODO: More lines
 
-            this.trailGraphicsLeft = this.add.graphics(0, 0);
-            this.trailGraphicsRight = this.add.graphics(0, 0);
+                this.trailGraphicsLeft = this.add.graphics(0, 0);
+                this.trailGraphicsRight = this.add.graphics(0, 0);
 
-            this.trailGraphicsLeft.name = "trailLeft";
-            this.trailGraphicsRight.name = "trailRight";
+                this.trailGraphicsLeft.name = "trailLeft";
+                this.trailGraphicsRight.name = "trailRight";
 
-            this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
-            this.trailGraphicsRight.moveTo(pos[2], pos[3]);
+                this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
+                this.trailGraphicsRight.moveTo(pos[2], pos[3]);
+            }
         },
 
 
@@ -239,13 +254,15 @@
          * @param color Color of the trail
          */
         drawTrails: function (plane, multiplier, color) {
-            var pos = this.getTrailPositions(plane, multiplier);
+            if (GameState.IS_TRAILS_RENDERING_ENABLED) {
+                var pos = this.getTrailPositions(plane, multiplier);
 
-            this.trailGraphicsLeft.lineStyle(1, color, 0.5);
-            this.trailGraphicsLeft.lineTo(pos[0], pos[1]);
+                this.trailGraphicsLeft.lineStyle(1, color, 0.5);
+                this.trailGraphicsLeft.lineTo(pos[0], pos[1]);
 
-            this.trailGraphicsRight.lineStyle(1, color, 0.5);
-            this.trailGraphicsRight.lineTo(pos[2], pos[3]);
+                this.trailGraphicsRight.lineStyle(1, color, 0.5);
+                this.trailGraphicsRight.lineTo(pos[2], pos[3]);
+            }
         },
 
 

@@ -13,14 +13,11 @@
     Weapon = function (game) {
         Phaser.Group.call(this, game, game.world, "Shot", false, true, Phaser.Physics.ARCADE);
 
+        this.isInited = false;
         this.nextFire = 0;
         this.bulletSpeed = 250;
         this.fireRate = 50;
         this.flip = false;
-
-        for (var i = 0; i < 64 * 4; i++) {
-            this.add(new Bullet(game), true);
-        }
     };
 
 
@@ -28,12 +25,25 @@
     Weapon.prototype.constructor = Weapon;
 
 
+    Weapon.prototype.init = function () {
+        for (var i = 0; i < 64 * 4; i++) {
+            var bullet = new Bullet(game);
+
+            this.add(bullet, true);
+
+            bullet.init();
+        }
+
+        this.isInited = true;
+    }
+
+
     /**
      * Fire with the weapon.
      * @param source Sprite source
      */
     Weapon.prototype.fire = function (source) {
-        if (this.game.time.time >= game.rnd.between(this.nextFire - 10, this.nextFire)) {
+        if (this.isInited && this.game.time.time >= game.rnd.between(this.nextFire - 10, this.nextFire)) {
             var d = this.flip ? game.rnd.between(-7, -3) : game.rnd.between(3, 7);
             this.flip = !this.flip;
 
