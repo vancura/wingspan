@@ -16,14 +16,6 @@
         Phaser.Sprite.call(this, game, x, y, "game", "plane1/p1.png");
 
         this.isInited = false;
-    };
-
-
-    Plane.prototype = Object.create(Phaser.Sprite.prototype);
-    Plane.prototype.constructor = Plane;
-
-
-    Plane.prototype.init = function () {
         // enable physics for this sprite
         game.physics.box2d.enable(this);
 
@@ -37,9 +29,15 @@
 
         // current degree
         this.degree = 0;
+    };
 
+
+    Plane.prototype = Object.create(Phaser.Sprite.prototype);
+    Plane.prototype.constructor = Plane;
+
+
+    Plane.prototype.init = function () {
         this.name = "plane";
-        this.anchor.set(0.5, 0.5);
         this.scale.set(0.5);
 
         this.body.angle = 180;

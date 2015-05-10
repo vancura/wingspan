@@ -30,6 +30,15 @@
             }
 
             this.planeList = [];
+
+            // master plane is the plane user controls
+            // it also gets destroyed and then another plane is set to be master
+            // see this.restart()
+            this.masterPlane = null;
+
+            // when restart is needed this is true
+            // handled in this.update()
+            this.isRestartRequested = false;
         },
 
 
@@ -66,32 +75,26 @@
             for (var a = 0; a < this.planeList.length; a++) {
                 var plane = this.planeList[a];
 
-                // turn sideways
-                if (this.leftButton.isDown && !this.rightButton.isDown) {
-                    plane.rotateLeft();
-                } else if (!this.leftButton.isDown && this.rightButton.isDown) {
-                    plane.rotateRight();
-                }
+                // only control the master plane
+                if (plane === this.masterPlane) {
+                    // turn sideways
+                    if (this.leftButton.isDown && !this.rightButton.isDown) {
+                        plane.rotateLeft();
+                    } else if (!this.leftButton.isDown && this.rightButton.isDown) {
+                        plane.rotateRight();
+                    }
 
-                // thrust or backpedal
-                // after a while revert to original power
-                if (this.thrustButton.isDown) {
-                    plane.thrust();
-                } else if (this.backpedalButton.isDown) {
-                    plane.backPedal();
-                } else {
-                    plane.leave();
-                }
+                    // thrust or backpedal
+                    // after a while revert to original power
+                    if (this.thrustButton.isDown) {
+                        plane.thrust();
+                    } else if (this.backpedalButton.isDown) {
+                        plane.backPedal();
+                    } else {
+                        plane.leave();
+                    }
 
-                // draw trails, calculate the distance multiplier
-                if (a === 0) {
-                    // TODO: More trails
-                    this.drawTrails(plane, 1 - Math.abs(plane.degree / 70), 0xFF0000);
-                }
-
-                // calculate parallax,
-                // only for the first plane
-                if (a === 0) {
+                    // calculate parallax,
                     var p = 1 / (this.world.width / plane.x);
 
                     this.groundGroup1.x = Math.round((this.world.width - this.groundGroup1.width) * p);
@@ -100,6 +103,11 @@
                     this.groundGroup4.x = Math.round((this.world.width - this.groundGroup4.width) * p);
 
                     this.game.camera.x = (this.world.width - this.originalWidth) * p;
+                }
+
+                // draw trails, calculate the distance multiplier
+                if (a === 0) {
+                    this.drawTrails(plane, 1 - Math.abs(plane.degree / 70), 0xFF0000);
                 }
             }
         },
@@ -138,18 +146,19 @@
          * Create the plane.
          */
         createPlanes: function () {
-            var startX = this.world.centerX;
-            var startY = Settings.WORLD_OVERFLOW;
-
             for (var a = 0; a < Settings.PLANE_COUNT; a++) {
-                var x = startX + (a - 1) * 200;
-                var plane = new Plane(this.game, x, startY);
+                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW);
 
                 this.add.existing(plane);
 
                 this.planeList.push(plane);
 
                 plane.init();
+
+                // set the master plane
+                if (a === 0) {
+                    this.masterPlane = plane;
+                }
             }
         },
 
@@ -166,16 +175,18 @@
          */
         createTrails: function () {
             if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-                var pos = this.getTrailPositions(this.planeList[0]); // TODO: More lines
+                if (this.masterPlane) {
+                    var pos = this.getTrailPositions(this.masterPlane);
 
-                this.trailGraphicsLeft = this.add.graphics(0, 0);
-                this.trailGraphicsRight = this.add.graphics(0, 0);
+                    this.trailGraphicsLeft = this.add.graphics(0, 0);
+                    this.trailGraphicsRight = this.add.graphics(0, 0);
 
-                this.trailGraphicsLeft.name = "trailLeft";
-                this.trailGraphicsRight.name = "trailRight";
+                    this.trailGraphicsLeft.name = "trailLeft";
+                    this.trailGraphicsRight.name = "trailRight";
 
-                this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
-                this.trailGraphicsRight.moveTo(pos[2], pos[3]);
+                    this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
+                    this.trailGraphicsRight.moveTo(pos[2], pos[3]);
+                }
             }
         },
 
@@ -315,13 +326,14 @@
          * Plane crash event handler.
          */
         onPlaneCrashed: function () {
-            this.fire.x = this.planeList[0].x;
-            this.fire.alpha = 1;
+            if (this.masterPlane) {
+                this.fire.x = this.masterPlane.x;
+                this.fire.alpha = 1;
 
-            var tween = this.add.tween(this.fire);
+                var tween = this.add.tween(this.fire);
 
-            tween.to({alpha: 0}, 1000);
-            tween.start();
+                tween.to({alpha: 0}, 1000);
+                tween.start();
 
             this.restart();
         }
