@@ -100,7 +100,7 @@
                     }
 
                     // calculate parallax,
-                    var p = 1 / (this.world.width / plane.x);
+                    var p = 1 / (this.world.width / plane.body.x);
 
                     this.groundGroup1.x = Math.round((this.world.width - this.groundGroup1.width) * p);
                     this.groundGroup2.x = Math.round((this.world.width - this.groundGroup2.width) * p);
@@ -135,10 +135,10 @@
                 var d = plane.rotation * -1 - 90 * (Math.PI / 180);
                 var m = (typeof multiplier === "undefined") ? 1 : multiplier;
 
-                var x1 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.x;
-                var y1 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.y;
-                var x2 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.x;
-                var y2 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.y;
+                var x1 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.body.x;
+                var y1 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.body.y;
+                var x2 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.body.x;
+                var y2 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.body.y;
 
                 out = [x1, y1, x2, y2];
             }
@@ -343,7 +343,7 @@
          */
         onPlaneCrashed: function () {
             if (this.masterPlane) {
-                this.fire.x = this.masterPlane.x;
+                this.fire.x = this.masterPlane.body.x;
                 this.fire.alpha = 1;
 
                 var tween = this.add.tween(this.fire);
