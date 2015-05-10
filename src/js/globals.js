@@ -10,16 +10,16 @@ var Settings = {
     IS_PLANE_WEAPON_ENABLED: true,
     IS_SOUND_ENABLED: true,
 
-    WORLD_GRAVITY: 45,
+    WORLD_GRAVITY: 75,
     WORLD_OVERFLOW: -30,
     MAX_TRAIL_DISTANCE: 15,
 
     PLANE_COUNT: 2,
-    MAX_PLANE_THRUST: 110,
+    MAX_PLANE_THRUST: 210,
     PLANE_THRUST_MULTIPLIER_UP: 1.9, // thrust multiplier when thrust button down
     PLANE_THRUST_MULTIPLIER_DOWN: 0.5, // thrust multiplier when backpedal button down
     PLANE_THRUST_MULTIPLIER_NONE: 0.995, // thrust step when both thrust and backpedal buttons released
     PLANE_ANGULAR_DAMPING_FACTOR: 20,
-    PLANE_KEYBOARD_ROTATION_STEP: 70,
-    PLANE_CONTROL_DEGREE_STEP: 0.02
+    PLANE_KEYBOARD_ROTATION_STEP: 50,
+    PLANE_CONTROL_DEGREE_STEP: 0.05
 };
