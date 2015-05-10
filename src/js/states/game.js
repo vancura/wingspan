@@ -21,6 +21,14 @@
             this.physics.box2d.gravity.y = Settings.WORLD_GRAVITY;
             this.physics.box2d.restitution = 0.4;
 
+            if(Settings.IS_DEBUG_ENABLED) {
+                game.physics.box2d.debugDraw.shapes = true;
+                game.physics.box2d.debugDraw.joints = true;
+                game.physics.box2d.debugDraw.aabbs = true;
+                game.physics.box2d.debugDraw.pairs = true;
+                game.physics.box2d.debugDraw.centerOfMass = true;
+            }
+
             this.planeList = [];
         },
 
@@ -44,11 +52,10 @@
          * Render.
          */
         render: function () {
-            if (Settings.IS_BOX2D_DEBUG_ENABLED) {
+            if (Settings.IS_DEBUG_ENABLED) {
                 this.game.debug.box2dWorld();
+                this.game.debug.cameraInfo(this.game.camera, 10, this.world.height - 70);
             }
-
-            this.game.debug.cameraInfo(game.camera, 500, 32);
         },
 
 
