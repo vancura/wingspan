@@ -30,6 +30,10 @@
 
         // current degree
         this.degree = 0;
+
+        // crashed flag preventing multiple crashes
+        // reset from this.reset()
+        this.isCrashed = false;
     };
 
 
@@ -82,6 +86,7 @@
         this.currentControlDegree = 0;
         this.currentThrust = 0.1;
         this.degree = 0;
+        this.isCrashed = false;
     };
 
 
@@ -204,8 +209,9 @@
      * @param j The contact object itself
      */
     Plane.prototype.onPlaneCrashed = function (e, f, g, h, i, j) {
+        if (!this.isCrashed && this.body.y > this.game.world.height - 100) {
+            this.isCrashed = true;
 
-        if (this.y > this.game.world.height - 100) {
             signals.onCrashBottom.dispatch();
         }
     };
