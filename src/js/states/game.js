@@ -152,7 +152,8 @@
          */
         createPlanes: function () {
             for (var a = 0; a < Settings.PLANE_COUNT; a++) {
-                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW);
+                var framePrefix = (a === 0) ? "plane1" : "plane2"; // TODO: More planes
+                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix);
 
                 this.add.existing(plane);
 
@@ -340,17 +341,20 @@
 
         /**
          * Plane crash event handler.
+         * @param e Plane reference
          */
-        onPlaneCrashed: function () {
-            if (this.masterPlane) {
-                this.fire.x = this.masterPlane.body.x;
-                this.fire.alpha = 1;
+        onPlaneCrashed: function (e) {
+            // TODO: Multiple fires
 
-                var tween = this.add.tween(this.fire);
+            this.fire.x = e.body.x;
+            this.fire.alpha = 1;
 
-                tween.to({alpha: 0}, 1000);
-                tween.start();
+            var tween = this.add.tween(this.fire);
 
+            tween.to({alpha: 0}, 1000);
+            tween.start();
+
+            if (e === this.masterPlane) {
                 this.isRestartRequested = true;
             }
         }

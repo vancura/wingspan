@@ -14,7 +14,7 @@ var Settings = {
     WORLD_OVERFLOW: -30,
     MAX_TRAIL_DISTANCE: 15,
 
-    PLANE_COUNT: 1,
+    PLANE_COUNT: 3,
     MAX_PLANE_THRUST: 110,
     PLANE_THRUST_MULTIPLIER_UP: 1.9, // thrust multiplier when thrust button down
     PLANE_THRUST_MULTIPLIER_DOWN: 0.5, // thrust multiplier when backpedal button down

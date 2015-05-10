@@ -10,12 +10,14 @@
      * @param game Game reference
      * @param x Start X position
      * @param y Start Y position
+     * @param framePrefix Sprite prefix
      * @constructor
      */
-    Plane = function (game, x, y) {
-        Phaser.Sprite.call(this, game, x, y, "game", "plane1/p1.png");
+    Plane = function (game, x, y, framePrefix) {
+        Phaser.Sprite.call(this, game, x, y, "game", framePrefix + "/p1.png");
 
         this.isInited = false;
+        this.framePrefix = framePrefix;
 
         // enable physics for this sprite
         game.physics.box2d.enable(this);
@@ -118,7 +120,7 @@
 
             // switch the plane frame based on the rotation
             if (Math.abs(rot) > 0) {
-                this.frameName = "plane1/p" + (Math.round(Math.abs(rot) / 8) + 1) + ".png";
+                this.frameName = this.framePrefix + "/p" + (Math.round(Math.abs(rot) / 8) + 1) + ".png";
             }
 
             // store the degree
@@ -209,7 +211,7 @@
         if (!this.isCrashed && this.body.y > this.game.world.height - 100) {
             this.isCrashed = true;
 
-            signals.onCrashBottom.dispatch();
+            signals.onCrashBottom.dispatch(this);
         }
     };
 
