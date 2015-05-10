@@ -79,7 +79,6 @@
         this.body.y = Settings.WORLD_OVERFLOW;
         this.body.angle = 180;
 
-        this.body.setZeroDamping();
         this.body.setZeroRotation();
         this.body.setZeroVelocity();
 
@@ -129,8 +128,6 @@
             if (Settings.IS_PLANE_WEAPON_ENABLED) {
                 this.weapon.fire(this);
             }
-
-            // console.log(this.body.velocity.y);
         }
     };
 

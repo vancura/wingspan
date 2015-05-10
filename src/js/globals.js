@@ -11,7 +11,7 @@ var Settings = {
     IS_SOUND_ENABLED: false,
 
     WORLD_GRAVITY: 45,
-    WORLD_OVERFLOW: -10,
+    WORLD_OVERFLOW: -30,
     MAX_TRAIL_DISTANCE: 15,
 
     PLANE_COUNT: 1,
