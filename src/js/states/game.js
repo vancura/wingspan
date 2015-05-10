@@ -307,7 +307,7 @@
          */
         createParallax: function () {
             this.originalWidth = this.world.width;
-            this.game.world.setBounds(0, 0, this.originalWidth * 1.2, this.world.height);
+            this.game.world.setBounds(0, 0, this.originalWidth * 2.2, this.world.height);
         },
 
 

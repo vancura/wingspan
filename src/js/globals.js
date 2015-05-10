@@ -5,7 +5,7 @@ var Bullet, Weapon, Plane;
 
 
 var Settings = {
-    IS_DEBUG_ENABLED: true,
+    IS_DEBUG_ENABLED: false,
     IS_TRAILS_RENDERING_ENABLED: true,
     IS_PLANE_WEAPON_ENABLED: true,
     IS_SOUND_ENABLED: false,
