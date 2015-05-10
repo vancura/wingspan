@@ -8,13 +8,13 @@ var Settings = {
     IS_DEBUG_ENABLED: false,
     IS_TRAILS_RENDERING_ENABLED: true,
     IS_PLANE_WEAPON_ENABLED: true,
-    IS_SOUND_ENABLED: false,
+    IS_SOUND_ENABLED: true,
 
     WORLD_GRAVITY: 45,
     WORLD_OVERFLOW: -30,
     MAX_TRAIL_DISTANCE: 15,
 
-    PLANE_COUNT: 3,
+    PLANE_COUNT: 2,
     MAX_PLANE_THRUST: 110,
     PLANE_THRUST_MULTIPLIER_UP: 1.9, // thrust multiplier when thrust button down
     PLANE_THRUST_MULTIPLIER_DOWN: 0.5, // thrust multiplier when backpedal button down

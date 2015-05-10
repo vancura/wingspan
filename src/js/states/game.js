@@ -29,7 +29,7 @@
                 game.physics.box2d.debugDraw.centerOfMass = true;
             }
 
-            this.planeList = [];
+            GameState.planeList = [];
 
             // master plane is the plane user controls
             // it also gets destroyed and then another plane is set to be master
@@ -72,8 +72,8 @@
          * Update.
          */
         update: function () {
-            for (var a = 0; a < this.planeList.length; a++) {
-                var plane = this.planeList[a];
+            for (var a = 0; a < GameState.planeList.length; a++) {
+                var plane = GameState.planeList[a];
 
                 // only control the master plane
                 if (plane === this.masterPlane) {
@@ -102,10 +102,10 @@
                     // calculate parallax,
                     var p = 1 / (this.world.width / plane.body.x);
 
-                    this.groundGroup1.x = Math.round((this.world.width - this.groundGroup1.width) * p);
-                    this.groundGroup2.x = Math.round((this.world.width - this.groundGroup2.width) * p);
-                    this.groundGroup3.x = Math.round((this.world.width - this.groundGroup3.width) * p);
-                    this.groundGroup4.x = Math.round((this.world.width - this.groundGroup4.width) * p);
+                    this.groundGroup1.x = (this.world.width - this.groundGroup1.width) * p;
+                    this.groundGroup2.x = (this.world.width - this.groundGroup2.width) * p;
+                    this.groundGroup3.x = (this.world.width - this.groundGroup3.width) * p;
+                    this.groundGroup4.x = (this.world.width - this.groundGroup4.width) * p;
 
                     this.game.camera.x = (this.world.width - this.originalWidth) * p;
                 }
@@ -157,7 +157,7 @@
 
                 this.add.existing(plane);
 
-                this.planeList.push(plane);
+                GameState.planeList.push(plane);
 
                 plane.init();
 
