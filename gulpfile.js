@@ -34,7 +34,6 @@ var paths = {
     distImages: "dist/images",
     distJS: "dist/js",
     distJSList: [
-        "src/js-vendor/cocoon.js",
         "components/phaser/build/custom/phaser-no-physics.js",
         "src/js-vendor/box2d-plugin-full-scrambled.js",
         "dist/js/main.js"

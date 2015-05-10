@@ -26,9 +26,7 @@
 
             this.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
 
-            if (!Cocoon.nativeAvailable) {
-                this.add.plugin(Phaser.Plugin.Debug);
-            }
+            this.add.plugin(Phaser.Plugin.Debug);
         },
 
 
