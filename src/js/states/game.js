@@ -175,11 +175,10 @@
             if (this.masterPlane) {
                 this.isRestartRequested = false;
 
-                // move the plane
-                this.masterPlane.body.x = this.world.centerX;
-                this.masterPlane.body.y = Settings.WORLD_OVERFLOW;
+                // reset the plane position and rotation
+                this.masterPlane.reset();
 
-                // move trails
+                // reset this plane trails
                 var pos = this.getTrailPositions(this.masterPlane);
                 this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
                 this.trailGraphicsRight.moveTo(pos[2], pos[3]);

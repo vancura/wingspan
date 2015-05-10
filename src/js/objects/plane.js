@@ -67,6 +67,25 @@
 
 
     /**
+     * Reset position and rotation.
+     * Used after a crash.
+     */
+    Plane.prototype.reset = function () {
+        this.body.x = this.game.world.centerX;
+        this.body.y = Settings.WORLD_OVERFLOW;
+        this.body.angle = 180;
+
+        this.body.setZeroDamping();
+        this.body.setZeroRotation();
+        this.body.setZeroVelocity();
+
+        this.currentControlDegree = 0;
+        this.currentThrust = 0.1;
+        this.degree = 0;
+    };
+
+
+    /**
      * Update.
      */
     Plane.prototype.update = function () {
@@ -105,6 +124,8 @@
             if (Settings.IS_PLANE_WEAPON_ENABLED) {
                 this.weapon.fire(this);
             }
+
+            // console.log(this.body.velocity.y);
         }
     };
 
@@ -183,10 +204,8 @@
      * @param j The contact object itself
      */
     Plane.prototype.onPlaneCrashed = function (e, f, g, h, i, j) {
-        // console.log(e, f, g, h, i, j);
 
         if (this.y > this.game.world.height - 100) {
-            // crash on the bottom
             signals.onCrashBottom.dispatch();
         }
     };
