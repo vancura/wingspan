@@ -77,6 +77,11 @@
 
                 // only control the master plane
                 if (plane === this.masterPlane) {
+                    // check for restart mode
+                    if(this.isRestartRequested) {
+                        this.restart();
+                    }
+
                     // turn sideways
                     if (this.leftButton.isDown && !this.rightButton.isDown) {
                         plane.rotateLeft();
@@ -167,6 +172,18 @@
          * Restart after crash.
          */
         restart: function () {
+            if(this.masterPlane) {
+                this.isRestartRequested = false;
+
+                // move the plane
+                this.masterPlane.body.x = this.world.centerX;
+                this.masterPlane.body.y = Settings.WORLD_OVERFLOW;
+
+                // move trails
+                var pos = this.getTrailPositions(this.masterPlane);
+                this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
+                this.trailGraphicsRight.moveTo(pos[2], pos[3]);
+            }
         },
 
 
@@ -335,7 +352,8 @@
                 tween.to({alpha: 0}, 1000);
                 tween.start();
 
-            this.restart();
+                this.isRestartRequested = true;
+            }
         }
 
 
