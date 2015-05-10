@@ -155,6 +155,18 @@
 
 
     /**
+     * Rotation button released,
+     * slowly decrease rotation.
+     * @author Adrian Cleave (@acleave)
+     */
+    Plane.prototype.leaveRotation = function () {
+        if (Math.abs(this.currentControlDegree) >= 0.01) {
+            this.currentControlDegree -= this.currentControlDegree / Math.abs(this.currentControlDegree) * Settings.PLANE_CONTROL_DEGREE_STEP;
+        }
+    };
+
+
+    /**
      * Thrust button down, thrust up.
      */
     Plane.prototype.thrust = function () {
@@ -184,7 +196,7 @@
      * Thrust button released and no backpedal down,
      * slowly decrease thrust.
      */
-    Plane.prototype.leave = function () {
+    Plane.prototype.leaveThrust = function () {
         if (this.isInited) {
             this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_NONE;
             this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);

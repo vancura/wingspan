@@ -87,6 +87,8 @@
                         plane.rotateLeft();
                     } else if (!this.leftButton.isDown && this.rightButton.isDown) {
                         plane.rotateRight();
+                    } else {
+                        plane.leaveRotation();
                     }
 
                     // thrust or backpedal
@@ -96,7 +98,7 @@
                     } else if (this.backpedalButton.isDown) {
                         plane.backPedal();
                     } else {
-                        plane.leave();
+                        plane.leaveThrust();
                     }
 
                     // calculate parallax,
