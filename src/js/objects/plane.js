@@ -16,6 +16,7 @@
         Phaser.Sprite.call(this, game, x, y, "game", "plane1/p1.png");
 
         this.isInited = false;
+
         // enable physics for this sprite
         game.physics.box2d.enable(this);
 

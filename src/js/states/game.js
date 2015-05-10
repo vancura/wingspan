@@ -21,7 +21,7 @@
             this.physics.box2d.gravity.y = Settings.WORLD_GRAVITY;
             this.physics.box2d.restitution = 0.4;
 
-            if(Settings.IS_DEBUG_ENABLED) {
+            if (Settings.IS_DEBUG_ENABLED) {
                 game.physics.box2d.debugDraw.shapes = true;
                 game.physics.box2d.debugDraw.joints = true;
                 game.physics.box2d.debugDraw.aabbs = true;
@@ -63,7 +63,7 @@
         render: function () {
             if (Settings.IS_DEBUG_ENABLED) {
                 this.game.debug.box2dWorld();
-                this.game.debug.cameraInfo(this.game.camera, 10, this.world.height - 70);
+                this.game.debug.cameraInfo(this.game.camera, 10, this.world.height - 82);
             }
         },
 
@@ -78,7 +78,7 @@
                 // only control the master plane
                 if (plane === this.masterPlane) {
                     // check for restart mode
-                    if(this.isRestartRequested) {
+                    if (this.isRestartRequested) {
                         this.restart();
                     }
 
@@ -172,7 +172,7 @@
          * Restart after crash.
          */
         restart: function () {
-            if(this.masterPlane) {
+            if (this.masterPlane) {
                 this.isRestartRequested = false;
 
                 // move the plane
@@ -315,7 +315,7 @@
         /**
          * Create signals.
          */
-        createSignals: function() {
+        createSignals: function () {
             signals.onCrashBottom.add(this.onPlaneCrashed, this);
         },
 
