@@ -114,7 +114,8 @@
 
                 // draw trails, calculate the distance multiplier
                 if (a === 0) {
-                    this.drawTrails(plane, 1 - Math.abs(plane.degree / 70), 0xFF0000);
+                    // 1.15 to prevent merging lines
+                    this.drawTrails(plane, 1 - Math.abs(plane.degree / (Settings.PLANE_KEYBOARD_ROTATION_STEP * 1.15)), 0xFF0000);
                 }
             }
         },
