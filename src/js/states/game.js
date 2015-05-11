@@ -50,6 +50,7 @@
             this.createBackground();
             this.createGroundBack();
             this.createPlanes();
+            this.createSounds();
             this.createTrails();
             this.createFire();
             this.createGroundFront();
@@ -109,8 +110,8 @@
 
                     // sounds
                     var v = plane.vel / 60;
-                    this.engineLoop.volume = 1 - v / 4;
-                    this.engineStress.volume = v / 4;
+                    this.engineLoop.volume = 1 - v;
+                    this.engineStress.volume = v / 8;
 
                     // calculate parallax,
                     var p = 1 / (this.world.width / plane.body.x);
@@ -180,8 +181,13 @@
                     this.masterPlane = plane;
                 }
             }
+        },
 
-            // sound
+
+        /**
+         * Create sounds. For the science!
+         */
+        createSounds: function () {
             if (Settings.IS_SOUND_ENABLED) {
                 this.engineLoop = this.game.add.audio("engineLoop");
                 this.engineLoop.play("", 0, 0, true);
@@ -191,6 +197,8 @@
 
                 this.musicLoop = this.game.add.audio("music-parapet");
                 //this.musicLoop.play("", 0, 0.8, true);
+
+                this.explosion = this.game.add.audio("explosion");
             }
         },
 
@@ -393,6 +401,8 @@
 
             tween.to({alpha: 0}, 1000);
             tween.start();
+
+            this.explosion.play();
 
             if (e === this.masterPlane) {
                 this.isRestartRequested = true;
