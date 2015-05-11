@@ -142,7 +142,7 @@
 
             if (Settings.IS_TRAILS_RENDERING_ENABLED) {
                 var d = plane.rotation * -1 - 90 * (Math.PI / 180);
-                var m = (typeof multiplier === "undefined") ? 1 : multiplier;
+                var m = (typeof multiplier === "undefined") ? 0 : 1 - multiplier;
 
                 var x1 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.body.x;
                 var y1 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.body.y;
