@@ -112,7 +112,8 @@
             this.body.rotateLeft(rot);
 
             // switch the plane frame based on the rotation
-            this.frameName = this.framePrefix + "/p" + (Math.round(Math.abs(rot) / 7) + 1) + ".png";
+            var f = 10 - (Math.round(Math.abs(rot) / 7) + 1);
+            this.frameName = this.framePrefix + "/p" + f + ".png";
 
             // store the degree
             this.degree = rot;
