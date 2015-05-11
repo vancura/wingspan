@@ -61,12 +61,6 @@
         this.fireSensor.SetSensor(true);
         this.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
 
-        // sound
-        if (Settings.IS_SOUND_ENABLED) {
-            this.fx = this.game.add.audio("engineLoop");
-            this.fx.play("", 0, 0.5, true);
-        }
-
         // done
         this.isInited = true;
     };
@@ -118,15 +112,10 @@
             this.body.rotateLeft(rot);
 
             // switch the plane frame based on the rotation
-            this.frameName = this.framePrefix + "/p" + (Math.round(Math.abs(rot) / 6) + 1) + ".png";
+            this.frameName = this.framePrefix + "/p" + (Math.round(Math.abs(rot) / 7) + 1) + ".png";
 
             // store the degree
             this.degree = rot;
-
-            // weapon
-            if (Settings.IS_PLANE_WEAPON_ENABLED) {
-                this.weapon.fire(this);
-            }
         }
     };
 

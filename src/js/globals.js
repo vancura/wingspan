@@ -7,7 +7,7 @@ var Bullet, Weapon, Plane;
 var Settings = {
     IS_DEBUG_ENABLED: false,
     IS_TRAILS_RENDERING_ENABLED: true,
-    IS_PLANE_WEAPON_ENABLED: false,
+    IS_PLANE_WEAPON_ENABLED: true,
     IS_SOUND_ENABLED: true,
 
     WORLD_GRAVITY: 75,
@@ -21,5 +21,8 @@ var Settings = {
     PLANE_THRUST_MULTIPLIER_NONE: 0.995, // thrust step when both thrust and backpedal buttons released
     PLANE_ANGULAR_DAMPING_FACTOR: 20,
     PLANE_KEYBOARD_ROTATION_STEP: 60,
-    PLANE_CONTROL_DEGREE_STEP: 0.05
+    PLANE_CONTROL_DEGREE_STEP: 0.05,
+    PLANE_BULLET_SPEED: 350,
+    PLANE_BULLET_FIRE_RATE: 70,
+    PLANE_BULLET_LIFESPAN: 1000
 };

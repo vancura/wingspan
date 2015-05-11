@@ -15,9 +15,10 @@
 
         this.isInited = false;
         this.nextFire = 0;
-        this.bulletSpeed = 250;
-        this.fireRate = 50;
+        this.bulletSpeed = Settings.PLANE_BULLET_SPEED;
+        this.fireRate = Settings.PLANE_BULLET_FIRE_RATE;
         this.flip = false;
+        this.isFiring = false;
     };
 
 
@@ -26,12 +27,18 @@
 
 
     Weapon.prototype.init = function () {
+        // prepare bullets
         for (var i = 0; i < 64 * 4; i++) {
             var bullet = new Bullet(game);
 
             this.add(bullet, true);
 
             bullet.init();
+        }
+
+        // sound
+        if (Settings.IS_SOUND_ENABLED) {
+            this.fx = this.game.add.audio("gunshot");
         }
 
         this.isInited = true;
@@ -53,7 +60,9 @@
 
             this.getFirstExists(false).fire(source.x + x, source.y + y, source.angle - 90, this.bulletSpeed, 0, 0);
 
-            this.nextFire = this.game.time.time + this.fireRate;
+            this.fx.play("", 0, this.game.rnd.between(0.75, 1.0));
+
+            this.nextFire = this.game.time.time + this.game.rnd.between(this.fireRate * 0.99, this.fireRate * 1.01);
         }
     };
 

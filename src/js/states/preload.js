@@ -21,7 +21,8 @@
             // this.load.crossOrigin = 'anonymous';
 
             this.load.atlasJSONHash("game", "assets/game.png", "assets/game.json");
-            this.load.audio("engineLoop", "assets/audio/PropEngineLoop1_02.wav");
+            this.load.audio("engineLoop", "assets/audio/base-engine-loop.wav");
+            this.load.audio("gunshot", "assets/audio/gunshot.wav");
             this.load.image("forestBackground", "assets/forest-bg-1920x1080.jpg");
         },
 

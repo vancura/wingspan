@@ -102,6 +102,11 @@
                         plane.leaveThrust();
                     }
 
+                    // firing
+                    if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButton.isDown) {
+                        plane.weapon.fire(this.masterPlane);
+                    }
+
                     // calculate parallax,
                     var p = 1 / (this.world.width / plane.body.x);
 
@@ -170,6 +175,12 @@
                     this.masterPlane = plane;
                 }
             }
+
+            // sound
+            if (Settings.IS_SOUND_ENABLED) {
+                this.fx = this.game.add.audio("engineLoop");
+                this.fx.play("", 0, 0.5, true);
+            }
         },
 
 
@@ -233,6 +244,7 @@
             this.rightButton = this.input.keyboard.addKey(Phaser.Keyboard.D);
             this.thrustButton = this.input.keyboard.addKey(Phaser.Keyboard.W);
             this.backpedalButton = this.input.keyboard.addKey(Phaser.Keyboard.S);
+            this.fireButton = this.input.keyboard.addKey(Phaser.Keyboard.F);
         },
 
 

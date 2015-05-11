@@ -49,7 +49,7 @@
             this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
             this.angle = angle;
-            this.lifespan = 700;
+            this.lifespan = Settings.PLANE_BULLET_LIFESPAN;
 
             this.body.gravity.set(0, 100);
         }
