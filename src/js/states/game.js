@@ -178,8 +178,11 @@
 
             // sound
             if (Settings.IS_SOUND_ENABLED) {
-                this.fx = this.game.add.audio("engineLoop");
-                this.fx.play("", 0, 0.5, true);
+                this.engineLoop = this.game.add.audio("engineLoop");
+                this.engineLoop.play("", 0, 0.5, true);
+
+                this.musicLoop = this.game.add.audio("music-parapet");
+                this.musicLoop.play("", 0, 0.8, true);
             }
         },
 
