@@ -22,6 +22,7 @@
 
             this.load.atlasJSONHash("game", "assets/game.png", "assets/game.json");
             this.load.audio("engineLoop", "assets/audio/base-engine-loop.wav");
+            this.load.audio("engineStress", "assets/audio/base-engine-stress.wav");
             this.load.audio("gunshot", "assets/audio/gunshot.wav");
             this.load.audio("music-parapet", "assets/audio/music-parapet.wav");
             this.load.image("forestBackground", "assets/forest-bg-1920x1080.jpg");

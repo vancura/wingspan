@@ -104,8 +104,13 @@
 
                     // firing
                     if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButton.isDown) {
-                        plane.weapon.fire(this.masterPlane);
+                        plane.weapon.fire(plane);
                     }
+
+                    // sounds
+                    var v = plane.vel / 60;
+                    this.engineLoop.volume = 1 - v / 4;
+                    this.engineStress.volume = v / 4;
 
                     // calculate parallax,
                     var p = 1 / (this.world.width / plane.body.x);
@@ -179,10 +184,13 @@
             // sound
             if (Settings.IS_SOUND_ENABLED) {
                 this.engineLoop = this.game.add.audio("engineLoop");
-                this.engineLoop.play("", 0, 0.5, true);
+                this.engineLoop.play("", 0, 0, true);
+
+                this.engineStress = this.game.add.audio("engineStress");
+                this.engineStress.play("", 0, 0, true);
 
                 this.musicLoop = this.game.add.audio("music-parapet");
-                this.musicLoop.play("", 0, 0.8, true);
+                //this.musicLoop.play("", 0, 0.8, true);
             }
         },
 

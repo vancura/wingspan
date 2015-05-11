@@ -30,8 +30,9 @@
         // could be 0.1 .. MAX_THRUST
         this.currentThrust = 0.1;
 
-        // current degree
+        // current degree and vel
         this.degree = 0;
+        this.vel = 0;
 
         // crashed flag preventing multiple crashes
         // reset from this.reset()
@@ -115,8 +116,9 @@
             var f = 10 - (Math.round(Math.abs(rot) / 7) + 1);
             this.frameName = this.framePrefix + "/p" + f + ".png";
 
-            // store the degree
+            // store the degree and vel
             this.degree = rot;
+            this.vel = vel;
         }
     };
 
