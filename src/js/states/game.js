@@ -110,8 +110,8 @@
 
                     // sounds
                     var v = plane.vel / 60;
-                    this.engineLoop.volume = 1 - v;
-                    this.engineStress.volume = v / 8;
+                    this.engineLoop.volume = 1 - v / 2;
+                    this.engineStress.volume = v / 4;
 
                     // calculate parallax,
                     var p = 1 / (this.world.width / plane.body.x);
@@ -196,7 +196,7 @@
                 this.engineStress.play("", 0, 0, true);
 
                 this.musicLoop = this.game.add.audio("music-parapet");
-                //this.musicLoop.play("", 0, 0.8, true);
+                this.musicLoop.play("", 0, 0.8, true);
 
                 this.explosion = this.game.add.audio("explosion");
             }
