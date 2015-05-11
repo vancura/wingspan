@@ -22,6 +22,7 @@
 
             this.load.atlasJSONHash("game", "assets/game.png", "assets/game.json");
             this.load.audio("engineLoop", "assets/audio/PropEngineLoop1_02.wav");
+            this.load.image("forestBackground", "assets/forest-bg-1920x1080.jpg");
         },
 
 

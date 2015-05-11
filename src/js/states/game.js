@@ -47,6 +47,7 @@
          */
         create: function () {
             this.createControls();
+            this.createBackground();
             this.createGroundBack();
             this.createPlanes();
             this.createTrails();
@@ -201,6 +202,8 @@
                     this.trailGraphicsLeft = this.add.graphics(0, 0);
                     this.trailGraphicsRight = this.add.graphics(0, 0);
 
+                    this.trailGraphicsLeft.alpha = this.trailGraphicsRight.alpha = 0.2;
+
                     this.trailGraphicsLeft.name = "trailLeft";
                     this.trailGraphicsRight.name = "trailRight";
 
@@ -234,6 +237,17 @@
 
 
         /**
+         * Create the background.
+         */
+        createBackground: function () {
+            this.background = this.add.sprite(0, 0, "forestBackground");
+            this.background.width = this.world.width;
+            this.background.height = this.world.height;
+            this.background.fixedToCamera = true;
+        },
+
+
+        /**
          * Create ground in back.
          * It needs to be called separately to allow proper z-sorting.
          */
@@ -251,7 +265,7 @@
             var i = 0;
             while (i < Math.ceil(this.world.width / 256)) {
                 var l = this.groundGroup4.create(i * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                l.tint = 0x8d9499;
+                l.tint = 0xf48f44;
                 i++;
             }
 
@@ -259,7 +273,7 @@
             var j = 0;
             while (j < Math.ceil(this.world.width / 256) + 1) {
                 var m = this.groundGroup3.create(j * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                m.tint = 0x4b565f;
+                m.tint = 0x882d25;
                 j++;
             }
 
@@ -267,7 +281,7 @@
             var k = 0;
             while (k < Math.ceil(this.world.width / 256) + 2) {
                 var n = this.groundGroup2.create(k * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                n.tint = 0x252d33;
+                n.tint = 0x5f0028;
                 k++;
             }
 
@@ -296,8 +310,8 @@
             this.groundGroup1.name = "groundGroup1";
 
             var i = 0;
-            while (i < Math.ceil(this.world.width / 256) + 3) {
-                var l = this.groundGroup1.create(i * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
+            while (i < Math.ceil(this.world.width / 254) + 3) {
+                var l = this.groundGroup1.create(i * 254, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
                 l.tint = 0x000000;
                 i++;
             }
