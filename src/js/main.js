@@ -8,8 +8,8 @@
 
 
     game = new Phaser.Game({
-        width: window.innerWidth,
-        height: window.innerHeight / 1.2,
+        width: 1280,
+        height: 720,
         renderer: Phaser.AUTO,
         parent: document.getElementById("app"),
         transparent: false,

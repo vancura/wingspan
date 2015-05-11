@@ -79,7 +79,6 @@
     Plane.prototype.reset = function () {
         this.body.x = this.game.world.centerX;
         this.body.y = Settings.WORLD_OVERFLOW;
-        this.body.angle = 180;
 
         this.body.setZeroRotation();
         this.body.setZeroVelocity();
