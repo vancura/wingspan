@@ -60,7 +60,9 @@
 
             this.getFirstExists(false).fire(source.x + x, source.y + y, source.angle - 90, this.bulletSpeed, 0, 0);
 
-            this.fx.play("", 0, this.game.rnd.between(0.75, 1.0));
+            if (Settings.IS_SOUND_ENABLED) {
+                this.fx.play("", 0, this.game.rnd.between(0.75, 1.0));
+            }
 
             this.nextFire = this.game.time.time + this.game.rnd.between(this.fireRate * 0.99, this.fireRate * 1.01);
         }

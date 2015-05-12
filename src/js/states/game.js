@@ -109,9 +109,11 @@
                     }
 
                     // sounds
-                    var v = plane.vel / 60;
-                    this.engineLoop.volume = 1 - v / 2;
-                    this.engineStress.volume = v / 4;
+                    if (Settings.IS_SOUND_ENABLED) {
+                        var v = plane.vel / 60;
+                        this.engineLoop.volume = 1 - v / 2;
+                        this.engineStress.volume = v / 4;
+                    }
 
                     // calculate parallax,
                     var p = 1 / (this.world.width / plane.body.x);
@@ -402,7 +404,9 @@
             tween.to({alpha: 0}, 1000);
             tween.start();
 
-            this.explosion.play();
+            if (Settings.IS_SOUND_ENABLED) {
+                this.explosion.play();
+            }
 
             if (e === this.masterPlane) {
                 this.isRestartRequested = true;
