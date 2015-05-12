@@ -129,7 +129,7 @@
                 // draw trails, calculate the distance multiplier
                 if (a === 0) {
                     // 1.15 to prevent merging lines
-                    this.drawTrails(plane, 1 - Math.abs(plane.degree / (Settings.PLANE_KEYBOARD_ROTATION_STEP * 1.15)), 0xFF0000);
+                    this.trails.draw(plane, 1 - Math.abs(plane.degree / (Settings.PLANE_KEYBOARD_ROTATION_STEP * 1.15)), 0xFF0000);
                 }
             }
         },
@@ -137,31 +137,6 @@
 
         // PRIVATE
         // -------
-
-
-        /**
-         * Get trail positions.
-         * @param plane The plane
-         * @param multiplier Distance multiplier (used when rotating)
-         * @return Array of trail positions [x1, y1, x2, y2]
-         */
-        getTrailPositions: function (plane, multiplier) {
-            var out = null;
-
-            if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-                var d = plane.rotation * -1 - 90 * (Math.PI / 180);
-                var m = (typeof multiplier === "undefined") ? 0 : 1 - multiplier;
-
-                var x1 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.body.x;
-                var y1 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * -m) + plane.body.y;
-                var x2 = Math.sin(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.body.x;
-                var y2 = Math.cos(d) * (Settings.MAX_TRAIL_DISTANCE * m) + plane.body.y;
-
-                out = [x1, y1, x2, y2];
-            }
-
-            return out;
-        },
 
 
         /**
@@ -216,9 +191,7 @@
                 this.masterPlane.reset();
 
                 // reset this plane trails
-                var pos = this.getTrailPositions(this.masterPlane);
-                this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
-                this.trailGraphicsRight.moveTo(pos[2], pos[3]);
+                this.trails.reset();
             }
         },
 
@@ -228,20 +201,8 @@
          */
         createTrails: function () {
             if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-                if (this.masterPlane) {
-                    var pos = this.getTrailPositions(this.masterPlane);
-
-                    this.trailGraphicsLeft = this.add.graphics(0, 0);
-                    this.trailGraphicsRight = this.add.graphics(0, 0);
-
-                    this.trailGraphicsLeft.alpha = this.trailGraphicsRight.alpha = 0.2;
-
-                    this.trailGraphicsLeft.name = "trailLeft";
-                    this.trailGraphicsRight.name = "trailRight";
-
-                    this.trailGraphicsLeft.moveTo(pos[0], pos[1]);
-                    this.trailGraphicsRight.moveTo(pos[2], pos[3]);
-                }
+                this.trails = new Trails(this.game, this.masterPlane);
+                this.trails.init();
             }
         },
 
@@ -367,25 +328,6 @@
          */
         createSignals: function () {
             signals.onCrashBottom.add(this.onPlaneCrashed, this);
-        },
-
-
-        /**
-         * Draw trails.
-         * @param plane Plane to draw a trail for
-         * @param multiplier Distance multiplier (used when rotating)
-         * @param color Color of the trail
-         */
-        drawTrails: function (plane, multiplier, color) {
-            if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-                var pos = this.getTrailPositions(plane, multiplier);
-
-                this.trailGraphicsLeft.lineStyle(1, color, 0.5);
-                this.trailGraphicsLeft.lineTo(pos[0], pos[1]);
-
-                this.trailGraphicsRight.lineStyle(1, color, 0.5);
-                this.trailGraphicsRight.lineTo(pos[2], pos[3]);
-            }
         },
 
 

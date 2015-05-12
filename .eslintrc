@@ -13,6 +13,7 @@
         "PreloadState": true,
         "Bullet": true,
         "Weapon": true,
-        "Plane": true
+        "Plane": true,
+        "Trails": true
     }
 }

@@ -18,7 +18,6 @@
         this.bulletSpeed = Settings.PLANE_BULLET_SPEED;
         this.fireRate = Settings.PLANE_BULLET_FIRE_RATE;
         this.flip = false;
-        this.isFiring = false;
     };
 
 
