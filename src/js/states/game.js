@@ -115,14 +115,11 @@
                         this.engineStress.volume = v / 4;
                     }
 
-                    // calculate parallax,
+                    // handle parallax scrolling
                     var p = 1 / (this.world.width / plane.body.x);
 
-                    this.groundGroup1.x = (this.world.width - this.groundGroup1.width) * p;
-                    this.groundGroup2.x = (this.world.width - this.groundGroup2.width) * p;
-                    this.groundGroup3.x = (this.world.width - this.groundGroup3.width) * p;
-                    this.groundGroup4.x = (this.world.width - this.groundGroup4.width) * p;
-
+                    this.groundBack.scroll(p);
+                    this.groundFront.scroll(p);
                     this.game.camera.x = (this.world.width - this.originalWidth) * p;
                 }
 
@@ -246,52 +243,8 @@
          * It needs to be called separately to allow proper z-sorting.
          */
         createGroundBack: function () {
-            this.groundGroup4 = this.add.group();
-            this.groundGroup4.name = "groundGroup4";
-
-            this.groundGroup3 = this.add.group();
-            this.groundGroup3.name = "groundGroup3";
-
-            this.groundGroup2 = this.add.group();
-            this.groundGroup2.name = "groundGroup2";
-
-            // add level 1 layer
-            var i = 0;
-            while (i < Math.ceil(this.world.width / 256)) {
-                var l = this.groundGroup4.create(i * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                l.tint = 0xf48f44;
-                i++;
-            }
-
-            // add level 2 layer
-            var j = 0;
-            while (j < Math.ceil(this.world.width / 256) + 1) {
-                var m = this.groundGroup3.create(j * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                m.tint = 0x882d25;
-                j++;
-            }
-
-            // add level 3 layer
-            var k = 0;
-            while (k < Math.ceil(this.world.width / 256) + 2) {
-                var n = this.groundGroup2.create(k * 256, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                n.tint = 0x5f0028;
-                k++;
-            }
-
-            var g2 = this.groundGroup2.create(0, 0, "game", "ground-grad.png");
-            var g3 = this.groundGroup3.create(0, 0, "game", "ground-grad.png");
-            var g4 = this.groundGroup4.create(0, 0, "game", "ground-grad.png");
-
-            g2.width = g3.width = g4.width = this.world.width;
-
-            g2.alpha = 0.3;
-            g3.alpha = 0.5;
-            g4.alpha = 0.7;
-
-            this.groundGroup2.y = this.world.height - 100 - 30;
-            this.groundGroup3.y = this.world.height - 100 - 50;
-            this.groundGroup4.y = this.world.height - 100 - 65;
+            this.groundBack = new GroundBack(this.game);
+            this.groundBack.init();
         },
 
 
@@ -300,17 +253,8 @@
          * It needs to be called separately to allow proper z-sorting.
          */
         createGroundFront: function () {
-            this.groundGroup1 = this.add.group();
-            this.groundGroup1.name = "groundGroup1";
-
-            var i = 0;
-            while (i < Math.ceil(this.world.width / 254) + 3) {
-                var l = this.groundGroup1.create(i * 254, 0, "game", "ground/g" + (this.rnd.integerInRange(1, 6)) + ".png");
-                l.tint = 0x000000;
-                i++;
-            }
-
-            this.groundGroup1.y = this.world.height - 100;
+            this.groundFront = new GroundFront(this.game);
+            this.groundFront.init();
         },
 
 

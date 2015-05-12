@@ -35,6 +35,8 @@
         "Bullet": true,
         "Weapon": true,
         "Plane": true,
-        "Trails": true
+        "Trails": true,
+        "GroundBack": true,
+        "GroundFront": true
     }
 }

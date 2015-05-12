@@ -1,7 +1,7 @@
 var game;
 var signals;
 var BootState, PreloadState, GameState;
-var Bullet, Weapon, Plane, Trails;
+var Bullet, Weapon, Plane, Trails, GroundBack, GroundFront;
 
 
 var Settings = {
