@@ -8,9 +8,10 @@
     /**
      * Weapon constructor.
      * @param game Game reference
+     * @param planeIdx Plane index
      * @constructor
      */
-    Weapon = function (game) {
+    Weapon = function (game, planeIdx) {
         Phaser.Group.call(this, game, game.world, "weapon", false, true, Phaser.Physics.ARCADE);
 
         this.isInited = false;
@@ -18,6 +19,7 @@
         this.bulletSpeed = Settings.PLANE_BULLET_SPEED;
         this.fireRate = Settings.PLANE_BULLET_FIRE_RATE;
         this.flip = false;
+        this.planeIdx = planeIdx;
     };
 
 
@@ -28,7 +30,7 @@
     Weapon.prototype.init = function () {
         // prepare bullets
         for (var i = 0; i < 64 * 4; i++) {
-            var bullet = new Bullet(game);
+            var bullet = new Bullet(game, this.planeIdx);
 
             this.add(bullet, true);
 
@@ -51,11 +53,11 @@
     Weapon.prototype.fire = function (source) {
         if (this.isInited && this.game.time.time >= game.rnd.between(this.nextFire - 10, this.nextFire)) {
             var d = this.flip ? game.rnd.between(-7, -3) : game.rnd.between(3, 7);
+
             this.flip = !this.flip;
 
-            var r = source.rotation;
-            var x = Math.cos(r) * d;
-            var y = Math.sin(r) * d;
+            var x = Math.cos(source.rotation) * d;
+            var y = Math.sin(source.rotation) * d;
 
             this.getFirstExists(false).fire(source.x + x, source.y + y, source.angle - 90, this.bulletSpeed, 0, 0);
 

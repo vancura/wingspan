@@ -8,18 +8,18 @@
     /**
      * Bullet constructor.
      * @param game Game reference
+     * @param planeIdx Plane index
      * @constructor
      */
-    Bullet = function (game) {
+    Bullet = function (game, planeIdx) {
         Phaser.Sprite.call(this, game, 0, 0, "game", "bullet.png");
 
         this.isInited = false;
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
         this.exists = false;
-        this.tracking = false;
-        this.scaleSpeed = 0;
         this.name = "bullet";
+        this.planeIdx = planeIdx;
     };
 
 
@@ -52,25 +52,6 @@
             this.lifespan = Settings.PLANE_BULLET_LIFESPAN;
 
             this.body.gravity.set(0, 100);
-        }
-    };
-
-
-    // PRIVATE
-    // -------
-
-
-    /**
-     * Update.
-     */
-    Bullet.prototype.update = function () {
-        if (this.tracking) {
-            this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);
-        }
-
-        if (this.scaleSpeed > 0) {
-            this.scale.x += this.scaleSpeed;
-            this.scale.y += this.scaleSpeed;
         }
     };
 

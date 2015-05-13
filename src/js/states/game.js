@@ -84,9 +84,9 @@
 
                     // turn sideways
                     if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown) {
-                        plane.rotateLeft();
+                        plane.rotateLeft(1);
                     } else if (!this.leftButtonP1.isDown && this.rightButtonP1.isDown) {
-                        plane.rotateRight();
+                        plane.rotateRight(1);
                     } else {
                         plane.leaveRotation();
                     }
@@ -125,9 +125,9 @@
                 if (plane === this.player2Plane) {
                     // turn sideways
                     if (this.leftButtonP2.isDown && !this.rightButtonP2.isDown) {
-                        plane.rotateLeft();
+                        plane.rotateLeft(1);
                     } else if (!this.leftButtonP2.isDown && this.rightButtonP2.isDown) {
-                        plane.rotateRight();
+                        plane.rotateRight(1);
                     } else {
                         plane.leaveRotation();
                     }
@@ -151,6 +151,9 @@
                 // draw trails, calculate the distance multiplier
                 // 0.1 to prevent merging lines
                 this.trails.draw(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1, plane.trailColor);
+
+                // check bullets
+                plane.weapon.forEachAlive(this.checkBullets, this);
             }
         },
 
@@ -166,7 +169,7 @@
             for (var a = 0; a < Settings.PLANE_COUNT; a++) {
                 var framePrefix = (a === 0) ? "plane1" : "plane2"; // TODO: More planes
                 var trailColor = Settings.PLANE_TRAIL_COLOR_LIST[a];
-                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor);
+                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, a);
 
                 this.add.existing(plane);
 
@@ -310,6 +313,31 @@
         createSignals: function () {
             signals.onCrashBottom.add(this.onPlaneCrashed, this);
         },
+
+
+        /**
+         * Check bullet impacts.
+         * @param e Bullet reference
+         */
+        checkBullets: function (e) {
+            var i = 0;
+            var plane;
+
+            // check for all planes
+            for (; i < GameState.planeList.length; i++) {
+                plane = GameState.planeList[i];
+
+                // but prevent this plane
+                if (i !== e.planeIdx && e.overlap(plane)) {
+                    // the plane was shot
+                    plane.shoot();
+                }
+            }
+        },
+
+
+        // EVENT LISTENERS
+        // ---------------
 
 
         /**

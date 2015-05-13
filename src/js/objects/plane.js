@@ -12,14 +12,16 @@
      * @param y Start Y position
      * @param framePrefix Sprite prefix
      * @param trailColor Trail color
+     * @param idx Plane index
      * @constructor
      */
-    Plane = function (game, x, y, framePrefix, trailColor) {
+    Plane = function (game, x, y, framePrefix, trailColor, idx) {
         Phaser.Sprite.call(this, game, x, y, "game", framePrefix + "/p1.png");
 
         this.isInited = false;
         this.framePrefix = framePrefix;
         this.trailColor = trailColor;
+        this.idx = idx;
 
         // enable physics for this sprite
         game.physics.box2d.enable(this);
@@ -55,7 +57,7 @@
 
         // create a weapon
         if (Settings.IS_PLANE_WEAPON_ENABLED) {
-            this.weapon = new Weapon(game);
+            this.weapon = new Weapon(game, this.idx);
             this.weapon.init();
         }
 
@@ -127,20 +129,22 @@
 
     /**
      * Rotating left, increase rotation degree until it's +1.
+     * @param multiplier Multiplier (used when shooting)
      */
-    Plane.prototype.rotateLeft = function () {
+    Plane.prototype.rotateLeft = function (multiplier) {
         if (this.isInited) {
-            this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP;
+            this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
         }
     };
 
 
     /**
      * Rotating right, decrease rotation degree until it's -1.
+     * @param multiplier Multiplier (used when shooting)
      */
-    Plane.prototype.rotateRight = function () {
+    Plane.prototype.rotateRight = function (multiplier) {
         if (this.isInited) {
-            this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP;
+            this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
         }
     };
 
@@ -193,6 +197,23 @@
             this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
             this.body.thrust(this.currentThrust);
+        }
+    };
+
+
+    /**
+     * Shoot this plane.
+     */
+    Plane.prototype.shoot = function () {
+        // first slow down
+        this.backPedal();
+
+        // then randomly rotate
+        if ((game.rnd.frac() > 0.5)) {
+            this.rotateLeft(game.rnd.frac() * 10);
+        }
+        else {
+            this.rotateRight(game.rnd.frac() * 10);
         }
     };
 
