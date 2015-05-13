@@ -8,16 +8,14 @@
     /**
      * Trails constructor.
      * @param game Game reference
-     * @param masterPlane Master plane reference
      * @constructor
      */
-    Trails = function (game, masterPlane) {
+    Trails = function (game) {
         this.bmpd = game.add.bitmapData(game.world.width, game.world.height);
         this.bmpd.fill(0, 0, 0, 1);
 
         Phaser.Sprite.call(this, game, 0, 0, this.bmpd);
 
-        this.masterPlane = masterPlane;
         this.isInited = false;
         this.blendMode = PIXI.blendModes.ADD;
     };

@@ -31,10 +31,8 @@
 
             GameState.planeList = [];
 
-            // master plane is the plane user controls
-            // it also gets destroyed and then another plane is set to be master
-            // see this.restart()
-            this.masterPlane = null;
+            this.player1Plane = null;
+            this.player2Plane = null;
 
             // when restart is needed this is true
             // handled in this.update()
@@ -77,17 +75,17 @@
             for (var a = 0; a < GameState.planeList.length; a++) {
                 var plane = GameState.planeList[a];
 
-                // only control the master plane
-                if (plane === this.masterPlane) {
+                // control the player 1 plane
+                if (plane === this.player1Plane) {
                     // check for restart mode
                     if (this.isRestartRequested) {
                         this.restart();
                     }
 
                     // turn sideways
-                    if (this.leftButton.isDown && !this.rightButton.isDown) {
+                    if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown) {
                         plane.rotateLeft();
-                    } else if (!this.leftButton.isDown && this.rightButton.isDown) {
+                    } else if (!this.leftButtonP1.isDown && this.rightButtonP1.isDown) {
                         plane.rotateRight();
                     } else {
                         plane.leaveRotation();
@@ -95,16 +93,16 @@
 
                     // thrust or backpedal
                     // after a while revert to original power
-                    if (this.thrustButton.isDown) {
+                    if (this.thrustButtonP1.isDown) {
                         plane.thrust();
-                    } else if (this.backpedalButton.isDown) {
+                    } else if (this.backpedalButtonP1.isDown) {
                         plane.backPedal();
                     } else {
                         plane.leaveThrust();
                     }
 
                     // firing
-                    if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButton.isDown) {
+                    if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown) {
                         plane.weapon.fire(plane);
                     }
 
@@ -121,6 +119,33 @@
                     this.groundBack.scroll(p);
                     this.groundFront.scroll(p);
                     this.game.camera.x = (this.world.width - this.originalWidth) * p;
+                }
+
+                // control the player 2 plane
+                if (plane === this.player2Plane) {
+                    // turn sideways
+                    if (this.leftButtonP2.isDown && !this.rightButtonP2.isDown) {
+                        plane.rotateLeft();
+                    } else if (!this.leftButtonP2.isDown && this.rightButtonP2.isDown) {
+                        plane.rotateRight();
+                    } else {
+                        plane.leaveRotation();
+                    }
+
+                    // thrust or backpedal
+                    // after a while revert to original power
+                    if (this.thrustButtonP2.isDown) {
+                        plane.thrust();
+                    } else if (this.backpedalButtonP2.isDown) {
+                        plane.backPedal();
+                    } else {
+                        plane.leaveThrust();
+                    }
+
+                    // firing
+                    if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP2.isDown) {
+                        plane.weapon.fire(plane);
+                    }
                 }
 
                 // draw trails, calculate the distance multiplier
@@ -149,9 +174,14 @@
 
                 plane.init();
 
-                // set the master plane
+                // set the player 1 plane
                 if (a === 0) {
-                    this.masterPlane = plane;
+                    this.player1Plane = plane;
+                }
+
+                // set the player 2 plane
+                if (a === 1) {
+                    this.player2Plane = plane;
                 }
             }
         },
@@ -180,11 +210,13 @@
          * Restart after crash.
          */
         restart: function () {
-            if (this.masterPlane) {
+            if (this.player1Plane) {
                 this.isRestartRequested = false;
 
                 // reset the plane position and rotation
-                this.masterPlane.reset();
+                this.player1Plane.reset();
+
+                // TODO: Player 2
             }
         },
 
@@ -194,7 +226,7 @@
          */
         createTrails: function () {
             if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-                this.trails = new Trails(this.game, this.masterPlane);
+                this.trails = new Trails(this.game);
                 this.trails.init();
 
                 this.add.existing(this.trails);
@@ -217,11 +249,17 @@
          * Create controls.
          */
         createControls: function () {
-            this.leftButton = this.input.keyboard.addKey(Phaser.Keyboard.A);
-            this.rightButton = this.input.keyboard.addKey(Phaser.Keyboard.D);
-            this.thrustButton = this.input.keyboard.addKey(Phaser.Keyboard.W);
-            this.backpedalButton = this.input.keyboard.addKey(Phaser.Keyboard.S);
-            this.fireButton = this.input.keyboard.addKey(Phaser.Keyboard.F);
+            this.leftButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.A);
+            this.rightButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.D);
+            this.thrustButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.W);
+            this.backpedalButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.S);
+            this.fireButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.F);
+
+            this.leftButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+            this.rightButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+            this.thrustButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+            this.backpedalButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+            this.fireButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.ALT);
         },
 
 
@@ -293,9 +331,11 @@
                 this.explosion.play();
             }
 
-            if (e === this.masterPlane) {
+            if (e === this.player1Plane) {
                 this.isRestartRequested = true;
             }
+
+            // TODO: Player 2
         }
 
 
