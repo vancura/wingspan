@@ -5,7 +5,7 @@ var Bullet, Weapon, Plane, Trails, GroundBack, GroundFront;
 
 
 var Settings = {
-    IS_DEBUG_ENABLED: true,
+    IS_DEBUG_ENABLED: false,
     IS_TRAILS_RENDERING_ENABLED: true,
     IS_PLANE_WEAPON_ENABLED: true,
     IS_SOUND_ENABLED: false,
@@ -24,5 +24,6 @@ var Settings = {
     PLANE_CONTROL_DEGREE_STEP: 0.05,
     PLANE_BULLET_SPEED: 350,
     PLANE_BULLET_FIRE_RATE: 70,
-    PLANE_BULLET_LIFESPAN: 1000
+    PLANE_BULLET_LIFESPAN: 1000,
+    PLANE_TRAIL_THICKNESS: 0.8
 };

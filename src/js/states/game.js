@@ -47,6 +47,7 @@
          */
         create: function () {
             this.createControls();
+            this.createParallax();
             this.createBackground();
             this.createGroundBack();
             this.createPlanes();
@@ -54,7 +55,6 @@
             this.createTrails();
             this.createFire();
             this.createGroundFront();
-            this.createParallax();
             this.createSignals();
         },
 
@@ -125,8 +125,8 @@
 
                 // draw trails, calculate the distance multiplier
                 if (a === 0) {
-                    // 1.15 to prevent merging lines
-                    this.trails.draw(plane, 1 - Math.abs(plane.degree / (Settings.PLANE_KEYBOARD_ROTATION_STEP * 1.15)), 0xFF0000);
+                    // 0.1 to prevent merging lines
+                    this.trails.draw(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1, "rgba(255,255,0,1)");
                 }
             }
         },
@@ -186,9 +186,6 @@
 
                 // reset the plane position and rotation
                 this.masterPlane.reset();
-
-                // reset this plane trails
-                this.trails.reset();
             }
         },
 
@@ -200,6 +197,8 @@
             if (Settings.IS_TRAILS_RENDERING_ENABLED) {
                 this.trails = new Trails(this.game, this.masterPlane);
                 this.trails.init();
+
+                this.add.existing(this.trails);
             }
         },
 
@@ -232,6 +231,7 @@
          */
         createBackground: function () {
             this.background = this.add.sprite(0, 0, "forestBackground");
+            this.background.name = "background";
             this.background.width = this.world.width;
             this.background.height = this.world.height;
             this.background.fixedToCamera = true;

@@ -12,34 +12,22 @@
      * @constructor
      */
     Trails = function (game, masterPlane) {
-        Phaser.Group.call(this, game, game.world, "trails");
+        this.bmpd = game.add.bitmapData(game.world.width, game.world.height);
+        this.bmpd.fill(0, 0, 0, 1);
+
+        Phaser.Sprite.call(this, game, 0, 0, this.bmpd);
 
         this.masterPlane = masterPlane;
         this.isInited = false;
+        this.blendMode = PIXI.blendModes.ADD;
     };
 
 
-    Trails.prototype = Object.create(Phaser.Group.prototype);
+    Trails.prototype = Object.create(Phaser.Sprite.prototype);
     Trails.prototype.constructor = Trails;
 
 
     Trails.prototype.init = function () {
-        var pos = this.getPositions(this.masterPlane);
-
-        this.graphicsLeft = new Phaser.Graphics(this.game, 0, 0);
-        this.graphicsRight = new Phaser.Graphics(this.game, 0, 0);
-
-        this.add(this.graphicsLeft);
-        this.add(this.graphicsRight);
-
-        this.graphicsLeft.alpha = this.graphicsRight.alpha = 0.2;
-
-        this.graphicsLeft.name = "trailLeft";
-        this.graphicsRight.name = "trailRight";
-
-        this.graphicsLeft.moveTo(pos[0], pos[1]);
-        this.graphicsRight.moveTo(pos[2], pos[3]);
-
         this.isInited = true;
     };
 
@@ -70,18 +58,6 @@
 
 
     /**
-     * Reset trail positions.
-     * Used after master plane crash.
-     */
-    Trails.prototype.reset = function () {
-        var pos = this.getPositions(this.masterPlane);
-
-        this.graphicsLeft.moveTo(pos[0], pos[1]);
-        this.graphicsRight.moveTo(pos[2], pos[3]);
-    };
-
-
-    /**
      * Draw trails.
      * @param plane Plane to draw a trail for
      * @param multiplier Distance multiplier (used when rotating)
@@ -91,11 +67,9 @@
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {
             var pos = this.getPositions(plane, multiplier);
 
-            this.graphicsLeft.lineStyle(1, color, 0.5);
-            this.graphicsLeft.lineTo(pos[0], pos[1]);
-
-            this.graphicsRight.lineStyle(1, color, 0.5);
-            this.graphicsRight.lineTo(pos[2], pos[3]);
+            this.bmpd.fill(0, 0, 0, 0.05);
+            this.bmpd.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, color);
+            this.bmpd.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, color);
         }
     };
 
