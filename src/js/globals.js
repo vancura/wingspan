@@ -25,5 +25,10 @@ var Settings = {
     PLANE_BULLET_SPEED: 350,
     PLANE_BULLET_FIRE_RATE: 70,
     PLANE_BULLET_LIFESPAN: 1000,
-    PLANE_TRAIL_THICKNESS: 0.8
+    PLANE_TRAIL_THICKNESS: 0.8,
+
+    PLANE_TRAIL_COLOR_LIST: [
+        "rgba(255,255,0,1)",
+        "rgba(255,0,255,1)"
+    ]
 };

@@ -11,13 +11,15 @@
      * @param x Start X position
      * @param y Start Y position
      * @param framePrefix Sprite prefix
+     * @param trailColor Trail color
      * @constructor
      */
-    Plane = function (game, x, y, framePrefix) {
+    Plane = function (game, x, y, framePrefix, trailColor) {
         Phaser.Sprite.call(this, game, x, y, "game", framePrefix + "/p1.png");
 
         this.isInited = false;
         this.framePrefix = framePrefix;
+        this.trailColor = trailColor;
 
         // enable physics for this sprite
         game.physics.box2d.enable(this);

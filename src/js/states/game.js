@@ -124,10 +124,8 @@
                 }
 
                 // draw trails, calculate the distance multiplier
-                if (a === 0) {
-                    // 0.1 to prevent merging lines
-                    this.trails.draw(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1, "rgba(255,255,0,1)");
-                }
+                // 0.1 to prevent merging lines
+                this.trails.draw(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1, plane.trailColor);
             }
         },
 
@@ -142,7 +140,8 @@
         createPlanes: function () {
             for (var a = 0; a < Settings.PLANE_COUNT; a++) {
                 var framePrefix = (a === 0) ? "plane1" : "plane2"; // TODO: More planes
-                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix);
+                var trailColor = Settings.PLANE_TRAIL_COLOR_LIST[a];
+                var plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor);
 
                 this.add.existing(plane);
 
