@@ -8,7 +8,7 @@ var Settings = {
     IS_DEBUG_ENABLED: false,
     IS_TRAILS_RENDERING_ENABLED: true,
     IS_PLANE_WEAPON_ENABLED: true,
-    IS_SOUND_ENABLED: false,
+    IS_SOUND_ENABLED: true,
 
     WORLD_GRAVITY: 75,
     WORLD_OVERFLOW: -30,
