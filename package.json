@@ -1,12 +1,12 @@
 {
-    "name": "project-sopwith",
-    "title": "Project Sopwith",
+    "name": "wingspan",
+    "title": "Wingspan",
     "author": "Vaclav Vancura <vaclav@vancura.org>",
     "homepage": "http://vancura.org",
     "version": "1.0.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/vancura/project-sopwith"
+        "url": "https://github.com/vancura/wingspan"
     },
     "devDependencies": {
         "browser-sync": "^2.0.1",

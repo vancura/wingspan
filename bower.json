@@ -1,5 +1,13 @@
 {
-    "name": "px",
+    "name": "wingspan",
+    "title": "Wingspan",
+    "author": "Vaclav Vancura <vaclav@vancura.org>",
+    "homepage": "http://vancura.org",
+    "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/vancura/wingspan"
+    },
     "dependencies": {},
     "devDependencies": {
         "normalize-scss": "^3.0.2",

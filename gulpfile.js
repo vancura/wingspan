@@ -17,7 +17,7 @@ var vinylPaths = require("vinyl-paths");
 
 
 var proxy = "http://localhost";
-var srcRoot = "/Users/Vancura/Repos/Projects/ProjectSopwith/project-sopwith/";
+var srcRoot = "/Users/Vancura/Repos/Projects/Wingspan/wingspan/";
 
 var paths = {
     src: "src",
