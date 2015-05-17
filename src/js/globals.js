@@ -17,7 +17,7 @@ var Settings = {
     PLANE_COUNT: 2,
     MAX_PLANE_THRUST: 210,
     PLANE_THRUST_MULTIPLIER_UP: 1.9, // thrust multiplier when thrust button down
-    PLANE_THRUST_MULTIPLIER_DOWN: 0.5, // thrust multiplier when backpedal button down
+    PLANE_THRUST_MULTIPLIER_DOWN: 1, // thrust multiplier when backpedal button down
     PLANE_THRUST_MULTIPLIER_NONE: 0.995, // thrust step when both thrust and backpedal buttons released
     PLANE_ANGULAR_DAMPING_FACTOR: 20,
     PLANE_KEYBOARD_ROTATION_STEP: 60,
@@ -25,7 +25,7 @@ var Settings = {
     PLANE_BULLET_SPEED: 350,
     PLANE_BULLET_FIRE_RATE: 70,
     PLANE_BULLET_LIFESPAN: 1000,
-    PLANE_TRAIL_THICKNESS: 0.9,
+    PLANE_TRAIL_THICKNESS: 0.8,
 
     PLANE_TRAIL_COLOR_LIST: [
         "rgba(255,255,0,1)",

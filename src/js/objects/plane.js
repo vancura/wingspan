@@ -179,7 +179,7 @@
      */
     Plane.prototype.backPedal = function () {
         if (this.isInited) {
-            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
+            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
             this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
             this.body.thrust(this.currentThrust);
@@ -209,7 +209,7 @@
         this.backPedal();
 
         // then randomly rotate
-        if ((game.rnd.frac() > 0.1)) {
+        if ((game.rnd.frac() > 0.5)) {
             this.rotateLeft(game.rnd.frac() * 10);
         }
         else {
