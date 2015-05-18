@@ -1,8 +1,14 @@
+/// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
+
+
 /**
  * Bullet.
  */
-(function () {
-    "use strict";
+class Bullet extends Phaser.Sprite {
+
+
+    private isInited:boolean;
+    private planeIdx:number; // TODO: idx should auto-increment
 
 
     /**
@@ -11,27 +17,26 @@
      * @param planeIdx Plane index
      * @constructor
      */
-    Bullet = function (game, planeIdx) {
-        Phaser.Sprite.call(this, game, 0, 0, "game", "bullet.png");
+    constructor(game:Phaser.Game, planeIdx:number) {
+        super(game, 0, 0, "game", "bullet.png");
 
-        this.isInited = false;
+        this.isInited         = false;
         this.checkWorldBounds = true;
-        this.outOfBoundsKill = true;
-        this.exists = false;
-        this.name = "bullet";
-        this.planeIdx = planeIdx;
-    };
+        this.outOfBoundsKill  = true;
+        this.exists           = false;
+        this.name             = "bullet";
+        this.planeIdx         = planeIdx;
+    }
 
 
-    Bullet.prototype = Object.create(Phaser.Sprite.prototype);
-    Bullet.prototype.constructor = Bullet;
-
-
-    Bullet.prototype.init = function () {
+    /**
+     * Init.
+     */
+    init() {
         this.anchor.set(0.5);
 
         this.isInited = true;
-    };
+    }
 
 
     /**
@@ -41,19 +46,20 @@
      * @param angle Angle in degrees
      * @param speed Speed
      */
-    Bullet.prototype.fire = function (x, y, angle, speed) {
+    fire(x:number, y:number, angle:number, speed:number) {
         if (this.isInited) {
             this.reset(x, y);
+
             this.scale.set(1);
 
             this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
-            this.angle = angle;
+            this.angle    = angle;
             this.lifespan = Settings.PLANE_BULLET_LIFESPAN;
 
             this.body.gravity.set(0, 100);
         }
-    };
+    }
 
 
-}());
+}

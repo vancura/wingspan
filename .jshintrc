@@ -21,23 +21,6 @@
     "white": false,
     "indent": 4,
     "globals": {
-        "require": false,
-        "document": false,
-        "window": false,
-        "game": true,
-        "signals": true,
-        "Cocoon": false,
-        "Phaser": false,
-        "PIXI": false,
-        "Settings": true,
-        "BootState": true,
-        "GameState": true,
-        "PreloadState": true,
-        "Bullet": true,
-        "Weapon": true,
-        "Plane": true,
-        "Trails": true,
-        "GroundBack": true,
-        "GroundFront": true
+        "require": false
     }
 }

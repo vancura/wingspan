@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "outDir": "../../dist/js"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./App.class.ts",
+        "./data/AppData.ts",
+        "./main.ts",
+        "./state/Boot.class.ts",
+        "./state/Main.class.ts",
+        "./state/Preload.class.ts",
+        "./utils/MathUtils.ts"
+    ]
+}
