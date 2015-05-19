@@ -88,80 +88,14 @@ class GameState extends Phaser.State {
      * Update.
      */
     update() {
-        var parallaxRatio:number;
         var plane:Plane;
-        var planeVelocity:number;
         var a:number;
+
+        this.updatePlane1();
+        this.updatePlane2();
 
         for (a = 0; a < GameState.planeList.length; a++) {
             plane = GameState.planeList[a];
-
-            // control the player 1 plane
-            if (plane === this.player1Plane) {
-                // check for restart mode
-                if (this.isRestartRequested)
-                    this.restart();
-
-                // turn sideways
-                if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown)
-                    plane.rotateLeft(1);
-                else if (!this.leftButtonP1.isDown && this.rightButtonP1.isDown)
-                    plane.rotateRight(1);
-                else
-                    plane.leaveRotation();
-
-                // thrust or backpedal
-                // after a while revert to original power
-                if (this.thrustButtonP1.isDown)
-                    plane.thrust();
-                else if (this.backpedalButtonP1.isDown)
-                    plane.backPedal();
-                else
-                    plane.leaveThrust();
-
-                // firing
-                if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown)
-                    plane.weapon.fire(plane);
-
-                // sounds
-                if (Settings.IS_SOUND_ENABLED) {
-                    planeVelocity            = plane.vel / 60;
-                    this.engineLoop.volume   = 1 - planeVelocity / 2;
-                    this.engineStress.volume = planeVelocity / 4;
-                }
-
-                // handle parallax scrolling
-                parallaxRatio = 1 / (this.world.width / plane.body.x);
-
-                this.groundBack.scroll(parallaxRatio);
-                this.groundFront.scroll(parallaxRatio);
-
-                this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
-            }
-
-            // control the player 2 plane
-            if (plane === this.player2Plane) {
-                // turn sideways
-                if (this.leftButtonP2.isDown && !this.rightButtonP2.isDown)
-                    plane.rotateLeft(1);
-                else if (!this.leftButtonP2.isDown && this.rightButtonP2.isDown)
-                    plane.rotateRight(1);
-                else
-                    plane.leaveRotation();
-
-                // thrust or backpedal
-                // after a while revert to original power
-                if (this.thrustButtonP2.isDown)
-                    plane.thrust();
-                else if (this.backpedalButtonP2.isDown)
-                    plane.backPedal();
-                else
-                    plane.leaveThrust();
-
-                // firing
-                if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP2.isDown)
-                    plane.weapon.fire(plane);
-            }
 
             // draw trails, calculate the distance multiplier
             // 0.1 to prevent merging lines
@@ -365,6 +299,83 @@ class GameState extends Phaser.State {
                 plane.shoot();
             }
         }
+    }
+
+
+    /**
+     * Update player 1 plane.
+     */
+    private updatePlane1() {
+        var planeVelocity;
+        var parallaxRatio;
+
+        // check for restart mode
+        if (this.isRestartRequested)
+            this.restart();
+
+        // turn sideways
+        if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown)
+            this.player1Plane.rotateLeft(1);
+        else if (!this.leftButtonP1.isDown && this.rightButtonP1.isDown)
+            this.player1Plane.rotateRight(1);
+        else
+            this.player1Plane.leaveRotation();
+
+        // thrust or backpedal
+        // after a while revert to original power
+        if (this.thrustButtonP1.isDown)
+            this.player1Plane.thrust();
+        else if (this.backpedalButtonP1.isDown)
+            this.player1Plane.backPedal();
+        else
+            this.player1Plane.leaveThrust();
+
+        // firing
+        if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown)
+            this.player1Plane.weapon.fire(this.player1Plane);
+
+        // sounds
+        if (Settings.IS_SOUND_ENABLED) {
+            planeVelocity = this.player1Plane.vel / 60;
+
+            this.engineLoop.volume   = 1 - planeVelocity / 2;
+            this.engineStress.volume = planeVelocity / 4;
+        }
+
+        // handle parallax scrolling
+        parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
+
+        this.groundBack.scroll(parallaxRatio);
+        this.groundFront.scroll(parallaxRatio);
+
+        this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
+    }
+
+
+    /**
+     * Update player 2 plane.
+     */
+    private updatePlane2() {
+        // turn sideways
+        if (this.leftButtonP2.isDown && !this.rightButtonP2.isDown)
+            this.player2Plane.rotateLeft(1);
+        else if (!this.leftButtonP2.isDown && this.rightButtonP2.isDown)
+            this.player2Plane.rotateRight(1);
+        else
+            this.player2Plane.leaveRotation();
+
+        // thrust or backpedal
+        // after a while revert to original power
+        if (this.thrustButtonP2.isDown)
+            this.player2Plane.thrust();
+        else if (this.backpedalButtonP2.isDown)
+            this.player2Plane.backPedal();
+        else
+            this.player2Plane.leaveThrust();
+
+        // firing
+        if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP2.isDown)
+            this.player2Plane.weapon.fire(this.player2Plane);
     }
 
 
