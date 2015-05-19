@@ -115,7 +115,7 @@ class Plane extends Phaser.Sprite {
             this.body.rotateLeft(rot);
 
             // switch the plane frame based on the rotation
-            this.frameName = this.framePrefix + `/p${10 - (Math.round(Math.abs(rot) / 7) + 1)}.png`;
+            this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
 
             // store the degree and vel
             this._degree = rot;
