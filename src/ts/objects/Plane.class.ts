@@ -7,7 +7,6 @@
 class Plane extends Phaser.Sprite {
 
 
-    private isInited:boolean;
     private framePrefix:string;
     private idx:number;
     private currentControlDegree:number;
@@ -34,13 +33,23 @@ class Plane extends Phaser.Sprite {
     constructor(game:Phaser.Game, x:number, y:number, framePrefix:string, trailColor:string, idx:number) {
         super(game, x, y, "game", `${framePrefix}/p1.png`);
 
-        this.isInited    = false;
         this.framePrefix = framePrefix;
         this.idx         = idx;
         this._trailColor = trailColor;
+        this.name = "plane";
 
-        // enable physics for this sprite
+        // physics settings
         game.physics["box2d"].enable(this);
+
+        this.body.angle         = 180;
+        this.body.linearDamping = 1;
+
+        this.fireSensor = this.body.setCircle(this.width / 2);
+        this.fireSensor.SetSensor(true);
+        this.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
+
+        // visual settings
+        this.scale.set(0.5);
 
         // current rotation degree; 0 = absolutely controllable, abs(1) = lost control
         // could be -1 .. +1 depending on rotation direction
@@ -57,32 +66,10 @@ class Plane extends Phaser.Sprite {
         // crashed flag preventing multiple crashes
         // reset from this.reset()
         this.isCrashed = false;
-    }
-
-
-    /**
-     * Init.
-     */
-    init() {
-        this.name = "plane";
-        this.scale.set(0.5);
-
-        this.body.angle         = 180;
-        this.body.linearDamping = 1;
 
         // create a weapon
-        if (Settings.IS_PLANE_WEAPON_ENABLED) {
+        if (Settings.IS_PLANE_WEAPON_ENABLED)
             this._weapon = new Weapon(this.game, this.idx);
-            this._weapon.init();
-        }
-
-        // sensors
-        this.fireSensor = this.body.setCircle(this.width / 2);
-        this.fireSensor.SetSensor(true);
-        this.body.setFixtureContactCallback(this.fireSensor, this.onPlaneCrashed, this);
-
-        // done
-        this.isInited = true;
     }
 
 
@@ -92,35 +79,33 @@ class Plane extends Phaser.Sprite {
     update() {
         var rot:number, vel:number;
 
-        if (this.isInited) {
-            // clamp rotation degree to -1..+1
-            this.currentControlDegree = Phaser.Math.clamp(this.currentControlDegree, -1, 1);
+        // clamp rotation degree to -1..+1
+        this.currentControlDegree = Phaser.Math.clamp(this.currentControlDegree, -1, 1);
 
-            // prevent division by zero below
-            if (this.currentControlDegree === 0)
-                this.currentControlDegree = 0.001;
+        // prevent division by zero below
+        if (this.currentControlDegree === 0)
+            this.currentControlDegree = 0.001;
 
-            // calculate new rotation
-            rot = Settings.PLANE_KEYBOARD_ROTATION_STEP * this.currentControlDegree;
+        // calculate new rotation
+        rot = Settings.PLANE_KEYBOARD_ROTATION_STEP * this.currentControlDegree;
 
-            // tweak based on plane speed
-            // the faster plane goes the more difficult is to control it
-            // calculate current plane velocity
-            vel = Math.sqrt(this.body.velocity.x * this.body.velocity.x + this.body.velocity.y * this.body.velocity.y);
+        // tweak based on plane speed
+        // the faster plane goes the more difficult is to control it
+        // calculate current plane velocity
+        vel = Math.sqrt(this.body.velocity.x * this.body.velocity.x + this.body.velocity.y * this.body.velocity.y);
 
-            // apply the angular damping from velocity calculated above
-            this.body.angularDamping = vel / Settings.PLANE_ANGULAR_DAMPING_FACTOR / this.currentControlDegree;
+        // apply the angular damping from velocity calculated above
+        this.body.angularDamping = vel / Settings.PLANE_ANGULAR_DAMPING_FACTOR / this.currentControlDegree;
 
-            // and finally rotate the plane
-            this.body.rotateLeft(rot);
+        // and finally rotate the plane
+        this.body.rotateLeft(rot);
 
-            // switch the plane frame based on the rotation
-            this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
+        // switch the plane frame based on the rotation
+        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
 
-            // store the degree and vel
-            this._degree = rot;
-            this._vel    = vel;
-        }
+        // store the degree and vel
+        this._degree = rot;
+        this._vel    = vel;
     }
 
 
@@ -147,8 +132,7 @@ class Plane extends Phaser.Sprite {
      * @param multiplier Multiplier (used when shooting)
      */
     rotateLeft(multiplier:number) {
-        if (this.isInited)
-            this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
+        this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
     }
 
 
@@ -157,8 +141,7 @@ class Plane extends Phaser.Sprite {
      * @param multiplier Multiplier (used when shooting)
      */
     rotateRight(multiplier:number) {
-        if (this.isInited)
-            this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
+        this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
     }
 
 
@@ -177,12 +160,10 @@ class Plane extends Phaser.Sprite {
      * Thrust button down, thrust up.
      */
     thrust() {
-        if (this.isInited) {
-            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
-            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
+        this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
+        this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
-            this.body.thrust(this.currentThrust);
-        }
+        this.body.thrust(this.currentThrust);
     }
 
 
@@ -190,12 +171,10 @@ class Plane extends Phaser.Sprite {
      * Backpedal button down, thrust down.
      */
     backPedal() {
-        if (this.isInited) {
-            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
-            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
+        this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
+        this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
-            this.body.thrust(this.currentThrust);
-        }
+        this.body.thrust(this.currentThrust);
     }
 
 
@@ -204,12 +183,10 @@ class Plane extends Phaser.Sprite {
      * slowly decrease thrust.
      */
     leaveThrust() {
-        if (this.isInited) {
-            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_NONE;
-            this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
+        this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_NONE;
+        this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
 
-            this.body.thrust(this.currentThrust);
-        }
+        this.body.thrust(this.currentThrust);
     }
 
 

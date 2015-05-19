@@ -8,7 +8,6 @@ class Trails extends Phaser.Sprite {
 
 
     private bitmap:Phaser.BitmapData;
-    private isInited:boolean;
 
 
     /**
@@ -22,17 +21,7 @@ class Trails extends Phaser.Sprite {
 
         super(game, 0, 0, this.bitmap);
 
-        this.isInited  = false;
         this.blendMode = PIXI.blendModes.ADD;
-    }
-
-
-    /**
-     * Init.
-     * TODO: Kill this
-     */
-    init() {
-        this.isInited = true;
     }
 
 

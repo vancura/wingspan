@@ -7,8 +7,6 @@
 class Bullet extends Phaser.Sprite {
 
 
-    private isInited:boolean;
-
     private _planeIdx:number;
 
 
@@ -21,22 +19,13 @@ class Bullet extends Phaser.Sprite {
     constructor(game:Phaser.Game, planeIdx:number) {
         super(game, 0, 0, "game", "bullet.png");
 
-        this.isInited         = false;
         this.checkWorldBounds = true;
         this.outOfBoundsKill  = true;
         this.exists           = false;
         this.name             = "bullet";
-        this._planeIdx = planeIdx;
-    }
+        this._planeIdx        = planeIdx;
 
-
-    /**
-     * Init.
-     */
-    init() {
         this.anchor.set(0.5);
-
-        this.isInited = true;
     }
 
 
@@ -48,18 +37,16 @@ class Bullet extends Phaser.Sprite {
      * @param speed Speed
      */
     fire(x:number, y:number, angle:number, speed:number) {
-        if (this.isInited) {
-            this.reset(x, y);
+        this.reset(x, y);
 
-            this.scale.set(1);
+        this.scale.set(1);
 
-            this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
+        this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
-            this.angle    = angle;
-            this.lifespan = Settings.PLANE_BULLET_LIFESPAN;
+        this.angle    = angle;
+        this.lifespan = Settings.PLANE_BULLET_LIFESPAN;
 
-            this.body.gravity.set(0, 100);
-        }
+        this.body.gravity.set(0, 100);
     }
 
 

@@ -142,8 +142,6 @@ class GameState extends Phaser.State {
 
             GameState.planeList.push(plane);
 
-            plane.init();
-
             // set the player 1 plane
             if (a === 0)
                 this.player1Plane = plane;
@@ -195,7 +193,6 @@ class GameState extends Phaser.State {
     private createTrails() {
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {
             this.trails = new Trails(this.game);
-            this.trails.init();
 
             this.add.existing(this.trails);
         }
@@ -252,7 +249,6 @@ class GameState extends Phaser.State {
      */
     private createGroundBack() {
         this.groundBack = new GroundBack(this.game);
-        this.groundBack.init();
     }
 
 
@@ -262,7 +258,6 @@ class GameState extends Phaser.State {
      */
     private createGroundFront() {
         this.groundFront = new GroundFront(this.game);
-        this.groundFront.init();
     }
 
 

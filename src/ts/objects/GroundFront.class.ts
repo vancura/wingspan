@@ -8,7 +8,6 @@ class GroundFront extends Phaser.Group {
 
 
     private groundGroup1:Phaser.Group;
-    private isInited:boolean;
 
 
     /**
@@ -17,19 +16,10 @@ class GroundFront extends Phaser.Group {
      * @constructor
      */
     constructor(game:Phaser.Game) {
-        super(game, game.world, "groundFront");
-
-        this.isInited = false;
-    }
-
-
-    /**
-     * Init.
-     * TODO: Optimize
-     */
-    init() {
         var l:Phaser.Sprite;
         var i:number = 0;
+
+        super(game, game.world, "groundFront");
 
         this.groundGroup1 = new Phaser.Group(this.game);
 
@@ -45,8 +35,6 @@ class GroundFront extends Phaser.Group {
         }
 
         this.groundGroup1.y = this.game.world.height - 100;
-
-        this.isInited = true;
     }
 
 

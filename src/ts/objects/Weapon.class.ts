@@ -7,7 +7,6 @@
 class Weapon extends Phaser.Group {
 
 
-    private isInited:boolean;
     private nextFire:number;
     private bulletSpeed:number;
     private flip:boolean;
@@ -22,37 +21,26 @@ class Weapon extends Phaser.Group {
      * @constructor
      */
     constructor(game:Phaser.Game, planeIdx:number) {
+        var bullet:Bullet;
+        var i:number;
+
         super(game, game.world, "weapon", false, true, Phaser.Physics.ARCADE);
 
-        this.isInited    = false;
         this.nextFire    = 0;
         this.bulletSpeed = Settings.PLANE_BULLET_SPEED;
         this.flip        = false;
         this.planeIdx    = planeIdx;
-    }
 
-
-    /**
-     * Init.
-     */
-    init() {
         // prepare bullets
-        var bullet:Bullet;
-        var i:number;
-
         for (i = 0; i < 64 * 4; i++) {
             bullet = new Bullet(this.game, this.planeIdx);
 
             this.add(bullet, true);
-
-            bullet.init();
         }
 
         // sound
         if (Settings.IS_SOUND_ENABLED)
             this.fx = this.game.add.audio("gunshot");
-
-        this.isInited = true;
     }
 
 
@@ -64,7 +52,7 @@ class Weapon extends Phaser.Group {
         var x:number, y:number;
         var d:number;
 
-        if (this.isInited && this.game.time.time >= this.game.rnd.between(this.nextFire - 10, this.nextFire)) {
+        if (this.game.time.time >= this.game.rnd.between(this.nextFire - 10, this.nextFire)) {
             d = this.flip ? this.game.rnd.between(-7, -3) : this.game.rnd.between(3, 7);
 
             this.flip = !this.flip;

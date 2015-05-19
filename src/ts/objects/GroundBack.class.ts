@@ -10,7 +10,6 @@ class GroundBack extends Phaser.Group {
     private groundGroup2:Phaser.Group;
     private groundGroup3:Phaser.Group;
     private groundGroup4:Phaser.Group;
-    private isInited:boolean;
 
 
     /**
@@ -19,20 +18,11 @@ class GroundBack extends Phaser.Group {
      * @constructor
      */
     constructor(game:Phaser.Game) {
-        super(game, game.world, "groundBack");
-
-        this.isInited = false;
-    }
-
-
-    /**
-     * Init.
-     * TODO: Optimize
-     */
-    init() {
         var l:Phaser.Sprite, m:Phaser.Sprite, n:Phaser.Sprite;
         var i:number = 0, j:number = 0, k:number = 0;
         var g2:Phaser.Sprite, g3:Phaser.Sprite, g4:Phaser.Sprite;
+
+        super(game, game.world, "groundBack");
 
         this.groundGroup4 = new Phaser.Group(this.game);
         this.groundGroup3 = new Phaser.Group(this.game);
@@ -83,8 +73,6 @@ class GroundBack extends Phaser.Group {
         this.groundGroup2.y = this.game.world.height - 100 - 30;
         this.groundGroup3.y = this.game.world.height - 100 - 50;
         this.groundGroup4.y = this.game.world.height - 100 - 65;
-
-        this.isInited = true;
     }
 
 
