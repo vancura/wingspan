@@ -287,7 +287,7 @@ class GameState extends Phaser.State {
      * Check bullet impacts.
      * @param e Bullet reference
      */
-    private checkBullets(e) {
+    private checkBullets(e:Bullet) {
         var i = 0;
         var plane;
 

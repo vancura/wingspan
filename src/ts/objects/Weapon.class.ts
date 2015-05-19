@@ -11,7 +11,7 @@ class Weapon extends Phaser.Group {
     private nextFire:number;
     private bulletSpeed:number;
     private flip:boolean;
-    private planeIdx:number; // TODO: idx should auto-increment
+    private planeIdx:number;
     private fx:Phaser.Sound;
 
 

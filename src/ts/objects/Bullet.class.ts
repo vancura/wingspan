@@ -8,7 +8,8 @@ class Bullet extends Phaser.Sprite {
 
 
     private isInited:boolean;
-    private planeIdx:number; // TODO: idx should auto-increment
+
+    private _planeIdx:number;
 
 
     /**
@@ -25,7 +26,7 @@ class Bullet extends Phaser.Sprite {
         this.outOfBoundsKill  = true;
         this.exists           = false;
         this.name             = "bullet";
-        this.planeIdx         = planeIdx;
+        this._planeIdx = planeIdx;
     }
 
 
@@ -59,6 +60,19 @@ class Bullet extends Phaser.Sprite {
 
             this.body.gravity.set(0, 100);
         }
+    }
+
+
+    // GETTERS & SETTERS
+    // -----------------
+
+
+    /**
+     * Get the index of plane which has fired this bullet.
+     * @return {number} Plane index
+     */
+    public get planeIdx():number {
+        return this._planeIdx;
     }
 
 
