@@ -15,7 +15,7 @@ class Plane extends Phaser.Sprite {
     private fireSensor:any; // TODO: Set type when Box2D has TS defs
 
     private _weapon:Weapon;
-    private _vel:number; // TODO: Rename to velocity
+    private _velocity:number;
     private _degree:number;
     private _trailColor:string;
 
@@ -60,8 +60,8 @@ class Plane extends Phaser.Sprite {
         this.currentThrust = 0.1;
 
         // current degree and vel
-        this._degree = 0;
-        this._vel    = 0;
+        this._degree   = 0;
+        this._velocity = 0;
 
         // crashed flag preventing multiple crashes
         // reset from this.reset()
@@ -104,8 +104,8 @@ class Plane extends Phaser.Sprite {
         this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
 
         // store the degree and vel
-        this._degree = rot;
-        this._vel    = vel;
+        this._degree   = rot;
+        this._velocity = vel;
     }
 
 
@@ -222,8 +222,8 @@ class Plane extends Phaser.Sprite {
      * Get the plane velocity.
      * @return {number} Plane velocity
      */
-    public get vel():number {
-        return this._vel;
+    public get velocity():number {
+        return this._velocity;
     }
 
 

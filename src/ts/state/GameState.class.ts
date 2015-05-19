@@ -333,7 +333,7 @@ class GameState extends Phaser.State {
 
         // sounds
         if (Settings.IS_SOUND_ENABLED) {
-            planeVelocity = this.player1Plane.vel / 60;
+            planeVelocity = this.player1Plane.velocity / 60;
 
             this.engineLoop.volume   = 1 - planeVelocity / 2;
             this.engineStress.volume = planeVelocity / 4;
