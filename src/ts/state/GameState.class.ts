@@ -236,10 +236,12 @@ class GameState extends Phaser.State {
      * Create the background.
      */
     private createBackground() {
-        this.background               = this.add.sprite(0, 0, "forestBackground");
-        this.background.name          = "background";
-        this.background.width         = this.world.width;
-        this.background.height        = this.world.height;
+        this.background          = this.add.sprite(0, 0, "forestBackground");
+        this.background.name     = "background";
+        this.background.smoothed = true;
+
+        this.background.scale.set(Math.min(1 / (this.world.width / this.background.width), 1 / (this.world.height / this.background.height)));
+
         this.background.fixedToCamera = true;
     }
 
