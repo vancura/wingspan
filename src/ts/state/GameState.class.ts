@@ -26,7 +26,9 @@ class GameState extends Phaser.State {
     private groundBack:GroundBack;
     private groundFront:GroundFront;
     private originalWidth:number;
-    private isRestartRequested:boolean;
+    private restartTimeout:Phaser.Timer;
+    private player1State:PlayState;
+    private dieSlide:Phaser.Point;
 
     private static _planeList:Plane[] = [];
 
@@ -50,9 +52,8 @@ class GameState extends Phaser.State {
             this.game.physics["box2d"].debugDraw.centerOfMass = true;
         }
 
-        // when restart is needed this is true
-        // handled in this.update()
-        this.isRestartRequested = false;
+        this.player1State = PlayState.Init;
+        this.dieSlide     = new Phaser.Point();
     }
 
 
@@ -70,6 +71,8 @@ class GameState extends Phaser.State {
         this.createFire();
         this.createGroundFront();
         this.createSignals();
+
+        this.player1State = PlayState.Playing;
     }
 
 
@@ -173,17 +176,42 @@ class GameState extends Phaser.State {
 
 
     /**
-     * Restart after crash.
+     * Time to die.
+     */
+    private die() {
+        var slideTween;
+
+        // prepare the restart timeout
+        // used to wait until the camera slide is done
+        this.restartTimeout = this.time.create();
+
+        this.restartTimeout.add(Settings.GAME_RESTART_TIMEOUT, this.restart, this);
+        this.restartTimeout.start();
+
+        // prepare the camera slide tween
+        this.dieSlide.x = 1 / (this.world.width / this.player1Plane.body.x);
+
+        slideTween = this.add.tween(this.dieSlide);
+        slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
+        slideTween.start();
+
+        // state needs to be switched
+        // currentlu it's PlayState.Died, needs to reflect waiting for the restart
+        this.player1State = PlayState.RestartScheduled;
+
+        // TODO: Player 2
+    }
+
+
+    /**
+     * Restart the game.
      */
     private restart() {
-        if (this.player1Plane) {
-            this.isRestartRequested = false;
+        // playing again
+        this.player1State = PlayState.Playing;
 
-            // reset the plane position and rotation
-            this.player1Plane.restart();
-
-            // TODO: Player 2
-        }
+        // reset the plane position and rotation
+        this.player1Plane.restart();
     }
 
 
@@ -304,9 +332,9 @@ class GameState extends Phaser.State {
         var planeVelocity;
         var parallaxRatio;
 
-        // check for restart mode
-        if (this.isRestartRequested)
-            this.restart();
+        // check for dying mode
+        if (this.player1State == PlayState.Died)
+            this.die();
 
         // turn sideways
         if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown)
@@ -338,8 +366,19 @@ class GameState extends Phaser.State {
         }
 
         // handle parallax scrolling
-        parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
+        switch (this.player1State) {
+            case PlayState.Playing:
+                // playing mode
+                parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
+                break;
 
+            case PlayState.RestartScheduled:
+                // sliding to start
+                parallaxRatio = this.dieSlide.x;
+                break;
+        }
+
+        // scroll now
         this.groundBack.scroll(parallaxRatio);
         this.groundFront.scroll(parallaxRatio);
 
@@ -414,8 +453,16 @@ class GameState extends Phaser.State {
         this.addPlaneExplosion(e.body.x);
 
         if (e === this.player1Plane)
-            this.isRestartRequested = true;
+            this.player1State = PlayState.Died;
     }
 
 
+}
+
+
+const enum PlayState {
+    Init = 0,
+    Playing,
+    Died,
+    RestartScheduled
 }

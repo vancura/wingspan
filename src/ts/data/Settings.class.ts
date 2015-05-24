@@ -9,9 +9,10 @@ class Settings {
     static IS_PLANE_WEAPON_ENABLED:boolean     = true;
     static IS_SOUND_ENABLED:boolean            = true;
 
-    static WORLD_GRAVITY:number      = 75;
-    static WORLD_OVERFLOW:number     = -30;
-    static MAX_TRAIL_DISTANCE:number = 15;
+    static WORLD_GRAVITY:number        = 75;
+    static WORLD_OVERFLOW:number       = -30;
+    static MAX_TRAIL_DISTANCE:number   = 15;
+    static GAME_RESTART_TIMEOUT:number = 2000; // delay between dying and restarting (also speed of the camera slide after dying)
 
     static PLANE_COUNT:number                = 2;
     static MAX_PLANE_THRUST:number           = 210;
