@@ -16,6 +16,7 @@ class GroundBack extends Phaser.Group {
      * Ground background constructor.
      * @param game Game reference
      * @constructor
+     * TODO Optimize
      */
     constructor(game:Phaser.Game) {
         var l:Phaser.Sprite, m:Phaser.Sprite, n:Phaser.Sprite;

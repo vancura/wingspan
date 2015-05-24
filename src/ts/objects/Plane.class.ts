@@ -124,6 +124,8 @@ class Plane extends Phaser.Sprite {
         this.currentThrust        = 0.1;
         this._degree              = 0;
         this.isCrashed            = false;
+
+        // FIXME: Rotation is kept
     }
 
 

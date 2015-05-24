@@ -14,6 +14,7 @@ class GroundFront extends Phaser.Group {
      * Ground foreground constructor.
      * @param game Game reference
      * @constructor
+     * TODO Optimize
      */
     constructor(game:Phaser.Game) {
         var l:Phaser.Sprite;
