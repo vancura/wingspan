@@ -330,7 +330,6 @@ class GameState extends Phaser.State {
      */
     private updatePlane1() {
         var planeVelocity;
-        var parallaxRatio;
 
         // check for dying mode
         if (this.player1State == PlayState.Died)
@@ -366,23 +365,7 @@ class GameState extends Phaser.State {
         }
 
         // handle parallax scrolling
-        switch (this.player1State) {
-            case PlayState.Playing:
-                // playing mode
-                parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
-                break;
-
-            case PlayState.RestartScheduled:
-                // sliding to start
-                parallaxRatio = this.dieSlide.x;
-                break;
-        }
-
-        // scroll now
-        this.groundBack.scroll(parallaxRatio);
-        this.groundFront.scroll(parallaxRatio);
-
-        this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
+        this.updateParallax();
     }
 
 
@@ -438,6 +421,32 @@ class GameState extends Phaser.State {
         // play the explosion sound if enabled
         if (Settings.IS_SOUND_ENABLED)
             this.explosion.play();
+    }
+
+
+    /**
+     * Handle parallax scrolling.
+     */
+    private updateParallax() {
+        var parallaxRatio;
+
+        switch (this.player1State) {
+            case PlayState.Playing:
+                // playing mode
+                parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
+                break;
+
+            case PlayState.RestartScheduled:
+                // sliding to start
+                parallaxRatio = this.dieSlide.x;
+                break;
+        }
+
+        // scroll now
+        this.groundBack.scroll(parallaxRatio);
+        this.groundFront.scroll(parallaxRatio);
+
+        this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
     }
 
 
