@@ -20,7 +20,7 @@ var tsd = require("gulp-tsd");
 var typedoc = require("gulp-typedoc");
 
 
-var proxy = "http://localhost";
+var proxy = "http://wingspan.192.168.1.111.xip.io";
 
 var paths = {
     src: "src",

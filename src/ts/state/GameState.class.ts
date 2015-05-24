@@ -11,7 +11,7 @@ class GameState extends Phaser.State {
     private musicLoop:Phaser.Sound;
     private explosion:Phaser.Sound;
     private trails:Trails;
-    private fire:Phaser.Sprite;
+    private fireGroup:Phaser.Group;
     private leftButtonP1:Phaser.Key;
     private rightButtonP1:Phaser.Key;
     private thrustButtonP1:Phaser.Key;
@@ -203,11 +203,9 @@ class GameState extends Phaser.State {
      * Create fire.
      */
     private createFire() {
-        this.fire       = this.add.sprite(0, this.world.height, "game", "fire.png");
-        this.fire.alpha = 0;
-        this.fire.name  = "fire";
+        this.fireGroup = new Phaser.Group(this.game, null, "fire", false, false);
 
-        this.fire.anchor.set(0.5, 1);
+        this.add.existing(this.fireGroup);
     }
 
 
@@ -376,6 +374,34 @@ class GameState extends Phaser.State {
     }
 
 
+    /**
+     * Add a plane explosion.
+     * @param x Plane X
+     */
+    private addPlaneExplosion(x:number) {
+        var fire = new Phaser.Sprite(this.game, x, this.world.height, "game", "fire.png");
+        var tween:Phaser.Tween;
+
+        fire.anchor.set(0.5, 1);
+
+        this.fireGroup.addChild(fire);
+
+        // fadeout tween
+        tween = this.add.tween(fire);
+
+        tween.to({alpha: 0}, 1000);
+        tween.onComplete.add(function () {
+            fire.destroy();
+        });
+
+        tween.start();
+
+        // play the explosion sound if enabled
+        if (Settings.IS_SOUND_ENABLED)
+            this.explosion.play();
+    }
+
+
     // EVENT LISTENERS
     // ---------------
 
@@ -384,26 +410,11 @@ class GameState extends Phaser.State {
      * Plane crash event handler.
      * @param e Plane reference
      */
-    private onPlaneCrashed(e) {
-        // TODO: Multiple fires
-
-        var tween:Phaser.Tween;
-
-        this.fire.x     = e.body.x;
-        this.fire.alpha = 1;
-
-        tween = this.add.tween(this.fire);
-
-        tween.to({alpha: 0}, 1000);
-        tween.start();
-
-        if (Settings.IS_SOUND_ENABLED)
-            this.explosion.play();
+    private onPlaneCrashed(e:Plane) {
+        this.addPlaneExplosion(e.body.x);
 
         if (e === this.player1Plane)
             this.isRestartRequested = true;
-
-        // TODO: Player 2
     }
 
 
