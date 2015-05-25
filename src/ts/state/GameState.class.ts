@@ -1,4 +1,11 @@
 /// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
+/// <reference path="../data/Settings.class.ts" />
+/// <reference path="../objects/Bullet.class.ts" />
+/// <reference path="../objects/GroundBack.class.ts" />
+/// <reference path="../objects/GroundFront.class.ts" />
+/// <reference path="../objects/Plane.class.ts" />
+/// <reference path="../objects/Trails.class.ts" />
+/// <reference path="../objects/Weapon.class.ts" />
 
 
 class GameState extends Phaser.State {
