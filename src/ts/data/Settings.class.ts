@@ -14,7 +14,6 @@ class Settings {
     static MAX_TRAIL_DISTANCE:number   = 15;
     static GAME_RESTART_TIMEOUT:number = 2000; // delay between dying and restarting (also speed of the camera slide after dying)
 
-    static PLANE_COUNT:number                = 2;
     static MAX_PLANE_THRUST:number           = 210;
     static PLANE_THRUST_MULTIPLIER_UP:number = 1.9; // thrust multiplier when thrust button down
     static PLANE_THRUST_MULTIPLIER_DOWN:number = 1; // thrust multiplier when backpedal button down

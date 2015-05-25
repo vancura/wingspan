@@ -11,43 +11,48 @@
 class GameState extends Phaser.State {
 
 
-    private player1Plane:Plane;
-    private player2Plane:Plane;
-    private engineLoop:Phaser.Sound;
-    private engineStress:Phaser.Sound;
-    private musicLoop:Phaser.Sound;
-    private explosion:Phaser.Sound;
-    private trails:Trails;
-    private fireGroup:Phaser.Group;
-    private leftButtonP1:Phaser.Key;
-    private rightButtonP1:Phaser.Key;
-    private thrustButtonP1:Phaser.Key;
-    private backpedalButtonP1:Phaser.Key;
-    private fireButtonP1:Phaser.Key;
-    private leftButtonP2:Phaser.Key;
-    private rightButtonP2:Phaser.Key;
-    private thrustButtonP2:Phaser.Key;
-    private backpedalButtonP2:Phaser.Key;
-    private fireButtonP2:Phaser.Key;
+    private gameModeState:GameModeState;
+    private player1State:PlayState;
+
     private background:Phaser.Sprite;
+    private fireGroup:Phaser.Group;
     private groundBack:GroundBack;
     private groundFront:GroundFront;
+    private player1Plane:Plane;
+    private player2Plane:Plane;
+    private trails:Trails;
+
+    private engineLoop:Phaser.Sound;
+    private engineStress:Phaser.Sound;
+    private explosion:Phaser.Sound;
+    private musicLoop:Phaser.Sound;
+
+    private backpedalButtonP1:Phaser.Key;
+    private backpedalButtonP2:Phaser.Key;
+    private fireButtonP1:Phaser.Key;
+    private fireButtonP2:Phaser.Key;
+    private leftButtonP1:Phaser.Key;
+    private leftButtonP2:Phaser.Key;
+    private rightButtonP1:Phaser.Key;
+    private rightButtonP2:Phaser.Key;
+    private thrustButtonP1:Phaser.Key;
+    private thrustButtonP2:Phaser.Key;
+
     private originalWidth:number;
     private restartTimeout:Phaser.Timer;
-    private player1State:PlayState;
     private dieSlide:Phaser.Point;
 
-    private static _planeList:Plane[] = [];
+    private static planeList:Plane[] = [];
 
 
     /**
      * Init.
      */
     init():void {
+        // setup physics
         this.physics.startSystem(Phaser.Physics.BOX2D);
 
         this.physics["box2d"].setBoundsToWorld(true, true, false, true);
-
         this.physics["box2d"].gravity.y   = Settings.WORLD_GRAVITY;
         this.physics["box2d"].restitution = 0.4;
 
@@ -59,8 +64,12 @@ class GameState extends Phaser.State {
             this.game.physics["box2d"].debugDraw.centerOfMass = true;
         }
 
+        // setup states
+        this.gameModeState = GameModeState.ScenicSingle; // TODO: Other modes
         this.player1State = PlayState.Init;
-        this.dieSlide     = new Phaser.Point();
+
+        // setup other data
+        this.dieSlide = new Phaser.Point();
     }
 
 
@@ -98,35 +107,29 @@ class GameState extends Phaser.State {
      * Update.
      */
     update() {
-        var plane:Plane;
-        var a:number;
+        switch (this.gameModeState) {
+            case GameModeState.ScenicSingle:
+                // single scenic mode
 
-        this.updatePlane1();
-        this.updatePlane2();
+                this.updatePlane1();
 
-        for (a = 0; a < GameState.planeList.length; a++) {
-            plane = GameState.planeList[a];
+                break;
 
-            // draw trails, calculate the distance multiplier
-            // 0.1 to prevent merging lines
-            this.trails.draw(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1, plane.trailColor);
+            case GameModeState.Local2Players:
+                // local two player mode
 
-            // check bullets
-            plane.weapon.forEachAlive(this.checkBullets, this);
+                this.updatePlane1();
+                this.updatePlane2();
+
+                break;
+
+            case GameModeState.RemoteXPlayers:
+                // remote x players mode
+
+                // FIXME: Implement
+
+                break;
         }
-    }
-
-
-    // GETTERS & SETTERS
-    // -----------------
-
-
-    /**
-     * Get the plane list.
-     * @return {any} Plane list
-     */
-    public static get planeList():Plane[] {
-        return this._planeList;
     }
 
 
@@ -138,28 +141,60 @@ class GameState extends Phaser.State {
      * Create the plane.
      */
     private createPlanes() {
-        var framePrefix:string;
-        var trailColor:string;
         var plane:Plane;
         var a:number;
 
-        for (a = 0; a < Settings.PLANE_COUNT; a++) {
-            framePrefix = (a === 0) ? "plane1" : "plane2"; // TODO: More planes
-            trailColor = Settings.PLANE_TRAIL_COLOR_LIST[a];
-            plane      = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, a);
+        switch (this.gameModeState) {
+            case GameModeState.ScenicSingle:
+                // single scenic mode
 
-            this.add.existing(plane);
+                plane = this.createSinglePlane(0);
+                this.add.existing(plane);
+                GameState.planeList.push(plane);
 
-            GameState.planeList.push(plane);
+                this.player1Plane = GameState.planeList[0];
 
-            // set the player 1 plane
-            if (a === 0)
-                this.player1Plane = plane;
+                break;
 
-            // set the player 2 plane
-            if (a === 1)
-                this.player2Plane = plane;
+            case GameModeState.Local2Players:
+                // local two player mode
+
+                for (a = 0; a < 2; a++) {
+                    plane = this.createSinglePlane(a);
+                    this.add.existing(plane);
+                    GameState.planeList.push(plane);
+                }
+
+                this.player1Plane = GameState.planeList[0];
+                this.player2Plane = GameState.planeList[1];
+
+                break;
+
+            case GameModeState.RemoteXPlayers:
+                // remote x players mode
+
+                // FIXME: Implement
+
+                break;
         }
+    }
+
+
+    /**
+     * Create a single plane.
+     * @param idx Plane index
+     * @return {Plane} Plane just created
+     */
+    private createSinglePlane(idx) {
+        var framePrefix:string;
+        var trailColor:string;
+        var plane:Plane;
+
+        framePrefix = (idx === 0) ? "plane1" : "plane2"; // TODO: More planes
+        trailColor = Settings.PLANE_TRAIL_COLOR_LIST[idx];
+        plane      = new Plane(this.game, this.world.centerX + (idx - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, idx);
+
+        return plane;
     }
 
 
@@ -203,7 +238,7 @@ class GameState extends Phaser.State {
         slideTween.start();
 
         // state needs to be switched
-        // currentlu it's PlayState.Died, needs to reflect waiting for the restart
+        // currently it's PlayState.Died, needs to reflect waiting for the restart
         this.player1State = PlayState.RestartScheduled;
 
         // TODO: Player 2
@@ -248,17 +283,42 @@ class GameState extends Phaser.State {
      * Create controls.
      */
     private createControls() {
-        this.leftButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.A);
-        this.rightButtonP1     = this.input.keyboard.addKey(Phaser.Keyboard.D);
-        this.thrustButtonP1    = this.input.keyboard.addKey(Phaser.Keyboard.W);
-        this.backpedalButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.S);
-        this.fireButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.F);
+        switch (this.gameModeState) {
+            case GameModeState.ScenicSingle:
+                // single scenic mode
 
-        this.leftButtonP2      = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-        this.rightButtonP2     = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-        this.thrustButtonP2    = this.input.keyboard.addKey(Phaser.Keyboard.UP);
-        this.backpedalButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-        this.fireButtonP2      = this.input.keyboard.addKey(Phaser.Keyboard.ALT);
+                this.leftButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+                this.rightButtonP1     = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+                this.thrustButtonP1    = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+                this.backpedalButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+                this.fireButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+                break;
+
+            case GameModeState.Local2Players:
+                // local two player mode
+
+                this.leftButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.A);
+                this.rightButtonP1     = this.input.keyboard.addKey(Phaser.Keyboard.D);
+                this.thrustButtonP1    = this.input.keyboard.addKey(Phaser.Keyboard.W);
+                this.backpedalButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.S);
+                this.fireButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.F);
+
+                this.leftButtonP2      = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+                this.rightButtonP2     = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+                this.thrustButtonP2    = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+                this.backpedalButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+                this.fireButtonP2      = this.input.keyboard.addKey(Phaser.Keyboard.ALT);
+
+                break;
+
+            case GameModeState.RemoteXPlayers:
+                // remote x players mode
+
+                // FIXME: Implement
+
+                break;
+        }
     }
 
 
@@ -371,8 +431,14 @@ class GameState extends Phaser.State {
             this.engineStress.volume = planeVelocity / 4;
         }
 
-        // handle parallax scrolling
+        // update parallax
         this.updateParallax();
+
+        // update trails
+        this.trails.draw(this.player1Plane);
+
+        // check bullets
+        this.player1Plane.weapon.forEachAlive(this.checkBullets, this);
     }
 
 
@@ -400,6 +466,12 @@ class GameState extends Phaser.State {
         // firing
         if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP2.isDown)
             this.player2Plane.weapon.fire(this.player2Plane);
+
+        // update trails
+        this.trails.draw(this.player2Plane);
+
+        // check bullets
+        this.player2Plane.weapon.forEachAlive(this.checkBullets, this);
     }
 
 
@@ -481,4 +553,12 @@ const enum PlayState {
     Playing,
     Died,
     RestartScheduled
+}
+
+
+const enum GameModeState {
+    Init = 0,
+    ScenicSingle,
+    Local2Players,
+    RemoteXPlayers
 }

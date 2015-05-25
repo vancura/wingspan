@@ -30,18 +30,16 @@ class Trails extends Phaser.Sprite {
     /**
      * Draw trails.
      * @param plane Plane to draw a trail for
-     * @param multiplier Distance multiplier (used when rotating)
-     * @param color Color of the trail
      */
-    draw(plane:Plane, multiplier:number, color:string) {
+    draw(plane:Plane) {
         var pos:number[];
 
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-            pos = Trails.getPositions(plane, multiplier);
+            pos = Trails.getPositions(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1);
 
             this.bitmap.fill(0, 0, 0, 0.05);
-            this.bitmap.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, color);
-            this.bitmap.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, color);
+            this.bitmap.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, plane.trailColor);
+            this.bitmap.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, plane.trailColor);
         }
     }
 
