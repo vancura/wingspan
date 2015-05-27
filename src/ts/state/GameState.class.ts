@@ -11,9 +11,6 @@
 class GameState extends Phaser.State {
 
 
-    private gameModeState:GameModeState;
-    private player1State:PlayState;
-
     private background:Phaser.Sprite;
     private fireGroup:Phaser.Group;
     private groundBack:GroundBack;
@@ -21,12 +18,7 @@ class GameState extends Phaser.State {
     private player1Plane:Plane;
     private player2Plane:Plane;
     private trails:Trails;
-    private scenicSingleModeButton:Phaser.Button;
-    private scenicSingleModeLabel:Phaser.Image;
-    private local2PlayersModeButton:Phaser.Button;
-    private local2PlayersModeLabel:Phaser.Image;
-    private remoteXPlayersModeButton:Phaser.Button;
-    private remoteXPlayersModeLabel:Phaser.Image;
+    private gui:GUI;
 
     private engineLoop:Phaser.Sound;
     private engineStress:Phaser.Sound;
@@ -48,7 +40,9 @@ class GameState extends Phaser.State {
     private restartTimeout:Phaser.Timer;
     private dieSlide:Phaser.Point;
 
-    private static planeList:Plane[] = [];
+    private static _gameModeState:GameModeState;
+    private static _planeList:Plane[] = [];
+    private static _player1State:PlayState;
 
 
     /**
@@ -71,8 +65,8 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        this.gameModeState = GameModeState.ScenicSingle;
-        this.player1State  = PlayState.Init;
+        GameState._gameModeState = GameModeState.ScenicSingle;
+        GameState._player1State  = PlayState.Init;
 
         // setup other data
         this.dieSlide = new Phaser.Point();
@@ -95,7 +89,7 @@ class GameState extends Phaser.State {
         this.createSignals();
         this.createGUI();
 
-        this.player1State = PlayState.Playing;
+        GameState._player1State = PlayState.Playing;
     }
 
 
@@ -114,7 +108,7 @@ class GameState extends Phaser.State {
      * Update.
      */
     update() {
-        switch (this.gameModeState) {
+        switch (GameState.gameModeState) {
             case GameModeState.ScenicSingle:
                 // single scenic mode
 
@@ -151,15 +145,15 @@ class GameState extends Phaser.State {
         var plane:Plane;
         var a:number;
 
-        switch (this.gameModeState) {
+        switch (GameState.gameModeState) {
             case GameModeState.ScenicSingle:
                 // single scenic mode
 
                 plane = this.createSinglePlane(0);
                 this.add.existing(plane);
-                GameState.planeList.push(plane);
+                GameState._planeList.push(plane);
 
-                this.player1Plane = GameState.planeList[0];
+                this.player1Plane = GameState._planeList[0];
 
                 break;
 
@@ -169,11 +163,11 @@ class GameState extends Phaser.State {
                 for (a = 0; a < 2; a++) {
                     plane = this.createSinglePlane(a);
                     this.add.existing(plane);
-                    GameState.planeList.push(plane);
+                    GameState._planeList.push(plane);
                 }
 
-                this.player1Plane = GameState.planeList[0];
-                this.player2Plane = GameState.planeList[1];
+                this.player1Plane = GameState._planeList[0];
+                this.player2Plane = GameState._planeList[1];
 
                 break;
 
@@ -246,7 +240,7 @@ class GameState extends Phaser.State {
 
         // state needs to be switched
         // currently it's PlayState.Died, needs to reflect waiting for the restart
-        this.player1State = PlayState.RestartScheduled;
+        GameState._player1State = PlayState.RestartScheduled;
 
         // TODO: Player 2
     }
@@ -257,7 +251,7 @@ class GameState extends Phaser.State {
      */
     private restart() {
         // playing again
-        this.player1State = PlayState.Playing;
+        GameState._player1State = PlayState.Playing;
 
         // reset the plane position and rotation
         this.player1Plane.restart();
@@ -290,7 +284,7 @@ class GameState extends Phaser.State {
      * Create controls.
      */
     private createControls() {
-        switch (this.gameModeState) {
+        switch (GameState.gameModeState) {
             case GameModeState.ScenicSingle:
                 // single scenic mode
 
@@ -382,91 +376,7 @@ class GameState extends Phaser.State {
      * Create GUI.
      */
     private createGUI() {
-        var x = 0;
-
-        this.scenicSingleModeButton               = this.add.button(x, this.world.height, "game", this.switchGameModeState, this, "gui/scenic-single-over.png", "gui/scenic-single-out.png");
-        this.scenicSingleModeButton.fixedToCamera = true;
-        this.scenicSingleModeButton.anchor.y      = 1;
-
-        this.scenicSingleModeLabel               = this.add.image(x, this.world.height, "game", "gui/scenic-single-active.png");
-        this.scenicSingleModeLabel.fixedToCamera = true;
-        this.scenicSingleModeLabel.anchor.y      = 1;
-        this.scenicSingleModeLabel.visible       = false;
-
-        x += this.scenicSingleModeButton.width + 5;
-
-        this.local2PlayersModeButton               = this.add.button(x, this.world.height, "game", this.switchGameModeState, this, "gui/local-2-players-over.png", "gui/local-2-players-out.png");
-        this.local2PlayersModeButton.fixedToCamera = true;
-        this.local2PlayersModeButton.anchor.y      = 1;
-
-        this.local2PlayersModeLabel               = this.add.image(x, this.world.height, "game", "gui/local-2-players-active.png");
-        this.local2PlayersModeLabel.fixedToCamera = true;
-        this.local2PlayersModeLabel.anchor.y      = 1;
-        this.local2PlayersModeLabel.visible       = false;
-
-        x += this.local2PlayersModeButton.width + 5;
-
-        this.remoteXPlayersModeButton               = this.add.button(x, this.world.height, "game", this.switchGameModeState, this, "gui/remote-x-players-over.png", "gui/remote-x-players-out.png");
-        this.remoteXPlayersModeButton.fixedToCamera = true;
-        this.remoteXPlayersModeButton.anchor.y      = 1;
-
-        this.remoteXPlayersModeLabel               = this.add.image(x, this.world.height, "game", "gui/remote-x-players-active.png");
-        this.remoteXPlayersModeLabel.fixedToCamera = true;
-        this.remoteXPlayersModeLabel.anchor.y      = 1;
-        this.remoteXPlayersModeLabel.visible       = false;
-
-        this.refreshGUI();
-    }
-
-
-    /**
-     * Switch game mode state.
-     * @param e Button origin
-     */
-    private switchGameModeState(e:Phaser.Button) {
-        switch (e) {
-            case this.scenicSingleModeButton:
-                this.gameModeState = GameModeState.ScenicSingle;
-                break;
-
-            case this.local2PlayersModeButton:
-                this.gameModeState = GameModeState.Local2Players;
-                break;
-
-            case this.remoteXPlayersModeButton:
-                this.gameModeState = GameModeState.RemoteXPlayers;
-                break;
-        }
-
-        this.refreshGUI();
-    }
-
-
-    private refreshGUI() {
-        this.scenicSingleModeButton.buttonMode   = true;
-        this.local2PlayersModeButton.buttonMode  = true;
-        this.remoteXPlayersModeButton.buttonMode = true;
-
-        this.scenicSingleModeLabel.visible   = false;
-        this.local2PlayersModeLabel.visible  = false;
-        this.remoteXPlayersModeLabel.visible = false;
-
-        switch (this.gameModeState) {
-            case GameModeState.ScenicSingle:
-                this.scenicSingleModeButton.inputEnabled = false;
-                this.scenicSingleModeLabel.visible       = true;
-                break;
-
-            case GameModeState.Local2Players:
-                this.local2PlayersModeButton.inputEnabled = false;
-                this.local2PlayersModeLabel.visible       = true;
-                break;
-
-            case GameModeState.RemoteXPlayers:
-                this.remoteXPlayersModeButton.inputEnabled = false;
-                this.remoteXPlayersModeLabel.visible       = true;
-                break;
-        }
+        this.gui = new GUI(this.game);
     }
 
 
@@ -479,8 +389,8 @@ class GameState extends Phaser.State {
         var plane;
 
         // check for all planes
-        for (; i < GameState.planeList.length; i++) {
-            plane = GameState.planeList[i];
+        for (; i < GameState._planeList.length; i++) {
+            plane = GameState._planeList[i];
 
             // but prevent this plane
             if (i !== e.planeIdx && e.overlap(plane)) {
@@ -498,7 +408,7 @@ class GameState extends Phaser.State {
         var planeVelocity;
 
         // check for dying mode
-        if (this.player1State == PlayState.Died)
+        if (GameState._player1State == PlayState.Died)
             this.die();
 
         // turn sideways
@@ -608,7 +518,7 @@ class GameState extends Phaser.State {
     private updateParallax() {
         var parallaxRatio;
 
-        switch (this.player1State) {
+        switch (GameState._player1State) {
             case PlayState.Playing:
                 // playing mode
                 parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
@@ -640,7 +550,41 @@ class GameState extends Phaser.State {
         this.addPlaneExplosion(e.body.x);
 
         if (e === this.player1Plane)
-            this.player1State = PlayState.Died;
+            GameState._player1State = PlayState.Died;
+    }
+
+
+    // GETTERS & SETTERS
+    // -----------------
+
+
+    /**
+     * Get the plane list.
+     * @return {Plane[]} Plane list
+     * @see Plane
+     */
+    public static get planeList():Plane[] {
+        return this._planeList;
+    }
+
+
+    /**
+     * Get current game mode state.
+     * @return {GameModeState} Current game mode state
+     * @see GameModeState
+     */
+    public static get gameModeState():GameModeState {
+        return GameState._gameModeState;
+    }
+
+
+    /**
+     * Get current player 1 state.
+     * @return {PlayState} Current planer 1 state
+     * @see PlayState
+     */
+    public static get player1State():PlayState {
+        return this._player1State;
     }
 
 
@@ -656,7 +600,6 @@ const enum PlayState {
 
 
 const enum GameModeState {
-    Init = 0,
     ScenicSingle,
     Local2Players,
     RemoteXPlayers
