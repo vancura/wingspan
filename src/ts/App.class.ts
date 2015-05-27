@@ -16,13 +16,13 @@ class App {
      * @constructor
      */
     static init() {
-        this.game = new Phaser.Game(1280, 720, Phaser.AUTO, document.getElementById('app'), null, false, false);
+        this.game = new Phaser.Game(1280, 720, Phaser.AUTO, document.getElementById("app"), null, false, false);
 
-        this.game.state.add('Boot', BootState);
-        this.game.state.add('Preload', PreloadState);
-        this.game.state.add('Game', GameState);
+        this.game.state.add("Boot", BootState);
+        this.game.state.add("Preload", PreloadState);
+        this.game.state.add("Game", GameState);
 
-        this.game.state.start('Boot');
+        this.game.state.start("Boot");
     }
 
 

@@ -12,12 +12,12 @@ class PreloadState extends Phaser.State {
      */
     preload() {
         // CodePen
-        // this.load.baseURL = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/1397/';
-        // this.load.crossOrigin = 'anonymous';
+        // this.load.baseURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/1397/";
+        // this.load.crossOrigin = "anonymous";
 
-        // this.preloadBar = this.add.sprite(0, 148, 'preload-bar');
+        // this.preloadBar = this.add.sprite(0, 148, "preload-bar");
         // this.load.setPreloadSprite(this.preloadBar);
-        // this.load.bitmapFont('stgotic', 'assets/stgotic.png', 'assets/stgotic.xml');
+        // this.load.bitmapFont("stgotic", "assets/stgotic.png", "assets/stgotic.xml");
 
         this.load.atlasJSONHash("game", "assets/game.png", "assets/game.json");
         this.load.audio("engineLoop", ["assets/audio/base-engine-loop.mp3", "assets/audio/base-engine-loop.ogg"]);

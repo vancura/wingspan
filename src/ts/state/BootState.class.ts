@@ -8,7 +8,7 @@ class BootState extends Phaser.State {
      * Initialize the app.
      */
     init() {
-        this.game.renderer['renderSession'].roundPixels = false;
+        this.game.renderer["renderSession"].roundPixels = false;
 
         this.stage.backgroundColor         = 0x000000;
         this.stage.smoothed                = true;
@@ -27,7 +27,7 @@ class BootState extends Phaser.State {
      * Preload (the preloader).
      */
     preload() {
-        // this.load.image('preload-bar', 'assets/preload-bar.png');
+        // this.load.image("preload-bar", "assets/preload-bar.png");
     }
 
 
@@ -35,7 +35,7 @@ class BootState extends Phaser.State {
      * Create.
      */
     create() {
-        this.game.state.start('Preload');
+        this.game.state.start("Preload");
     }
 
 
