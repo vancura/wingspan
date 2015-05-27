@@ -117,8 +117,9 @@ class Plane extends Phaser.Sprite {
      * Used after a crash.
      */
     restart() {
-        this.body.x = this.game.world.centerX;
-        this.body.y = Settings.WORLD_OVERFLOW;
+        this.body.x     = this.game.world.centerX;
+        this.body.y     = Settings.WORLD_OVERFLOW;
+        this.body.angle = 180;
 
         this.body.setZeroRotation();
         this.body.setZeroVelocity();
@@ -127,8 +128,6 @@ class Plane extends Phaser.Sprite {
         this.currentThrust        = 0.1;
         this._degree              = 0;
         this.isCrashed            = false;
-
-        // FIXME: Rotation is kept
     }
 
 
