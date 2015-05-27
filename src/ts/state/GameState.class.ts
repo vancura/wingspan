@@ -21,6 +21,12 @@ class GameState extends Phaser.State {
     private player1Plane:Plane;
     private player2Plane:Plane;
     private trails:Trails;
+    private scenicSingleModeButton:Phaser.Button;
+    private scenicSingleModeLabel:Phaser.Image;
+    private local2PlayersModeButton:Phaser.Button;
+    private local2PlayersModeLabel:Phaser.Image;
+    private remoteXPlayersModeButton:Phaser.Button;
+    private remoteXPlayersModeLabel:Phaser.Image;
 
     private engineLoop:Phaser.Sound;
     private engineStress:Phaser.Sound;
@@ -65,8 +71,8 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        this.gameModeState = GameModeState.ScenicSingle; // TODO: Other modes
-        this.player1State = PlayState.Init;
+        this.gameModeState = GameModeState.ScenicSingle;
+        this.player1State  = PlayState.Init;
 
         // setup other data
         this.dieSlide = new Phaser.Point();
@@ -87,6 +93,7 @@ class GameState extends Phaser.State {
         this.createFire();
         this.createGroundFront();
         this.createSignals();
+        this.createGUI();
 
         this.player1State = PlayState.Playing;
     }
@@ -368,6 +375,98 @@ class GameState extends Phaser.State {
      */
     private createSignals() {
         Signals.onCrashBottom.add(this.onPlaneCrashed, this);
+    }
+
+
+    /**
+     * Create GUI.
+     */
+    private createGUI() {
+        var x = 0;
+
+        this.scenicSingleModeButton               = this.add.button(x, this.world.height, "game", this.switchGameModeState, this, "gui/scenic-single-over.png", "gui/scenic-single-out.png");
+        this.scenicSingleModeButton.fixedToCamera = true;
+        this.scenicSingleModeButton.anchor.y      = 1;
+
+        this.scenicSingleModeLabel               = this.add.image(x, this.world.height, "game", "gui/scenic-single-active.png");
+        this.scenicSingleModeLabel.fixedToCamera = true;
+        this.scenicSingleModeLabel.anchor.y      = 1;
+        this.scenicSingleModeLabel.visible       = false;
+
+        x += this.scenicSingleModeButton.width + 5;
+
+        this.local2PlayersModeButton               = this.add.button(x, this.world.height, "game", this.switchGameModeState, this, "gui/local-2-players-over.png", "gui/local-2-players-out.png");
+        this.local2PlayersModeButton.fixedToCamera = true;
+        this.local2PlayersModeButton.anchor.y      = 1;
+
+        this.local2PlayersModeLabel               = this.add.image(x, this.world.height, "game", "gui/local-2-players-active.png");
+        this.local2PlayersModeLabel.fixedToCamera = true;
+        this.local2PlayersModeLabel.anchor.y      = 1;
+        this.local2PlayersModeLabel.visible       = false;
+
+        x += this.local2PlayersModeButton.width + 5;
+
+        this.remoteXPlayersModeButton               = this.add.button(x, this.world.height, "game", this.switchGameModeState, this, "gui/remote-x-players-over.png", "gui/remote-x-players-out.png");
+        this.remoteXPlayersModeButton.fixedToCamera = true;
+        this.remoteXPlayersModeButton.anchor.y      = 1;
+
+        this.remoteXPlayersModeLabel               = this.add.image(x, this.world.height, "game", "gui/remote-x-players-active.png");
+        this.remoteXPlayersModeLabel.fixedToCamera = true;
+        this.remoteXPlayersModeLabel.anchor.y      = 1;
+        this.remoteXPlayersModeLabel.visible       = false;
+
+        this.refreshGUI();
+    }
+
+
+    /**
+     * Switch game mode state.
+     * @param e Button origin
+     */
+    private switchGameModeState(e:Phaser.Button) {
+        switch (e) {
+            case this.scenicSingleModeButton:
+                this.gameModeState = GameModeState.ScenicSingle;
+                break;
+
+            case this.local2PlayersModeButton:
+                this.gameModeState = GameModeState.Local2Players;
+                break;
+
+            case this.remoteXPlayersModeButton:
+                this.gameModeState = GameModeState.RemoteXPlayers;
+                break;
+        }
+
+        this.refreshGUI();
+    }
+
+
+    private refreshGUI() {
+        this.scenicSingleModeButton.buttonMode   = true;
+        this.local2PlayersModeButton.buttonMode  = true;
+        this.remoteXPlayersModeButton.buttonMode = true;
+
+        this.scenicSingleModeLabel.visible   = false;
+        this.local2PlayersModeLabel.visible  = false;
+        this.remoteXPlayersModeLabel.visible = false;
+
+        switch (this.gameModeState) {
+            case GameModeState.ScenicSingle:
+                this.scenicSingleModeButton.inputEnabled = false;
+                this.scenicSingleModeLabel.visible       = true;
+                break;
+
+            case GameModeState.Local2Players:
+                this.local2PlayersModeButton.inputEnabled = false;
+                this.local2PlayersModeLabel.visible       = true;
+                break;
+
+            case GameModeState.RemoteXPlayers:
+                this.remoteXPlayersModeButton.inputEnabled = false;
+                this.remoteXPlayersModeLabel.visible       = true;
+                break;
+        }
     }
 
 
