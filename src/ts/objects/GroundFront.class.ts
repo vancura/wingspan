@@ -29,7 +29,7 @@ class GroundFront extends Phaser.Group {
         this.add(this.groundGroup1);
 
         while (i < Math.ceil(this.game.world.width / 254) + 3) {
-            l      = this.groundGroup1.create(i * 254, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            l = this.groundGroup1.create(i * 254, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
             l.tint = 0x000000;
 
             i++;

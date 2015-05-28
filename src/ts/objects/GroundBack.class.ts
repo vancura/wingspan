@@ -39,7 +39,7 @@ class GroundBack extends Phaser.Group {
 
         // add level 1 layer
         while (i < Math.ceil(this.game.world.width / 256)) {
-            l      = this.groundGroup4.create(i * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            l = this.groundGroup4.create(i * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
             l.tint = 0xf48f44;
 
             i++;
@@ -47,7 +47,7 @@ class GroundBack extends Phaser.Group {
 
         // add level 2 layer
         while (j < Math.ceil(this.game.world.width / 256) + 1) {
-            m      = this.groundGroup3.create(j * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            m = this.groundGroup3.create(j * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
             m.tint = 0x882d25;
 
             j++;
@@ -55,7 +55,7 @@ class GroundBack extends Phaser.Group {
 
         // add level 3 layer
         while (k < Math.ceil(this.game.world.width / 256) + 2) {
-            n      = this.groundGroup2.create(k * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            n = this.groundGroup2.create(k * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
             n.tint = 0x5f0028;
 
             k++;

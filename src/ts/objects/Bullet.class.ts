@@ -21,10 +21,10 @@ class Bullet extends Phaser.Sprite {
         super(game, 0, 0, "game", "bullet.png");
 
         this.checkWorldBounds = true;
-        this.outOfBoundsKill  = true;
-        this.exists           = false;
-        this.name             = "bullet";
-        this._planeIdx        = planeIdx;
+        this.outOfBoundsKill = true;
+        this.exists = false;
+        this.name = "bullet";
+        this._planeIdx = planeIdx;
 
         this.anchor.set(0.5);
     }
@@ -44,7 +44,7 @@ class Bullet extends Phaser.Sprite {
 
         this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
 
-        this.angle    = angle;
+        this.angle = angle;
         this.lifespan = Settings.PLANE_BULLET_LIFESPAN;
 
         this.body.gravity.set(0, 100);

@@ -37,14 +37,14 @@ class Plane extends Phaser.Sprite {
         super(game, x, y, "game", `${framePrefix}/p1.png`);
 
         this.framePrefix = framePrefix;
-        this.idx         = idx;
+        this.idx = idx;
         this._trailColor = trailColor;
         this.name = "plane";
 
         // physics settings
         game.physics["box2d"].enable(this);
 
-        this.body.angle         = 180;
+        this.body.angle = 180;
         this.body.linearDamping = 1;
 
         this.fireSensor = this.body.setCircle(this.width / 2);
@@ -63,7 +63,7 @@ class Plane extends Phaser.Sprite {
         this.currentThrust = 0.1;
 
         // current degree and vel
-        this._degree   = 0;
+        this._degree = 0;
         this._velocity = 0;
 
         // crashed flag preventing multiple crashes
@@ -107,7 +107,7 @@ class Plane extends Phaser.Sprite {
         this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
 
         // store the degree and vel
-        this._degree   = rot;
+        this._degree = rot;
         this._velocity = vel;
     }
 
@@ -117,17 +117,17 @@ class Plane extends Phaser.Sprite {
      * Used after a crash.
      */
     restart() {
-        this.body.x     = this.game.world.centerX;
-        this.body.y     = Settings.WORLD_OVERFLOW;
+        this.body.x = this.game.world.centerX;
+        this.body.y = Settings.WORLD_OVERFLOW;
         this.body.angle = 180;
 
         this.body.setZeroRotation();
         this.body.setZeroVelocity();
 
         this.currentControlDegree = 0;
-        this.currentThrust        = 0.1;
-        this._degree              = 0;
-        this.isCrashed            = false;
+        this.currentThrust = 0.1;
+        this._degree = 0;
+        this.isCrashed = false;
     }
 
 

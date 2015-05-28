@@ -53,20 +53,20 @@ class GameState extends Phaser.State {
         this.physics.startSystem(Phaser.Physics.BOX2D);
 
         this.physics["box2d"].setBoundsToWorld(true, true, false, true);
-        this.physics["box2d"].gravity.y   = Settings.WORLD_GRAVITY;
+        this.physics["box2d"].gravity.y = Settings.WORLD_GRAVITY;
         this.physics["box2d"].restitution = 0.4;
 
         if (Settings.IS_DEBUG_ENABLED) {
-            this.game.physics["box2d"].debugDraw.shapes       = true;
-            this.game.physics["box2d"].debugDraw.joints       = true;
-            this.game.physics["box2d"].debugDraw.aabbs        = true;
-            this.game.physics["box2d"].debugDraw.pairs        = true;
+            this.game.physics["box2d"].debugDraw.shapes = true;
+            this.game.physics["box2d"].debugDraw.joints = true;
+            this.game.physics["box2d"].debugDraw.aabbs = true;
+            this.game.physics["box2d"].debugDraw.pairs = true;
             this.game.physics["box2d"].debugDraw.centerOfMass = true;
         }
 
         // setup states
         GameState._gameModeState = GameModeState.ScenicSingle;
-        GameState._player1State  = PlayState.Init;
+        GameState._player1State = PlayState.Init;
 
         // setup other data
         this.dieSlide = new Phaser.Point();
@@ -193,7 +193,7 @@ class GameState extends Phaser.State {
 
         framePrefix = (idx === 0) ? "plane1" : "plane2"; // TODO: More planes
         trailColor = Settings.PLANE_TRAIL_COLOR_LIST[idx];
-        plane      = new Plane(this.game, this.world.centerX + (idx - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, idx);
+        plane = new Plane(this.game, this.world.centerX + (idx - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, idx);
 
         return plane;
     }
@@ -288,28 +288,28 @@ class GameState extends Phaser.State {
             case GameModeState.ScenicSingle:
                 // single scenic mode
 
-                this.leftButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-                this.rightButtonP1     = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-                this.thrustButtonP1    = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+                this.leftButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+                this.rightButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+                this.thrustButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.UP);
                 this.backpedalButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-                this.fireButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+                this.fireButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
                 break;
 
             case GameModeState.Local2Players:
                 // local two player mode
 
-                this.leftButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.A);
-                this.rightButtonP1     = this.input.keyboard.addKey(Phaser.Keyboard.D);
-                this.thrustButtonP1    = this.input.keyboard.addKey(Phaser.Keyboard.W);
+                this.leftButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.A);
+                this.rightButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.D);
+                this.thrustButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.W);
                 this.backpedalButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.S);
-                this.fireButtonP1      = this.input.keyboard.addKey(Phaser.Keyboard.F);
+                this.fireButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.F);
 
-                this.leftButtonP2      = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-                this.rightButtonP2     = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-                this.thrustButtonP2    = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+                this.leftButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+                this.rightButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+                this.thrustButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.UP);
                 this.backpedalButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-                this.fireButtonP2      = this.input.keyboard.addKey(Phaser.Keyboard.ALT);
+                this.fireButtonP2 = this.input.keyboard.addKey(Phaser.Keyboard.ALT);
 
                 break;
 
@@ -327,8 +327,8 @@ class GameState extends Phaser.State {
      * Create the background.
      */
     private createBackground() {
-        this.background          = this.add.sprite(0, 0, "forestBackground");
-        this.background.name     = "background";
+        this.background = this.add.sprite(0, 0, "forestBackground");
+        this.background.name = "background";
         this.background.smoothed = true;
 
         this.background.scale.set(Math.min(1 / (this.world.width / this.background.width), 1 / (this.world.height / this.background.height)));
@@ -436,7 +436,7 @@ class GameState extends Phaser.State {
         if (Settings.IS_SOUND_ENABLED) {
             planeVelocity = this.player1Plane.velocity / 60;
 
-            this.engineLoop.volume   = 1 - planeVelocity / 2;
+            this.engineLoop.volume = 1 - planeVelocity / 2;
             this.engineStress.volume = planeVelocity / 4;
         }
 

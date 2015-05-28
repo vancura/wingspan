@@ -10,8 +10,8 @@ class BootState extends Phaser.State {
     init() {
         this.game.renderer["renderSession"].roundPixels = false;
 
-        this.stage.backgroundColor         = 0x000000;
-        this.stage.smoothed                = true;
+        this.stage.backgroundColor = 0x000000;
+        this.stage.smoothed = true;
         this.stage.disableVisibilityChange = false; // phaser will automatically pause if the browser tab the app is in loses focus
 
         this.input.maxPointers = 1; // unless you specifically know your app needs to support multi-touch

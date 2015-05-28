@@ -27,10 +27,10 @@ class Weapon extends Phaser.Group {
 
         super(game, game.world, "weapon", false, true, Phaser.Physics.ARCADE);
 
-        this.nextFire    = 0;
+        this.nextFire = 0;
         this.bulletSpeed = Settings.PLANE_BULLET_SPEED;
-        this.flip        = false;
-        this.planeIdx    = planeIdx;
+        this.flip = false;
+        this.planeIdx = planeIdx;
 
         // prepare bullets
         for (i = 0; i < 64 * 4; i++) {
