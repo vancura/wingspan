@@ -444,6 +444,9 @@ class GameState extends Phaser.State {
         // update parallax
         this.updateParallax();
 
+        // update offscreen arrows
+        this.gui.updateOffscreenArrows(this.player1Plane.y);
+
         // update trails
         this.trails.draw(this.player1Plane);
 
