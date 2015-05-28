@@ -134,23 +134,21 @@ class GUI extends Phaser.Group {
      * @param e Button origin
      */
     private switchGameModeState(e:Phaser.Button) {
-        /*
-         switch (e) {
-         case this.scenicSingleModeButton:
-         this._gameModeState = GameModeState.ScenicSingle;
-         break;
+        switch (e) {
+            case this.scenicSingleModeButton:
+                Signals.onSwitchGameModeState.dispatch(GameModeState.ScenicSingle);
+                break;
 
-         case this.local2PlayersModeButton:
-         this._gameModeState = GameModeState.Local2Players;
-         break;
+            case this.local2PlayersModeButton:
+                Signals.onSwitchGameModeState.dispatch(GameModeState.Local2Players);
+                break;
 
-         case this.remoteXPlayersModeButton:
-         this._gameModeState = GameModeState.RemoteXPlayers;
-         break;
-         }
+            case this.remoteXPlayersModeButton:
+                Signals.onSwitchGameModeState.dispatch(GameModeState.RemoteXPlayers);
+                break;
+        }
 
-         this.refreshGUI();
-         */
+        this.refresh();
     }
 
 

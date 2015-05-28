@@ -369,6 +369,7 @@ class GameState extends Phaser.State {
      */
     private createSignals() {
         Signals.onCrashBottom.add(this.onPlaneCrashed, this);
+        Signals.onSwitchGameModeState.add(this.onGameModeStateSwitched, this);
     }
 
 
@@ -551,6 +552,16 @@ class GameState extends Phaser.State {
 
         if (e === this.player1Plane)
             GameState._player1State = PlayState.Died;
+    }
+
+
+    /**
+     * Game mode state switched from GUI.
+     * @param {GameModeState} e New game mode state
+     * @see GameModeState
+     */
+    private onGameModeStateSwitched(e:GameModeState) {
+        // TODO: Game mode switch
     }
 
 
