@@ -21,6 +21,7 @@ var typedoc = require("gulp-typedoc");
 
 
 var proxy = "http://wingspan.192.168.1.111.xip.io";
+var srcRoot = "../../";
 
 var paths = {
     src: "src",
@@ -31,7 +32,6 @@ var paths = {
     distCSS: "dist/css",
     distImages: "dist/images",
     distJS: "dist/js",
-    distTS: "dist/js/ts",
     distJSList: [
         "components/phaser/build/custom/phaser-no-physics.js",
         "src/js-vendor/box2d-plugin-full-scrambled.js",
@@ -53,10 +53,7 @@ gulp.task("styles", function () {
 
     // Compile SCSS.
     return gulp.src(paths.srcSCSS)
-        .pipe(sass({
-            errLogToConsole: false,
-            outputStyle: "expanded"
-        }))
+        .pipe(sass({errLogToConsole: false, outputStyle: "expanded"}))
         .pipe(autoprefixer("last 2 versions", "safari 6", "ie 10", "opera 12.1", "ios 6", "android 4", "blackberry 10"))
         .pipe(gulp.dest(paths.distCSS));
 });
@@ -79,44 +76,32 @@ gulp.task("sprites", function () {
 
     // Generate sprite sheet images and optimize them.
     spriteOutput.img
-        .pipe(imagemin({
-            optimizationLevel: 0,
-            use: [pngcrush()]
-        }))
+        .pipe(imagemin({optimizationLevel: 0, use: [pngcrush()]}))
         .pipe(gulp.dest(paths.distImages));
 
     // Minify main.css.
     spriteOutput.css
-        .pipe(rename({
-            suffix: ".min"
-        }))
+        .pipe(rename({suffix: ".min"}))
         .pipe(minifycss())
         .pipe(gulp.dest(paths.distCSS))
-        .pipe(browserSync.reload({
-            stream: true
-        }));
+        .pipe(browserSync.reload({stream: true}));
 });
 
 
 gulp.task("scripts-debug", function () {
     "use strict";
 
-    var tsResult = gulp.src(paths.srcTS, {
-        base: "src/ts"
-    })
+    var tsResult = gulp.src(paths.srcTS, {base: "src/ts"})
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
 
     return tsResult.js
-        .pipe(gulp.dest(paths.distTS))
         .pipe(filelog("concat-debug"))
         .pipe(concat("main.js"))
         .pipe(cleants())
-        .pipe(sourcemaps.write("."))
+        .pipe(sourcemaps.write(".", {sourceRoot: srcRoot + "src/ts", includeContent: false}))
         .pipe(gulp.dest(paths.distJS))
-        .pipe(browserSync.reload({
-            stream: true
-        }));
+        .pipe(browserSync.reload({stream: true}));
 });
 
 
@@ -126,9 +111,7 @@ gulp.task("scripts-dist", ["scripts-debug"], function () {
     return gulp.src(paths.distJSList)
         .pipe(filelog("concat-dist"))
         .pipe(concat("main.js"))
-        .pipe(rename({
-            suffix: ".min"
-        }))
+        .pipe(rename({suffix: ".min"}))
         .pipe(uglify())
         .pipe(gulp.dest(paths.distJS));
 });
@@ -150,11 +133,7 @@ gulp.task("docs", function () {
 gulp.task("browser-sync", function () {
     "use strict";
 
-    browserSync({
-        proxy: proxy,
-        logConnections: true,
-        open: false
-    });
+    browserSync({proxy: proxy, logConnections: true, open: false});
 });
 
 
@@ -180,10 +159,7 @@ gulp.task("clean", function () {
 gulp.task("tsd", function (callback) {
     "use strict";
 
-    tsd({
-        command: "reinstall",
-        config: "./tsd.json"
-    }, callback);
+    tsd({command: "reinstall", config: "./tsd.json"}, callback);
 });
 
 
