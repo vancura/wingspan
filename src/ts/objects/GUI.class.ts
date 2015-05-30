@@ -17,6 +17,7 @@ class GUI extends Phaser.Group {
     private remoteXPlayersModeLabel:Phaser.Image;
     private playerOffscreenLeftImage:Phaser.Image;
     private playerOffscreenRightImage:Phaser.Image;
+    private playerOffscreenUpImage:Phaser.Image;
 
 
     constructor(game:Phaser.Game) {
@@ -67,15 +68,19 @@ class GUI extends Phaser.Group {
 
     /**
      * Update offscreen arrows.
-     * @param y New Y value
+     * @param x Plane X position
+     * @param y Plane Y position
      * TODO: More players, more images
      */
-    updateOffscreenArrows(y:number):void {
-        this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = false;
+    updateOffscreenArrows(x:number, y:number):void {
+        this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = false;
+
         this.playerOffscreenLeftImage.y = this.playerOffscreenRightImage.y = y;
         this.playerOffscreenLeftImage.x = 0;
         this.playerOffscreenRightImage.x = this.game.canvas.width;
-        this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = true;
+        this.playerOffscreenUpImage.x = x;
+
+        this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = true;
     }
 
 
@@ -162,8 +167,13 @@ class GUI extends Phaser.Group {
         this.playerOffscreenRightImage.fixedToCamera = true;
         this.playerOffscreenRightImage.anchor.set(1, 0.5);
 
+        this.playerOffscreenUpImage = new Phaser.Image(this.game, this.game.canvas.width / 2, 0, "game", "gui/player-offscreen-up.png");
+        this.playerOffscreenUpImage.fixedToCamera = true;
+        this.playerOffscreenUpImage.anchor.set(0.5, 0);
+
         this.add(this.playerOffscreenLeftImage);
         this.add(this.playerOffscreenRightImage);
+        this.add(this.playerOffscreenUpImage);
     }
 
 

@@ -35,7 +35,7 @@
 "ground/g2.png":
 {
     "frame": {
-        "x": 282,
+        "x": 293,
         "y": 344,
         "w": 256,
         "h": 100
@@ -48,7 +48,7 @@
 "ground/g3.png":
 {
     "frame": {
-        "x": 540,
+        "x": 551,
         "y": 344,
         "w": 256,
         "h": 100
@@ -108,7 +108,7 @@
 },
     "gui/player-offscreen-left.png": {
         "frame": {
-            "x": 2,
+            "x": 55,
             "y": 359,
             "w": 42,
             "h": 51
@@ -128,7 +128,7 @@
     },
     "gui/player-offscreen-right.png": {
         "frame": {
-            "x": 46,
+            "x": 99,
             "y": 359,
             "w": 42,
             "h": 51
@@ -144,6 +144,26 @@
         "sourceSize": {
             "w": 42,
             "h": 51
+        }
+    },
+    "gui/player-offscreen-up.png": {
+        "frame": {
+            "x": 2,
+            "y": 375,
+            "w": 51,
+            "h": 42
+        },
+        "rotated": false,
+        "trimmed": false,
+        "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 51,
+            "h": 42
+        },
+        "sourceSize": {
+            "w": 51,
+            "h": 42
         }
     },
 "gui/remote-x-players-active.png":
@@ -221,7 +241,7 @@
 "plane1/p3.png":
 {
     "frame": {
-        "x": 138,
+        "x": 191,
         "y": 359,
         "w": 52,
         "h": 44
@@ -234,7 +254,7 @@
 "plane1/p4.png":
 {
     "frame": {
-        "x": 192,
+        "x": 245,
         "y": 359,
         "w": 46,
         "h": 44
@@ -247,8 +267,8 @@
 "plane1/p5.png":
 {
     "frame": {
-        "x": 240,
-        "y": 359,
+        "x": 809,
+        "y": 353,
         "w": 40,
         "h": 44
     },
@@ -324,7 +344,7 @@
 "plane2/p4.png":
 {
     "frame": {
-        "x": 90,
+        "x": 143,
         "y": 359,
         "w": 46,
         "h": 45
@@ -381,6 +401,6 @@
 	"format": "RGBA8888",
 	"size": {"w":1024,"h":1024},
 	"scale": "1",
-    "smartupdate": "$TexturePacker:SmartUpdate:ee12fab089a0669816514a4af1dcdffe:e2eccb69d9551f45eb807a333cc24756:fc2835210f98bae8e8c1b7f0a84c9321$"
+    "smartupdate": "$TexturePacker:SmartUpdate:ac6f9be8214b595ed9c6cbc6514d0fe4:8ee3fbc1748d4ec50207eddba84dd7a0:fc2835210f98bae8e8c1b7f0a84c9321$"
 }
 }

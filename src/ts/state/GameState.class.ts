@@ -374,7 +374,7 @@ class GameState extends Phaser.State {
                 plane.weapon.fire(plane);
 
             // update offscreen arrows
-            this.gui.updateOffscreenArrows(plane.y);
+            this.gui.updateOffscreenArrows(plane.position.x - this.game.camera.x, plane.position.y);
 
             // update trails
             this.trails.draw(plane);
