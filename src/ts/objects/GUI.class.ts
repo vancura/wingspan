@@ -1,4 +1,5 @@
 /// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
+/// <reference path="../data/Data.class.ts"/>
 /// <reference path="../state/GameState.class.ts"/>
 
 
@@ -45,7 +46,7 @@ class GUI extends Phaser.Group {
         this.local2PlayersModeLabel.visible = false;
         this.remoteXPlayersModeLabel.visible = false;
 
-        switch (Settings.gameMode) {
+        switch (Data.gameMode) {
             case GameMode.ScenicSingle:
                 this.scenicSingleModeButton.inputEnabled = false;
                 this.scenicSingleModeLabel.visible = true;

@@ -1,4 +1,6 @@
 /// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
+/// <reference path="../data/Data.class.ts"/>
+/// <reference path="../data/Enums.class.ts"/>
 /// <reference path="../data/Settings.class.ts" />
 /// <reference path="../objects/Bullet.class.ts" />
 /// <reference path="../objects/GroundBack.class.ts" />
@@ -59,7 +61,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        Settings.gameMode = GameMode.ScenicSingle;
+        Data.gameMode = GameMode.ScenicSingle;
 
         // setup other data
         this.dieSlide = new Phaser.Point();
@@ -99,7 +101,7 @@ class GameState extends Phaser.State {
      * Update.
      */
     update() {
-        switch (Settings.gameMode) {
+        switch (Data.gameMode) {
             case GameMode.ScenicSingle:
                 this.updateScenicSingle();
                 break;
@@ -129,7 +131,7 @@ class GameState extends Phaser.State {
         var plane:Plane;
         var a:number, count:number;
 
-        if (Settings.gameMode == GameMode.ScenicSingle)
+        if (Data.gameMode == GameMode.ScenicSingle)
             count = 1;
 
         for (a = 0; a < count; a++) {
@@ -217,7 +219,7 @@ class GameState extends Phaser.State {
      * Create controls.
      */
     private createControls() {
-        switch (Settings.gameMode) {
+        switch (Data.gameMode) {
             case GameMode.ScenicSingle:
                 this.leftButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
                 this.rightButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
