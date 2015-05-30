@@ -12,9 +12,12 @@ class BootState extends Phaser.State {
 
         this.stage.backgroundColor = 0x000000;
         this.stage.smoothed = true;
-        this.stage.disableVisibilityChange = false; // phaser will automatically pause if the browser tab the app is in loses focus
 
-        this.input.maxPointers = 1; // unless you specifically know your app needs to support multi-touch
+        // phaser will automatically pause if the browser tab the app is in loses focus
+        this.stage.disableVisibilityChange = false;
+
+        // unless you specifically know your app needs to support multi-touch
+        this.input.maxPointers = 1;
 
         this.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
 
