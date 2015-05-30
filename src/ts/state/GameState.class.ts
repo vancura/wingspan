@@ -212,9 +212,12 @@ class GameState extends Phaser.State {
             this.engineStress = this.game.add.audio("engineStress");
             this.engineStress.play("", 0, 0, true);
 
+        if (Settings.IS_MUSIC_ENABLED) {
             this.musicLoop = this.game.add.audio("music-parapet");
             this.musicLoop.play("", 0, 0.8, true);
+        }
 
+        if (Settings.IS_SOUND_ENABLED) {
             this.explosion = this.game.add.audio("explosion");
         }
     }
