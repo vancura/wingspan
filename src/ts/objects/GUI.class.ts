@@ -68,23 +68,32 @@ class GUI extends Phaser.Group {
 
     /**
      * Update offscreen arrows.
-     * @param x Plane X position
-     * @param y Plane Y position
+     * @param plane Plane to show arrows for
      * TODO: More players, more images
      */
-    updateOffscreenArrows(x:number, y:number):void {
-        this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = false;
+    updateOffscreenArrows(plane:Plane):void {
+        var mx = plane.position.x - this.game.camera.x;
+        var my = plane.position.y;
 
-        this.playerOffscreenLeftImage.y = this.playerOffscreenRightImage.y = y;
-        this.playerOffscreenLeftImage.x = 0;
-        this.playerOffscreenRightImage.x = this.game.canvas.width;
-        this.playerOffscreenUpImage.x = x;
+        if (plane.state == PlaneState.Flying) {
+            this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = false;
 
-        this.playerOffscreenLeftImage.visible = x < 0;
-        this.playerOffscreenRightImage.visible = x > this.game.canvas.width;
-        this.playerOffscreenUpImage.visible = y < 0;
+            this.playerOffscreenLeftImage.y = this.playerOffscreenRightImage.y = my;
+            this.playerOffscreenLeftImage.x = 0;
+            this.playerOffscreenRightImage.x = this.game.canvas.width;
+            this.playerOffscreenUpImage.x = mx;
 
-        this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = true;
+            this.playerOffscreenLeftImage.visible = mx < 0;
+            this.playerOffscreenRightImage.visible = mx > this.game.canvas.width;
+            this.playerOffscreenUpImage.visible = my < 0;
+
+            this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = true;
+        }
+        else {
+            this.playerOffscreenLeftImage.visible = false;
+            this.playerOffscreenRightImage.visible = false;
+            this.playerOffscreenUpImage.visible = false;
+        }
     }
 
 

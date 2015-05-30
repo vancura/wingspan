@@ -373,9 +373,6 @@ class GameState extends Phaser.State {
             if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown)
                 plane.weapon.fire(plane);
 
-            // update offscreen arrows
-            this.gui.updateOffscreenArrows(plane.position.x - this.game.camera.x, plane.position.y);
-
             // update trails
             this.trails.draw(plane);
 
@@ -385,6 +382,9 @@ class GameState extends Phaser.State {
 
         // update parallax
         this.updateParallax();
+
+        // update offscreen arrows
+        this.gui.updateOffscreenArrows(plane);
     }
 
 
@@ -437,10 +437,12 @@ class GameState extends Phaser.State {
         }
 
         // scroll now
-        this.groundBack.scroll(parallaxRatio);
-        this.groundFront.scroll(parallaxRatio);
+        if (parallaxRatio >= 0 && parallaxRatio <= 1) {
+            this.groundBack.scroll(parallaxRatio);
+            this.groundFront.scroll(parallaxRatio);
 
-        this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
+            this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
+        }
     }
 
 
