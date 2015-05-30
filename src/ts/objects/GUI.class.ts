@@ -80,6 +80,10 @@ class GUI extends Phaser.Group {
         this.playerOffscreenRightImage.x = this.game.canvas.width;
         this.playerOffscreenUpImage.x = x;
 
+        this.playerOffscreenLeftImage.visible = x < 0;
+        this.playerOffscreenRightImage.visible = x > this.game.canvas.width;
+        this.playerOffscreenUpImage.visible = y < 0;
+
         this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = true;
     }
 
