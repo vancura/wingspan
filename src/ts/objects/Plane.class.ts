@@ -24,6 +24,7 @@ class Plane extends Phaser.Sprite {
     private _velocity:number;
     private _degree:number;
     private _trailColor:string;
+    private _state:PlaneState;
 
 
     /**
@@ -40,9 +41,10 @@ class Plane extends Phaser.Sprite {
         super(game, x, y, "game", `${framePrefix}/p1.png`);
 
         this.framePrefix = framePrefix;
+        this.name = "plane";
         this.idx = idx;
         this._trailColor = trailColor;
-        this.name = "plane";
+        this._state = PlaneState.Flying;
 
         // physics settings
         game.physics["box2d"].enable(this);
@@ -133,10 +135,37 @@ class Plane extends Phaser.Sprite {
 
 
     /**
+     * Crash the plane.
+     * Crashed and RestartScheduled needed (in this order)
+     * due to separation of frames in GameState.update()
+     * Sets the state to PlaneState.Crashed
+     * @see PlaneState
+     */
+    crash() {
+        this._state = PlaneState.Crashed;
+    }
+
+
+    /**
+     * Schedule a restart.
+     * Crashed and RestartScheduled needed (in this order)
+     * due to separation of frames in GameState.update()
+     * Sets the state to PlaneState.RestartScheduled
+     * @see PlaneState
+     */
+    scheduleRestart() {
+        this._state = PlaneState.RestartScheduled;
+    }
+
+
+    /**
      * Reset position and rotation.
      * Used after a crash.
+     * Sets the state to PlaneState.Flying
+     * @see PlaneState
      */
     restart() {
+        // reset physics
         this.body.x = this.game.world.centerX;
         this.body.y = Settings.WORLD_OVERFLOW;
         this.body.angle = 180;
@@ -144,10 +173,14 @@ class Plane extends Phaser.Sprite {
         this.body.setZeroRotation();
         this.body.setZeroVelocity();
 
+        // reset properties
         this.currentControlDegree = 0;
         this.currentThrust = 0.1;
         this._degree = 0;
         this.isCrashed = false;
+
+        // plane is flying again
+        this._state = PlaneState.Flying;
     }
 
 
@@ -269,6 +302,16 @@ class Plane extends Phaser.Sprite {
     }
 
 
+    /**
+     * Get current plane state.
+     * @return {PlaneState} Current plane state
+     * @see PlaneState
+     */
+    public get state():PlaneState {
+        return this._state;
+    }
+
+
     // EVENT LISTENERS
     // ---------------
 
@@ -292,4 +335,11 @@ class Plane extends Phaser.Sprite {
     }
 
 
+}
+
+
+const enum PlaneState {
+    Flying,
+    Crashed,
+    RestartScheduled
 }

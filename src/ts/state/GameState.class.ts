@@ -16,8 +16,6 @@ class GameState extends Phaser.State {
     private fireGroup:Phaser.Group;
     private groundBack:GroundBack;
     private groundFront:GroundFront;
-    private player1Plane:Plane;
-    private player2Plane:Plane;
     private trails:Trails;
     private gui:GUI;
 
@@ -41,7 +39,6 @@ class GameState extends Phaser.State {
 
     private static _gameModeState:GameModeState;
     private static _planeList:Plane[] = [];
-    private static _player1State:PlayState;
 
 
     /**
@@ -65,7 +62,6 @@ class GameState extends Phaser.State {
 
         // setup states
         GameState._gameModeState = GameModeState.ScenicSingle;
-        GameState._player1State = PlayState.Init;
 
         // setup other data
         this.dieSlide = new Phaser.Point();
@@ -87,8 +83,6 @@ class GameState extends Phaser.State {
         this.createGroundFront();
         this.createSignals();
         this.createGUI();
-
-        GameState._player1State = PlayState.Playing;
     }
 
 
@@ -109,25 +103,15 @@ class GameState extends Phaser.State {
     update() {
         switch (GameState.gameModeState) {
             case GameModeState.ScenicSingle:
-                // single scenic mode
-
-                this.updatePlane1();
-
+                this.updateScenicSingle();
                 break;
 
             case GameModeState.Local2Players:
-                // local two player mode
-
-                this.updatePlane1();
-                this.updatePlane2();
-
+                // FIXME: Implement
                 break;
 
             case GameModeState.RemoteXPlayers:
-                // remote x players mode
-
                 // FIXME: Implement
-
                 break;
         }
     }
@@ -141,60 +125,23 @@ class GameState extends Phaser.State {
      * Create the plane.
      */
     private createPlanes() {
-        var plane:Plane;
-        var a:number;
-
-        switch (GameState.gameModeState) {
-            case GameModeState.ScenicSingle:
-                // single scenic mode
-
-                plane = this.createSinglePlane(0);
-                this.add.existing(plane);
-                GameState._planeList.push(plane);
-
-                this.player1Plane = GameState._planeList[0];
-
-                break;
-
-            case GameModeState.Local2Players:
-                // local two player mode
-
-                for (a = 0; a < 2; a++) {
-                    plane = this.createSinglePlane(a);
-                    this.add.existing(plane);
-                    GameState._planeList.push(plane);
-                }
-
-                this.player1Plane = GameState._planeList[0];
-                this.player2Plane = GameState._planeList[1];
-
-                break;
-
-            case GameModeState.RemoteXPlayers:
-                // remote x players mode
-
-                // FIXME: Implement
-
-                break;
-        }
-    }
-
-
-    /**
-     * Create a single plane.
-     * @param idx Plane index
-     * @return {Plane} Plane just created
-     */
-    private createSinglePlane(idx) {
         var framePrefix:string;
         var trailColor:string;
         var plane:Plane;
+        var a:number, count:number;
 
-        framePrefix = (idx === 0) ? "plane1" : "plane2"; // TODO: More planes
-        trailColor = Settings.PLANE_TRAIL_COLOR_LIST[idx];
-        plane = new Plane(this.game, this.world.centerX + (idx - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, idx);
+        if (GameState.gameModeState == GameModeState.ScenicSingle)
+            count = 1;
 
-        return plane;
+        for (a = 0; a < count; a++) {
+            framePrefix = "plane1"; // FIXME: More planes
+            trailColor = Settings.PLANE_TRAIL_COLOR_LIST[a];
+            plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, a);
+
+            this.add.existing(plane);
+
+            GameState._planeList.push(plane);
+        }
     }
 
 
@@ -214,9 +161,10 @@ class GameState extends Phaser.State {
 
 
     /**
-     * Time to die.
+     * Start a crash slide.
+     * FIXME: More planes
      */
-    private die() {
+    private startCrashSlide() {
         var slideTween;
 
         // prepare the restart timeout
@@ -227,17 +175,11 @@ class GameState extends Phaser.State {
         this.restartTimeout.start();
 
         // prepare the camera slide tween
-        this.dieSlide.x = 1 / (this.world.width / this.player1Plane.body.x);
+        this.dieSlide.x = 1 / (this.world.width / GameState._planeList[0].body.x);
 
         slideTween = this.add.tween(this.dieSlide);
         slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
         slideTween.start();
-
-        // state needs to be switched
-        // currently it's PlayState.Died, needs to reflect waiting for the restart
-        GameState._player1State = PlayState.RestartScheduled;
-
-        // TODO: Player 2
     }
 
 
@@ -245,11 +187,8 @@ class GameState extends Phaser.State {
      * Restart the game.
      */
     private restart() {
-        // playing again
-        GameState._player1State = PlayState.Playing;
-
         // reset the plane position and rotation
-        this.player1Plane.restart();
+        GameState._planeList[0].restart();
     }
 
 
@@ -398,81 +337,59 @@ class GameState extends Phaser.State {
 
 
     /**
-     * Update player 1 plane.
+     * Update scenic single play mode.
      */
-    private updatePlane1() {
-        var planeVelocity;
+    private updateScenicSingle() {
+        var plane:Plane = GameState._planeList[0];
 
-        // check for dying mode
-        if (GameState._player1State == PlayState.Died)
-            this.die();
+        // check for crashed mode
+        if (plane.state == PlaneState.Crashed) {
+            // plane just crashed, but only in the last frame
+            // since now the restart will be scheduled
+            this.startCrashSlide();
 
-        // turn sideways
-        if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown)
-            this.player1Plane.rotateLeft(1);
-        else if (!this.leftButtonP1.isDown && this.rightButtonP1.isDown)
-            this.player1Plane.rotateRight(1);
-        else
-            this.player1Plane.leaveRotation();
+            // state needs to be switched
+            // currently it's PlayState.Crashed,
+            // needs to reflect waiting for the restart
+            // in another frame
+            GameState._planeList[0].scheduleRestart();
+        }
 
-        // thrust or backpedal
-        // after a while revert to original power
-        if (this.thrustButtonP1.isDown)
-            this.player1Plane.thrust();
-        else if (this.backpedalButtonP1.isDown)
-            this.player1Plane.backPedal();
-        else
-            this.player1Plane.leaveThrust();
+        // continue, but only if plane is not going to be restarted now
+        else if (plane.state != PlaneState.RestartScheduled) {
+            // turn sideways
+            if (this.leftButtonP1.isDown && !this.rightButtonP1.isDown)
+                plane.rotateLeft(1);
+            else if (!this.leftButtonP1.isDown && this.rightButtonP1.isDown)
+                plane.rotateRight(1);
+            else
+                plane.leaveRotation();
 
-        // firing
-        if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown)
-            this.player1Plane.weapon.fire(this.player1Plane);
+            // thrust or backpedal
+            // after a while revert to original power
+            if (this.thrustButtonP1.isDown)
+                plane.thrust();
+            else if (this.backpedalButtonP1.isDown)
+                plane.backPedal();
+            else
+                plane.leaveThrust();
+
+            // firing
+            if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown)
+                plane.weapon.fire(plane);
+
+            // update offscreen arrows
+            this.gui.updateOffscreenArrows(plane.y);
+
+            // update trails
+            this.trails.draw(plane);
+
+            // check bullets
+            plane.weapon.forEachAlive(this.checkBullets, this);
         }
 
         // update parallax
         this.updateParallax();
-
-        // update offscreen arrows
-        this.gui.updateOffscreenArrows(this.player1Plane.y);
-
-        // update trails
-        this.trails.draw(this.player1Plane);
-
-        // check bullets
-        this.player1Plane.weapon.forEachAlive(this.checkBullets, this);
-    }
-
-
-    /**
-     * Update player 2 plane.
-     */
-    private updatePlane2() {
-        // turn sideways
-        if (this.leftButtonP2.isDown && !this.rightButtonP2.isDown)
-            this.player2Plane.rotateLeft(1);
-        else if (!this.leftButtonP2.isDown && this.rightButtonP2.isDown)
-            this.player2Plane.rotateRight(1);
-        else
-            this.player2Plane.leaveRotation();
-
-        // thrust or backpedal
-        // after a while revert to original power
-        if (this.thrustButtonP2.isDown)
-            this.player2Plane.thrust();
-        else if (this.backpedalButtonP2.isDown)
-            this.player2Plane.backPedal();
-        else
-            this.player2Plane.leaveThrust();
-
-        // firing
-        if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP2.isDown)
-            this.player2Plane.weapon.fire(this.player2Plane);
-
-        // update trails
-        this.trails.draw(this.player2Plane);
-
-        // check bullets
-        this.player2Plane.weapon.forEachAlive(this.checkBullets, this);
     }
 
 
@@ -506,18 +423,20 @@ class GameState extends Phaser.State {
 
     /**
      * Handle parallax scrolling.
+     * FIXME: More planes
      */
     private updateParallax() {
         var parallaxRatio;
+        var plane:Plane = GameState._planeList[0];
 
-        switch (GameState._player1State) {
-            case PlayState.Playing:
+        switch (GameState._planeList[0].state) {
+            case PlaneState.Flying:
                 // playing mode
-                parallaxRatio = 1 / (this.world.width / this.player1Plane.body.x);
+                parallaxRatio = 1 / (this.world.width / plane.body.x);
                 break;
 
-            case PlayState.RestartScheduled:
-                // sliding to start
+            case PlaneState.RestartScheduled:
+                // sliding to start after the crash
                 parallaxRatio = this.dieSlide.x;
                 break;
         }
@@ -541,8 +460,11 @@ class GameState extends Phaser.State {
     private onPlaneCrashed(e:Plane) {
         this.addPlaneExplosion(e.body.x);
 
-        if (e === this.player1Plane)
-            GameState._player1State = PlayState.Died;
+        if (e === GameState._planeList[0]) {
+            // sets the crashed state,
+            // which is checked in future update()
+            GameState._planeList[0].crash();
+        }
     }
 
 
@@ -580,24 +502,6 @@ class GameState extends Phaser.State {
     }
 
 
-    /**
-     * Get current player 1 state.
-     * @return {PlayState} Current planer 1 state
-     * @see PlayState
-     */
-    public static get player1State():PlayState {
-        return this._player1State;
-    }
-
-
-}
-
-
-const enum PlayState {
-    Init = 0,
-    Playing,
-    Died,
-    RestartScheduled
 }
 
 
