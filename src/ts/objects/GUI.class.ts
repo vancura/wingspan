@@ -45,18 +45,18 @@ class GUI extends Phaser.Group {
         this.local2PlayersModeLabel.visible = false;
         this.remoteXPlayersModeLabel.visible = false;
 
-        switch (GameState.gameModeState) {
-            case GameModeState.ScenicSingle:
+        switch (Settings.gameMode) {
+            case GameMode.ScenicSingle:
                 this.scenicSingleModeButton.inputEnabled = false;
                 this.scenicSingleModeLabel.visible = true;
                 break;
 
-            case GameModeState.Local2Players:
+            case GameMode.Local2Players:
                 this.local2PlayersModeButton.inputEnabled = false;
                 this.local2PlayersModeLabel.visible = true;
                 break;
 
-            case GameModeState.RemoteXPlayers:
+            case GameMode.RemoteXPlayers:
                 this.remoteXPlayersModeButton.inputEnabled = false;
                 this.remoteXPlayersModeLabel.visible = true;
                 break;
@@ -173,15 +173,15 @@ class GUI extends Phaser.Group {
     private switchGameModeState(e:Phaser.Button) {
         switch (e) {
             case this.scenicSingleModeButton:
-                Signals.onSwitchGameModeState.dispatch(GameModeState.ScenicSingle);
+                Signals.onSwitchGameModeState.dispatch(GameMode.ScenicSingle);
                 break;
 
             case this.local2PlayersModeButton:
-                Signals.onSwitchGameModeState.dispatch(GameModeState.Local2Players);
+                Signals.onSwitchGameModeState.dispatch(GameMode.Local2Players);
                 break;
 
             case this.remoteXPlayersModeButton:
-                Signals.onSwitchGameModeState.dispatch(GameModeState.RemoteXPlayers);
+                Signals.onSwitchGameModeState.dispatch(GameMode.RemoteXPlayers);
                 break;
         }
 

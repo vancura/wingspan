@@ -336,10 +336,3 @@ class Plane extends Phaser.Sprite {
 
 
 }
-
-
-const enum PlaneState {
-    Flying,
-    Crashed,
-    RestartScheduled
-}

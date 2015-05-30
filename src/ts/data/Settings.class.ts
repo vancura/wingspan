@@ -41,5 +41,24 @@ class Settings {
         "rgba(255,0,255,1)"
     ];
 
+    // FIXME: Move somewhere
+    static gameMode:GameMode;
 
+
+}
+
+
+// FIXME: Move somewhere
+const enum GameMode {
+    ScenicSingle,
+    Local2Players,
+    RemoteXPlayers
+}
+
+
+// FIXME: Move somewhere
+const enum PlaneState {
+    Flying,
+    Crashed,
+    RestartScheduled
 }

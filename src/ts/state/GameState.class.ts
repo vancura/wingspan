@@ -36,9 +36,7 @@ class GameState extends Phaser.State {
     private originalWidth:number;
     private restartTimeout:Phaser.Timer;
     private dieSlide:Phaser.Point;
-
-    private static _gameModeState:GameModeState;
-    private static _planeList:Plane[] = [];
+    private planeList:Plane[] = [];
 
 
     /**
@@ -61,7 +59,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        GameState._gameModeState = GameModeState.ScenicSingle;
+        Settings.gameMode = GameMode.ScenicSingle;
 
         // setup other data
         this.dieSlide = new Phaser.Point();
@@ -101,16 +99,16 @@ class GameState extends Phaser.State {
      * Update.
      */
     update() {
-        switch (GameState.gameModeState) {
-            case GameModeState.ScenicSingle:
+        switch (Settings.gameMode) {
+            case GameMode.ScenicSingle:
                 this.updateScenicSingle();
                 break;
 
-            case GameModeState.Local2Players:
+            case GameMode.Local2Players:
                 // FIXME: Implement
                 break;
 
-            case GameModeState.RemoteXPlayers:
+            case GameMode.RemoteXPlayers:
                 // FIXME: Implement
                 break;
         }
@@ -123,6 +121,7 @@ class GameState extends Phaser.State {
 
     /**
      * Create the plane.
+     * FIXME: More planes
      */
     private createPlanes() {
         var framePrefix:string;
@@ -130,17 +129,17 @@ class GameState extends Phaser.State {
         var plane:Plane;
         var a:number, count:number;
 
-        if (GameState.gameModeState == GameModeState.ScenicSingle)
+        if (Settings.gameMode == GameMode.ScenicSingle)
             count = 1;
 
         for (a = 0; a < count; a++) {
-            framePrefix = "plane1"; // FIXME: More planes
+            framePrefix = "plane1";
             trailColor = Settings.PLANE_TRAIL_COLOR_LIST[a];
             plane = new Plane(this.game, this.world.centerX + (a - 1) * 200, Settings.WORLD_OVERFLOW, framePrefix, trailColor, a);
 
             this.add.existing(plane);
 
-            GameState._planeList.push(plane);
+            this.planeList.push(plane);
         }
     }
 
@@ -175,7 +174,7 @@ class GameState extends Phaser.State {
         this.restartTimeout.start();
 
         // prepare the camera slide tween
-        this.dieSlide.x = 1 / (this.world.width / GameState._planeList[0].body.x);
+        this.dieSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
 
         slideTween = this.add.tween(this.dieSlide);
         slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
@@ -188,7 +187,7 @@ class GameState extends Phaser.State {
      */
     private restart() {
         // reset the plane position and rotation
-        GameState._planeList[0].restart();
+        this.planeList[0].restart();
     }
 
 
@@ -218,10 +217,8 @@ class GameState extends Phaser.State {
      * Create controls.
      */
     private createControls() {
-        switch (GameState.gameModeState) {
-            case GameModeState.ScenicSingle:
-                // single scenic mode
-
+        switch (Settings.gameMode) {
+            case GameMode.ScenicSingle:
                 this.leftButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
                 this.rightButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
                 this.thrustButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.UP);
@@ -230,9 +227,7 @@ class GameState extends Phaser.State {
 
                 break;
 
-            case GameModeState.Local2Players:
-                // local two player mode
-
+            case GameMode.Local2Players:
                 this.leftButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.A);
                 this.rightButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.D);
                 this.thrustButtonP1 = this.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -247,9 +242,7 @@ class GameState extends Phaser.State {
 
                 break;
 
-            case GameModeState.RemoteXPlayers:
-                // remote x players mode
-
+            case GameMode.RemoteXPlayers:
                 // FIXME: Implement
 
                 break;
@@ -324,8 +317,8 @@ class GameState extends Phaser.State {
         var plane;
 
         // check for all planes
-        for (; i < GameState._planeList.length; i++) {
-            plane = GameState._planeList[i];
+        for (; i < this.planeList.length; i++) {
+            plane = this.planeList[i];
 
             // but prevent this plane
             if (i !== e.planeIdx && e.overlap(plane)) {
@@ -340,7 +333,7 @@ class GameState extends Phaser.State {
      * Update scenic single play mode.
      */
     private updateScenicSingle() {
-        var plane:Plane = GameState._planeList[0];
+        var plane:Plane = this.planeList[0];
 
         // check for crashed mode
         if (plane.state == PlaneState.Crashed) {
@@ -352,7 +345,7 @@ class GameState extends Phaser.State {
             // currently it's PlayState.Crashed,
             // needs to reflect waiting for the restart
             // in another frame
-            GameState._planeList[0].scheduleRestart();
+            this.planeList[0].scheduleRestart();
         }
 
         // continue, but only if plane is not going to be restarted now
@@ -427,9 +420,9 @@ class GameState extends Phaser.State {
      */
     private updateParallax() {
         var parallaxRatio;
-        var plane:Plane = GameState._planeList[0];
+        var plane:Plane = this.planeList[0];
 
-        switch (GameState._planeList[0].state) {
+        switch (plane.state) {
             case PlaneState.Flying:
                 // playing mode
                 parallaxRatio = 1 / (this.world.width / plane.body.x);
@@ -460,53 +453,22 @@ class GameState extends Phaser.State {
     private onPlaneCrashed(e:Plane) {
         this.addPlaneExplosion(e.body.x);
 
-        if (e === GameState._planeList[0]) {
+        if (e === this.planeList[0]) {
             // sets the crashed state,
             // which is checked in future update()
-            GameState._planeList[0].crash();
+            this.planeList[0].crash();
         }
     }
 
 
     /**
      * Game mode state switched from GUI.
-     * @param {GameModeState} e New game mode state
-     * @see GameModeState
+     * @param {GameMode} e New game mode state
+     * @see GameMode
      */
-    private onGameModeStateSwitched(e:GameModeState) {
-        // TODO: Game mode switch
+    private onGameModeStateSwitched(e:GameMode) {
+        // FIXME: Game mode switch
     }
 
 
-    // GETTERS & SETTERS
-    // -----------------
-
-
-    /**
-     * Get the plane list.
-     * @return {Plane[]} Plane list
-     * @see Plane
-     */
-    public static get planeList():Plane[] {
-        return this._planeList;
-    }
-
-
-    /**
-     * Get current game mode state.
-     * @return {GameModeState} Current game mode state
-     * @see GameModeState
-     */
-    public static get gameModeState():GameModeState {
-        return GameState._gameModeState;
-    }
-
-
-}
-
-
-const enum GameModeState {
-    ScenicSingle,
-    Local2Players,
-    RemoteXPlayers
 }
