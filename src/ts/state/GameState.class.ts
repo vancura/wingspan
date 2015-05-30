@@ -9,7 +9,6 @@
 /// <reference path="../objects/Weapon.class.ts" />
 
 
-
 class GameState extends Phaser.State {
 
 
@@ -22,8 +21,6 @@ class GameState extends Phaser.State {
     private trails:Trails;
     private gui:GUI;
 
-    private engineLoop:Phaser.Sound;
-    private engineStress:Phaser.Sound;
     private explosion:Phaser.Sound;
     private musicLoop:Phaser.Sound;
 
@@ -205,13 +202,6 @@ class GameState extends Phaser.State {
      * Create sounds. For the science!
      */
     private createSounds() {
-        if (Settings.IS_SOUND_ENABLED) {
-            this.engineLoop = this.game.add.audio("engineLoop");
-            this.engineLoop.play("", 0, 0, true);
-
-            this.engineStress = this.game.add.audio("engineStress");
-            this.engineStress.play("", 0, 0, true);
-
         if (Settings.IS_MUSIC_ENABLED) {
             this.musicLoop = this.game.add.audio("music-parapet");
             this.musicLoop.play("", 0, 0.8, true);
@@ -437,13 +427,6 @@ class GameState extends Phaser.State {
         // firing
         if (Settings.IS_PLANE_WEAPON_ENABLED && this.fireButtonP1.isDown)
             this.player1Plane.weapon.fire(this.player1Plane);
-
-        // sounds
-        if (Settings.IS_SOUND_ENABLED) {
-            planeVelocity = this.player1Plane.velocity / 60;
-
-            this.engineLoop.volume = 1 - planeVelocity / 2;
-            this.engineStress.volume = planeVelocity / 4;
         }
 
         // update parallax

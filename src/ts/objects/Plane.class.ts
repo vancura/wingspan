@@ -10,6 +10,9 @@
 class Plane extends Phaser.Sprite {
 
 
+    private engineLoop:Phaser.Sound;
+    private engineStress:Phaser.Sound;
+
     private framePrefix:string;
     private idx:number;
     private currentControlDegree:number;
@@ -73,6 +76,15 @@ class Plane extends Phaser.Sprite {
         // create a weapon
         if (Settings.IS_PLANE_WEAPON_ENABLED)
             this._weapon = new Weapon(this.game, this.idx);
+
+        // create sounds
+        if (Settings.IS_SOUND_ENABLED) {
+            this.engineLoop = this.game.add.audio("engineLoop");
+            this.engineLoop.play("", 0, 0, true);
+
+            this.engineStress = this.game.add.audio("engineStress");
+            this.engineStress.play("", 0, 0, true);
+        }
     }
 
 
@@ -80,7 +92,7 @@ class Plane extends Phaser.Sprite {
      * Update.
      */
     update() {
-        var rot:number, vel:number;
+        var rot:number, vel:number, vol:number;
 
         // clamp rotation degree to -1..+1
         this.currentControlDegree = Phaser.Math.clamp(this.currentControlDegree, -1, 1);
@@ -109,6 +121,14 @@ class Plane extends Phaser.Sprite {
         // store the degree and vel
         this._degree = rot;
         this._velocity = vel;
+
+        // play sounds
+        if (Settings.IS_SOUND_ENABLED) {
+            vol = this._velocity / 60;
+
+            this.engineLoop.volume = 1 - vol / 2;
+            this.engineStress.volume = vol / 4;
+        }
     }
 
 
