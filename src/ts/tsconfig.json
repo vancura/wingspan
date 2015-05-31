@@ -14,11 +14,20 @@
     ],
     "files": [
         "./App.class.ts",
-        "./data/AppData.ts",
+        "./data/Data.class.ts",
+        "./data/Enums.class.ts",
+        "./data/Settings.class.ts",
+        "./data/Signals.class.ts",
         "./main.ts",
-        "./state/Boot.class.ts",
-        "./state/Main.class.ts",
-        "./state/Preload.class.ts",
-        "./utils/MathUtils.ts"
+        "./objects/Bullet.class.ts",
+        "./objects/GUI.class.ts",
+        "./objects/GroundBack.class.ts",
+        "./objects/GroundFront.class.ts",
+        "./objects/Plane.class.ts",
+        "./objects/Trails.class.ts",
+        "./objects/Weapon.class.ts",
+        "./state/BootState.class.ts",
+        "./state/GameState.class.ts",
+        "./state/PreloadState.class.ts"
     ]
 }
