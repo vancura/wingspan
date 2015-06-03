@@ -52,7 +52,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        Data.gameMode = GameMode.Local2Players;
+        Data.gameMode = GameMode.ScenicSingle;
 
         // setup other data
         this.crashSlide = new Phaser.Point();
@@ -522,12 +522,6 @@ class GameState extends Phaser.State {
      */
     private onPlaneCrashed(e:Plane) {
         this.addPlaneExplosion(e.body.x);
-
-        if (e === this.planeList[0]) {
-            // sets the crashed state,
-            // which is checked in future update()
-            this.planeList[0].crash();
-        }
     }
 
 

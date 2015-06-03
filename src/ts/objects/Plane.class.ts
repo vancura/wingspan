@@ -17,7 +17,6 @@ class Plane extends Phaser.Sprite {
     private framePrefix:string;
     private currentControlDegree:number;
     private currentThrust:number;
-    private isCrashed:boolean;
     private fireSensor:any; // TODO: Set type when Box2D has TS defs
 
     private _idx:number;
@@ -71,10 +70,6 @@ class Plane extends Phaser.Sprite {
         // current degree and vel
         this._degree = 0;
         this._velocity = 0;
-
-        // crashed flag preventing multiple crashes
-        // reset from this.reset()
-        this.isCrashed = false;
 
         // create a weapon
         if (Settings.IS_PLANE_WEAPON_ENABLED)
@@ -136,18 +131,6 @@ class Plane extends Phaser.Sprite {
 
 
     /**
-     * Crash the plane.
-     * Crashed and RestartScheduled needed (in this order)
-     * due to separation of frames in GameState.update()
-     * Sets the state to PlaneState.Crashed
-     * @see PlaneState
-     */
-    crash() {
-        this._state = PlaneState.Crashed;
-    }
-
-
-    /**
      * Schedule a restart.
      * Crashed and RestartScheduled needed (in this order)
      * due to separation of frames in GameState.update()
@@ -178,7 +161,6 @@ class Plane extends Phaser.Sprite {
         this.currentControlDegree = 0;
         this.currentThrust = 0.1;
         this._degree = 0;
-        this.isCrashed = false;
 
         // plane is flying again
         this._state = PlaneState.Flying;
@@ -337,8 +319,11 @@ class Plane extends Phaser.Sprite {
      * TODO: Set type when Box2D has TS defs
      */
     private onPlaneCrashed(e:any, f:any, g:any, h:any, i:boolean, j:any) {
-        if (!this.isCrashed && this.body.y > this.game.world.height - 100) {
-            this.isCrashed = true;
+        if (this._state == PlaneState.Flying && this.body.y > this.game.world.height - 100) {
+            // crash the plane.
+            // Crashed and RestartScheduled needed (in this order)
+            // due to separation of frames in GameState.update()
+            this._state = PlaneState.Crashed;
 
             Signals.onCrashBottom.dispatch(this);
         }
