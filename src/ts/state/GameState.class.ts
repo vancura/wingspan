@@ -120,6 +120,74 @@ class GameState extends Phaser.State {
 
 
     /**
+     * Create controls.
+     */
+    private createControls() {
+        // this is awkward, but IMO it's the easiest method when
+        // we need to share the logic across all game modes
+
+        switch (Data.gameMode) {
+            case GameMode.ScenicSingle:
+            case GameMode.RemoteXPlayers:
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.DOWN));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
+
+                break;
+
+            case GameMode.Local2Players:
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.A));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.D));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.W));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.S));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.F));
+
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.DOWN));
+                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.ALT));
+
+                break;
+        }
+    }
+
+
+    /**
+     * Create the parallax effect.
+     */
+    private createParallax() {
+        this.originalWidth = this.world.width;
+        this.game.world.setBounds(0, 0, this.originalWidth * 2.2, this.world.height);
+    }
+
+
+    /**
+     * Create the background.
+     */
+    private createBackground() {
+        this.background = this.add.sprite(0, 0, "forestBackground");
+        this.background.name = "background";
+        this.background.smoothed = true;
+
+        this.background.scale.set(Math.min(1 / (this.world.width / this.background.width), 1 / (this.world.height / this.background.height)));
+
+        this.background.fixedToCamera = true;
+    }
+
+
+    /**
+     * Create ground in back.
+     * It needs to be called separately to allow proper z-sorting.
+     */
+    private createGroundBack() {
+        this.groundBack = new GroundBack(this.game);
+    }
+
+
+    /**
      * Create the plane.
      */
     private createPlanes() {
@@ -183,33 +251,6 @@ class GameState extends Phaser.State {
             this.musicLoop = this.game.add.audio("music-parapet");
             this.musicLoop.play("", 0, 0.8, true);
         }
-
-        if (Settings.IS_SOUND_ENABLED) {
-            this.explosion = this.game.add.audio("explosion");
-        }
-    }
-
-
-    /**
-     * Schedule a plane restart.
-     * Also adds a new crash slide.
-     * @param plane A plane to schedule restart for
-     */
-    private schedulePlaneRestart(plane:Plane) {
-        var slideTween;
-
-        // prepare the camera slide tween
-        this.crashSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
-
-        slideTween = this.add.tween(this.crashSlide);
-        slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
-        slideTween.start();
-
-        // state needs to be switched
-        // currently it's PlayState.Crashed,
-        // needs to reflect waiting for the restart
-        // in another frame
-        plane.scheduleRestart();
     }
 
 
@@ -236,79 +277,11 @@ class GameState extends Phaser.State {
 
 
     /**
-     * Create controls.
-     */
-    private createControls() {
-        // this is awkward, but IMO it's the easiest method when
-        // we need to share the logic across all game modes
-
-        switch (Data.gameMode) {
-            case GameMode.ScenicSingle:
-            case GameMode.RemoteXPlayers:
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.DOWN));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
-
-                break;
-
-            case GameMode.Local2Players:
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.A));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.D));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.W));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.S));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.F));
-
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.DOWN));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.ALT));
-
-                break;
-        }
-    }
-
-
-    /**
-     * Create the background.
-     */
-    private createBackground() {
-        this.background = this.add.sprite(0, 0, "forestBackground");
-        this.background.name = "background";
-        this.background.smoothed = true;
-
-        this.background.scale.set(Math.min(1 / (this.world.width / this.background.width), 1 / (this.world.height / this.background.height)));
-
-        this.background.fixedToCamera = true;
-    }
-
-
-    /**
-     * Create ground in back.
-     * It needs to be called separately to allow proper z-sorting.
-     */
-    private createGroundBack() {
-        this.groundBack = new GroundBack(this.game);
-    }
-
-
-    /**
      * Create ground in front.
      * It needs to be called separately to allow proper z-sorting.
      */
     private createGroundFront() {
         this.groundFront = new GroundFront(this.game);
-    }
-
-
-    /**
-     * Create the parallax effect.
-     */
-    private createParallax() {
-        this.originalWidth = this.world.width;
-        this.game.world.setBounds(0, 0, this.originalWidth * 2.2, this.world.height);
     }
 
 
@@ -326,6 +299,29 @@ class GameState extends Phaser.State {
      */
     private createGUI() {
         this.gui = new GUI(this.game);
+    }
+
+
+    /**
+     * Schedule a plane restart.
+     * Also adds a new crash slide.
+     * @param plane A plane to schedule restart for
+     */
+    private schedulePlaneRestart(plane:Plane) {
+        var slideTween;
+
+        // prepare the camera slide tween
+        this.crashSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
+
+        slideTween = this.add.tween(this.crashSlide);
+        slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
+        slideTween.start();
+
+        // state needs to be switched
+        // currently it's PlayState.Crashed,
+        // needs to reflect waiting for the restart
+        // in another frame
+        plane.scheduleRestart();
     }
 
 
