@@ -26,7 +26,6 @@ class GameState extends Phaser.State {
     private keyList:Phaser.Key[] = [];
 
     private originalWidth:number;
-    private crashSlide:Phaser.Point;
     private planeList:Plane[] = [];
 
 
@@ -51,9 +50,6 @@ class GameState extends Phaser.State {
 
         // setup states
         Data.gameMode = GameMode.ScenicSingle;
-
-        // setup other data
-        this.crashSlide = new Phaser.Point();
     }
 
 
@@ -101,7 +97,7 @@ class GameState extends Phaser.State {
             // if it has just crashed, but only in the last frame
             // since now its restart will be scheduled
             if (plane.state == PlaneState.Crashed)
-                this.schedulePlaneRestart(plane);
+                plane.scheduleRestart();
 
             // control the plane
             this.controlPlane(plane);
@@ -303,29 +299,6 @@ class GameState extends Phaser.State {
 
 
     /**
-     * Schedule a plane restart.
-     * Also adds a new crash slide.
-     * @param plane A plane to schedule restart for
-     */
-    private schedulePlaneRestart(plane:Plane) {
-        var slideTween;
-
-        // prepare the camera slide tween
-        this.crashSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
-
-        slideTween = this.add.tween(this.crashSlide);
-        slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
-        slideTween.start();
-
-        // state needs to be switched
-        // currently it's PlayState.Crashed,
-        // needs to reflect waiting for the restart
-        // in another frame
-        plane.scheduleRestart();
-    }
-
-
-    /**
      * Check bullet impacts.
      * @param e Bullet reference
      */
@@ -414,7 +387,7 @@ class GameState extends Phaser.State {
     private updateParallax() {
         // if main plane is flying, set the parallax ratio to it's distance in world, 0..1
         // otherwise use the crash slide value (plane crashed)
-        var parallaxRatio:number = this.planeList[0].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[0].body.x) : this.crashSlide.x;
+        var parallaxRatio:number = this.planeList[0].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[0].body.x) : this.planeList[0].crashSlidePos;
 
         if (Data.gameMode == GameMode.Local2Players) {
             // in local two players mode we need

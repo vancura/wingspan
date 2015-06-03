@@ -16,6 +16,8 @@ class Plane extends Phaser.Sprite {
     private explosion:Phaser.Sound;
 
     private restartTimeout:Phaser.Timer;
+    private crashSlideObj:Phaser.Point; // TODO: Test a number value (not object)
+    private crashSlideTween:Phaser.Tween;
 
     private framePrefix:string;
     private currentControlDegree:number;
@@ -48,6 +50,7 @@ class Plane extends Phaser.Sprite {
         this._idx = idx;
         this._trailColor = trailColor;
         this._state = PlaneState.Flying;
+        this.crashSlideObj = new Phaser.Point();
 
         // physics settings
         game.physics["box2d"].enable(this);
@@ -70,7 +73,7 @@ class Plane extends Phaser.Sprite {
         // could be 0.1 .. MAX_THRUST
         this.currentThrust = 0.1;
 
-        // current degree and vel
+        // current degree and velocity
         this._degree = 0;
         this._velocity = 0;
 
@@ -143,6 +146,12 @@ class Plane extends Phaser.Sprite {
      * @see PlaneState
      */
     scheduleRestart() {
+        // prepare the camera slide tween
+        this.crashSlideObj.x = 1 / (this.game.world.width / this.body.x);
+        this.crashSlideTween = this.game.add.tween(this.crashSlideObj);
+        this.crashSlideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
+        this.crashSlideTween.start();
+
         // prepare the restart timeout
         // used to wait until the camera slide is done
         this.restartTimeout = this.game.time.create();
@@ -317,6 +326,15 @@ class Plane extends Phaser.Sprite {
      */
     public get idx():number {
         return this._idx;
+    }
+
+
+    /**
+     * Get current slide position.
+     * @return {number} Slide X position
+     */
+    public get crashSlidePos():number {
+        return this.crashSlideObj.x;
     }
 
 
