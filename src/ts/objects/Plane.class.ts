@@ -15,12 +15,12 @@ class Plane extends Phaser.Sprite {
     private engineStress:Phaser.Sound;
 
     private framePrefix:string;
-    private idx:number;
     private currentControlDegree:number;
     private currentThrust:number;
     private isCrashed:boolean;
     private fireSensor:any; // TODO: Set type when Box2D has TS defs
 
+    private _idx:number;
     private _weapon:Weapon;
     private _velocity:number;
     private _degree:number;
@@ -43,7 +43,7 @@ class Plane extends Phaser.Sprite {
 
         this.framePrefix = framePrefix;
         this.name = "plane";
-        this.idx = idx;
+        this._idx = idx;
         this._trailColor = trailColor;
         this._state = PlaneState.Flying;
 
@@ -310,6 +310,15 @@ class Plane extends Phaser.Sprite {
      */
     public get state():PlaneState {
         return this._state;
+    }
+
+
+    /**
+     * Get plane index.
+     * @return {number} Plane index
+     */
+    public get idx():number {
+        return this._idx;
     }
 
 
