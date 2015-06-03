@@ -23,7 +23,7 @@ class Settings {
     static PLANE_THRUST_MULTIPLIER_UP:number = 1.9;
 
     // thrust multiplier when backpedal button down
-    static PLANE_THRUST_MULTIPLIER_DOWN:number = 1;
+    static PLANE_THRUST_MULTIPLIER_DOWN:number = 0.96;
 
     // thrust step when both thrust and backpedal buttons released
     static PLANE_THRUST_MULTIPLIER_NONE:number = 0.995;
