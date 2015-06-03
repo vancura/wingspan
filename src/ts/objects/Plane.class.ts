@@ -14,6 +14,8 @@ class Plane extends Phaser.Sprite {
     private engineLoop:Phaser.Sound;
     private engineStress:Phaser.Sound;
 
+    private restartTimeout:Phaser.Timer;
+
     private framePrefix:string;
     private currentControlDegree:number;
     private currentThrust:number;
@@ -138,32 +140,14 @@ class Plane extends Phaser.Sprite {
      * @see PlaneState
      */
     scheduleRestart() {
+        // prepare the restart timeout
+        // used to wait until the camera slide is done
+        this.restartTimeout = this.game.time.create();
+
+        this.restartTimeout.add(Settings.GAME_RESTART_TIMEOUT, this.restart, this);
+        this.restartTimeout.start();
+
         this._state = PlaneState.RestartScheduled;
-    }
-
-
-    /**
-     * Reset position and rotation.
-     * Used after a crash.
-     * Sets the state to PlaneState.Flying
-     * @see PlaneState
-     */
-    restart() {
-        // reset physics
-        this.body.x = this.game.world.centerX;
-        this.body.y = Settings.WORLD_OVERFLOW;
-        this.body.angle = 180;
-
-        this.body.setZeroRotation();
-        this.body.setZeroVelocity();
-
-        // reset properties
-        this.currentControlDegree = 0;
-        this.currentThrust = 0.1;
-        this._degree = 0;
-
-        // plane is flying again
-        this._state = PlaneState.Flying;
     }
 
 
@@ -242,6 +226,35 @@ class Plane extends Phaser.Sprite {
             this.rotateLeft(this.game.rnd.frac() * 10);
         else
             this.rotateRight(this.game.rnd.frac() * 10);
+    }
+
+
+    // PRIVATE
+    // -------
+
+
+    /**
+     * Reset position and rotation.
+     * Used after a crash.
+     * Sets the state to PlaneState.Flying
+     * @see PlaneState
+     */
+    private restart() {
+        // reset physics
+        this.body.x = this.game.world.centerX;
+        this.body.y = Settings.WORLD_OVERFLOW;
+        this.body.angle = 180;
+
+        this.body.setZeroRotation();
+        this.body.setZeroVelocity();
+
+        // reset properties
+        this.currentControlDegree = 0;
+        this.currentThrust = 0.1;
+        this._degree = 0;
+
+        // plane is flying again
+        this._state = PlaneState.Flying;
     }
 
 

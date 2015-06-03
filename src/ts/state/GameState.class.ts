@@ -27,7 +27,6 @@ class GameState extends Phaser.State {
     private keyList:Phaser.Key[] = [];
 
     private originalWidth:number;
-    private restartTimeout:Phaser.Timer;
     private crashSlide:Phaser.Point;
     private planeList:Plane[] = [];
 
@@ -92,18 +91,27 @@ class GameState extends Phaser.State {
      * Update.
      */
     update() {
-        switch (Data.gameMode) {
-            case GameMode.ScenicSingle:
-                this.updateScenicSingle();
-                break;
+        var i = 0;
+        var plane;
 
-            case GameMode.Local2Players:
-                this.updateLocal2Players();
-                break;
+        // check for all planes
+        for (; i < this.planeList.length; i++) {
+            plane = this.planeList[i];
 
-            case GameMode.RemoteXPlayers:
-                // FIXME: Implement
-                break;
+            // check for crashed mode
+            // if it has just crashed, but only in the last frame
+            // since now its restart will be scheduled
+            if (plane.state == PlaneState.Crashed)
+                this.schedulePlaneRestart(plane);
+
+            // control the plane
+            this.controlPlane(plane);
+
+            // update parallax
+            this.updateParallax();
+
+            // update offscreen arrows
+            this.gui.updateOffscreenArrows(plane);
         }
     }
 
@@ -184,18 +192,12 @@ class GameState extends Phaser.State {
 
 
     /**
-     * Start a crash slide.
-     * FIXME: More planes
+     * Schedule a plane restart.
+     * Also adds a new crash slide.
+     * @param plane A plane to schedule restart for
      */
-    private startCrashSlide() {
+    private schedulePlaneRestart(plane:Plane) {
         var slideTween;
-
-        // prepare the restart timeout
-        // used to wait until the camera slide is done
-        this.restartTimeout = this.time.create();
-
-        this.restartTimeout.add(Settings.GAME_RESTART_TIMEOUT, this.restart, this);
-        this.restartTimeout.start();
 
         // prepare the camera slide tween
         this.crashSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
@@ -203,15 +205,12 @@ class GameState extends Phaser.State {
         slideTween = this.add.tween(this.crashSlide);
         slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
         slideTween.start();
-    }
 
-
-    /**
-     * Restart the game.
-     */
-    private restart() {
-        // reset the plane position and rotation
-        this.planeList[0].restart();
+        // state needs to be switched
+        // currently it's PlayState.Crashed,
+        // needs to reflect waiting for the restart
+        // in another frame
+        plane.scheduleRestart();
     }
 
 
@@ -349,73 +348,6 @@ class GameState extends Phaser.State {
                 plane.shoot();
             }
         }
-    }
-
-
-    /**
-     * Update scenic single play mode.
-     */
-    private updateScenicSingle() {
-        var plane:Plane = this.planeList[0];
-
-        // check for crashed mode
-        if (plane.state == PlaneState.Crashed) {
-            // plane just crashed, but only in the last frame
-            // since now the restart will be scheduled
-            this.startCrashSlide();
-
-            // state needs to be switched
-            // currently it's PlayState.Crashed,
-            // needs to reflect waiting for the restart
-            // in another frame
-            this.planeList[0].scheduleRestart();
-        }
-
-        // control the plane
-        this.controlPlane(plane);
-
-        // update parallax
-        this.updateParallax();
-
-        // update offscreen arrows
-        this.gui.updateOffscreenArrows(plane);
-    }
-
-
-    /**
-     * Update local two players play mode.
-     */
-    private updateLocal2Players() {
-        var plane1:Plane = this.planeList[0];
-        var plane2:Plane = this.planeList[1];
-
-        /*
-         // check for crashed mode
-         if (plane1.state == PlaneState.Crashed) {
-         // plane just crashed, but only in the last frame
-         // since now the restart will be scheduled
-         this.startCrashSlide();
-
-         // state needs to be switched
-         // currently it's PlayState.Crashed,
-         // needs to reflect waiting for the restart
-         // in another frame
-         this.planeList[0].scheduleRestart();
-         }
-         */
-
-        // continue, but only if plane is not going to be restarted now
-        /*else*/
-
-        // control planes
-        this.controlPlane(plane1);
-        this.controlPlane(plane2);
-
-        // update parallax
-        this.updateParallax();
-
-        // update offscreen arrows
-        this.gui.updateOffscreenArrows(plane1);
     }
 
 
