@@ -21,7 +21,6 @@ class GameState extends Phaser.State {
     private trails:Trails;
     private gui:GUI;
 
-    private explosion:Phaser.Sound;
     private musicLoop:Phaser.Sound;
 
     private keyList:Phaser.Key[] = [];
@@ -409,10 +408,6 @@ class GameState extends Phaser.State {
         });
 
         tween.start();
-
-        // play the explosion sound if enabled
-        if (Settings.IS_SOUND_ENABLED)
-            this.explosion.play();
     }
 
 

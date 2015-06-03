@@ -13,6 +13,7 @@ class Plane extends Phaser.Sprite {
 
     private engineLoop:Phaser.Sound;
     private engineStress:Phaser.Sound;
+    private explosion:Phaser.Sound;
 
     private restartTimeout:Phaser.Timer;
 
@@ -84,6 +85,8 @@ class Plane extends Phaser.Sprite {
 
             this.engineStress = this.game.add.audio("engineStress");
             this.engineStress.play("", 0, 0, true);
+
+            this.explosion = this.game.add.audio("explosion");
         }
     }
 
@@ -330,6 +333,7 @@ class Plane extends Phaser.Sprite {
      * @param i A boolean to say whether it was a begin or end event
      * @param j The contact object itself
      * TODO: Set type when Box2D has TS defs
+     * TODO: Do we still need the frame separation? Maybe we can do everything here
      */
     private onPlaneCrashed(e:any, f:any, g:any, h:any, i:boolean, j:any) {
         if (this._state == PlaneState.Flying && this.body.y > this.game.world.height - 100) {
@@ -337,6 +341,9 @@ class Plane extends Phaser.Sprite {
             // Crashed and RestartScheduled needed (in this order)
             // due to separation of frames in GameState.update()
             this._state = PlaneState.Crashed;
+
+            if (Settings.IS_SOUND_ENABLED)
+                this.explosion.play();
 
             Signals.onCrashBottom.dispatch(this);
         }
