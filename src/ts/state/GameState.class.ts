@@ -49,7 +49,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        Data.gameMode = GameMode.ScenicSingle;
+        Data.gameMode = GameMode.Local2Players;
     }
 
 
@@ -385,6 +385,8 @@ class GameState extends Phaser.State {
      * FIXME: More planes
      */
     private updateParallax() {
+        var parallaxRatioPlane2:number;
+
         // if main plane is flying, set the parallax ratio to it's distance in world, 0..1
         // otherwise use the crash slide value (plane crashed)
         var parallaxRatio:number = this.planeList[0].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[0].body.x) : this.planeList[0].crashSlidePos;
@@ -393,9 +395,8 @@ class GameState extends Phaser.State {
             // in local two players mode we need
             // to calculate both positions
             // and find the middle
-            // var parallaxRatio2 = this.planeList[1].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[1].body.x) : this.crashSlide.x;
-            // FIXME: crash slide calculation
-            parallaxRatio = (parallaxRatio + 1 / (this.world.width / this.planeList[1].body.x)) / 2;
+            parallaxRatioPlane2 = this.planeList[1].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[1].body.x) : this.planeList[1].crashSlidePos;
+            parallaxRatio = (parallaxRatio + parallaxRatioPlane2) / 2;
         }
 
         // scroll now
