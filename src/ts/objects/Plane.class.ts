@@ -23,6 +23,7 @@ class Plane extends Phaser.Sprite {
     private currentControlDegree:number;
     private currentThrust:number;
     private fireSensor:any; // TODO: Set type when Box2D has TS defs
+    private startX:number;
 
     private _idx:number;
     private _weapon:Weapon;
@@ -45,6 +46,7 @@ class Plane extends Phaser.Sprite {
     constructor(game:Phaser.Game, x:number, y:number, framePrefix:string, trailColor:string, idx:number) {
         super(game, x, y, "game", `${framePrefix}/p1.png`);
 
+        this.startX = x;
         this.framePrefix = framePrefix;
         this.name = "plane";
         this._idx = idx;
@@ -253,7 +255,7 @@ class Plane extends Phaser.Sprite {
      */
     private restart() {
         // reset physics
-        this.body.x = this.game.world.centerX;
+        this.body.x = this.startX;
         this.body.y = Settings.WORLD_OVERFLOW;
         this.body.angle = 180;
 
