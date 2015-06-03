@@ -37,7 +37,7 @@ class GameState extends Phaser.State {
 
     private originalWidth:number;
     private restartTimeout:Phaser.Timer;
-    private dieSlide:Phaser.Point;
+    private crashSlide:Phaser.Point;
     private planeList:Plane[] = [];
 
 
@@ -64,7 +64,7 @@ class GameState extends Phaser.State {
         Data.gameMode = GameMode.ScenicSingle;
 
         // setup other data
-        this.dieSlide = new Phaser.Point();
+        this.crashSlide = new Phaser.Point();
     }
 
 
@@ -176,9 +176,9 @@ class GameState extends Phaser.State {
         this.restartTimeout.start();
 
         // prepare the camera slide tween
-        this.dieSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
+        this.crashSlide.x = 1 / (this.world.width / this.planeList[0].body.x);
 
-        slideTween = this.add.tween(this.dieSlide);
+        slideTween = this.add.tween(this.crashSlide);
         slideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
         slideTween.start();
     }
