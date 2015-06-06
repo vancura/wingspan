@@ -73,8 +73,7 @@ class Plane extends Phaser.Sprite {
         this.currentControlDegree = 0;
 
         // current thrust
-        // could be 0.1 .. MAX_THRUST
-        this.currentThrust = 0.1;
+        this.currentThrust = Settings.MIN_PLANE_THRUST;
 
         // current degree and velocity
         this._degree = 0;
@@ -186,7 +185,7 @@ class Plane extends Phaser.Sprite {
      */
     thrust() {
         this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
-        this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
+        this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
         this.body.thrust(this.currentThrust);
     }
@@ -197,7 +196,7 @@ class Plane extends Phaser.Sprite {
      */
     backPedal() {
         this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
-        this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
+        this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
         this.body.thrust(this.currentThrust);
     }
@@ -209,7 +208,7 @@ class Plane extends Phaser.Sprite {
      */
     leaveThrust() {
         this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_NONE;
-        this.currentThrust = Phaser.Math.clamp(this.currentThrust, 0.1, Settings.MAX_PLANE_THRUST);
+        this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
         this.body.thrust(this.currentThrust);
     }
@@ -251,7 +250,7 @@ class Plane extends Phaser.Sprite {
 
         // reset properties
         this.currentControlDegree = 0;
-        this.currentThrust = 0.1;
+        this.currentThrust = Settings.MIN_PLANE_THRUST;
         this._degree = 0;
 
         // plane is flying again

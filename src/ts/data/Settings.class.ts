@@ -17,6 +17,8 @@ class Settings {
     // delay between dying and restarting (also speed of the camera slide after dying)
     static GAME_RESTART_TIMEOUT:number = 2000;
 
+    // min and max plane thrust
+    static MIN_PLANE_THRUST:number = 60;
     static MAX_PLANE_THRUST:number = 210;
 
     // thrust multiplier when thrust button down
