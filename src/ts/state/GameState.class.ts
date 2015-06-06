@@ -190,7 +190,7 @@ class GameState extends Phaser.State {
         var framePrefix:string;
         var trailColor:string;
         var plane:Plane;
-        var a:number, count:number, mx:number;
+        var a:number, count:number, sr:number;
 
         switch (Data.gameMode) {
             case GameMode.ScenicSingle:
@@ -215,14 +215,14 @@ class GameState extends Phaser.State {
             switch (Data.gameMode) {
                 case GameMode.ScenicSingle:
                     // one plane starting in the middle of the screen
-                    mx = this.world.centerX;
+                    sr = 0.5;
                     break;
 
                 case GameMode.Local2Players:
                     // local two players starts with two planes
                     // in the middle of the screen,
                     // with a small distance between them
-                    mx = this.world.centerX + (a === 0 ? -100 : 100);
+                    sr = 0.5 + (a === 0 ? -0.1 : 0.1);
                     break;
 
                 case GameMode.RemoteXPlayers:
@@ -230,7 +230,7 @@ class GameState extends Phaser.State {
                     break;
             }
 
-            plane = new Plane(this.game, mx, Settings.WORLD_OVERFLOW, framePrefix, trailColor, a);
+            plane = new Plane(this.game, sr, framePrefix, trailColor, a);
 
             this.add.existing(plane);
 

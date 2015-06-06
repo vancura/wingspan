@@ -23,7 +23,7 @@ class Plane extends Phaser.Sprite {
     private currentControlDegree:number;
     private currentThrust:number;
     private fireSensor:any; // TODO: Set type when Box2D has TS defs
-    private startX:number;
+    private startRatio:number;
 
     private _idx:number;
     private _weapon:Weapon;
@@ -36,17 +36,16 @@ class Plane extends Phaser.Sprite {
     /**
      * Plane constructor.
      * @param game Game reference
-     * @param x Start X position
-     * @param y Start Y position
+     * @param sr Start ratio
      * @param framePrefix Sprite prefix
      * @param trailColor Trail color
      * @param idx Plane index
      * @constructor
      */
-    constructor(game:Phaser.Game, x:number, y:number, framePrefix:string, trailColor:string, idx:number) {
-        super(game, x, y, "game", `${framePrefix}/p1.png`);
+    constructor(game:Phaser.Game, sr:number, framePrefix:string, trailColor:string, idx:number) {
+        super(game, game.world.width * sr, Settings.WORLD_OVERFLOW, "game", `${framePrefix}/p1.png`);
 
-        this.startX = x;
+        this.startRatio = sr;
         this.framePrefix = framePrefix;
         this.name = "plane";
         this._idx = idx;
@@ -151,7 +150,7 @@ class Plane extends Phaser.Sprite {
         // prepare the camera slide tween
         this.crashSlideObj.x = 1 / (this.game.world.width / this.body.x);
         this.crashSlideTween = this.game.add.tween(this.crashSlideObj);
-        this.crashSlideTween.to({x: 0.5}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
+        this.crashSlideTween.to({x: this.startRatio}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
         this.crashSlideTween.start();
 
         // prepare the restart timeout
@@ -255,7 +254,7 @@ class Plane extends Phaser.Sprite {
      */
     private restart() {
         // reset physics
-        this.body.x = this.startX;
+        this.body.x = this.game.world.width * this.startRatio;
         this.body.y = Settings.WORLD_OVERFLOW;
         this.body.angle = 180;
 
