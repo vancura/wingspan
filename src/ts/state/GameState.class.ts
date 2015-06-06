@@ -93,12 +93,6 @@ class GameState extends Phaser.State {
         for (; i < this.planeList.length; i++) {
             plane = this.planeList[i];
 
-            // check for crashed mode
-            // if it has just crashed, but only in the last frame
-            // since now its restart will be scheduled
-            if (plane.state == PlaneState.Crashed)
-                plane.scheduleRestart();
-
             // control the plane
             this.controlPlane(plane);
 
@@ -332,7 +326,7 @@ class GameState extends Phaser.State {
         // keyList[idx * 5 + 3] = backpedal
         // keyList[idx * 5 + 4] = fire
 
-        if (plane.state != PlaneState.RestartScheduled) {
+        if (plane.state == PlaneState.Flying) {
             // turn sideways
             if (this.keyList[plane.idx * 5].isDown && !this.keyList[plane.idx * 5 + 1].isDown) plane.rotateLeft(1); // left && !right
             else if (!this.keyList[plane.idx * 5].isDown && this.keyList[plane.idx * 5 + 1].isDown) plane.rotateRight(1); // !left && right

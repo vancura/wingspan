@@ -10,6 +10,5 @@ const enum GameMode {
 
 const enum PlaneState {
     Flying,
-    Crashed,
-    RestartScheduled
+    Crashed
 }

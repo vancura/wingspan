@@ -16,7 +16,7 @@ class Plane extends Phaser.Sprite {
     private explosion:Phaser.Sound;
 
     private restartTimeout:Phaser.Timer;
-    private crashSlideObj:Phaser.Point; // TODO: Test a number value (not object)
+    private crashSlideObj:Phaser.Point;
     private crashSlideTween:Phaser.Tween;
 
     private framePrefix:string;
@@ -136,31 +136,6 @@ class Plane extends Phaser.Sprite {
             this.engineLoop.volume = 1 - vol / 2;
             this.engineStress.volume = vol / 4;
         }
-    }
-
-
-    /**
-     * Schedule a restart.
-     * Crashed and RestartScheduled needed (in this order)
-     * due to separation of frames in GameState.update()
-     * Sets the state to PlaneState.RestartScheduled
-     * @see PlaneState
-     */
-    scheduleRestart() {
-        // prepare the camera slide tween
-        this.crashSlideObj.x = 1 / (this.game.world.width / this.body.x);
-        this.crashSlideTween = this.game.add.tween(this.crashSlideObj);
-        this.crashSlideTween.to({x: this.startRatio}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
-        this.crashSlideTween.start();
-
-        // prepare the restart timeout
-        // used to wait until the camera slide is done
-        this.restartTimeout = this.game.time.create();
-
-        this.restartTimeout.add(Settings.GAME_RESTART_TIMEOUT, this.restart, this);
-        this.restartTimeout.start();
-
-        this._state = PlaneState.RestartScheduled;
     }
 
 
@@ -352,7 +327,6 @@ class Plane extends Phaser.Sprite {
      * @param i A boolean to say whether it was a begin or end event
      * @param j The contact object itself
      * TODO: Set type when Box2D has TS defs
-     * TODO: Do we still need the frame separation? Maybe we can do everything here
      */
     private onPlaneCrashed(e:any, f:any, g:any, h:any, i:boolean, j:any) {
         if (this._state == PlaneState.Flying && this.body.y > this.game.world.height - 100) {
@@ -361,10 +335,24 @@ class Plane extends Phaser.Sprite {
             // due to separation of frames in GameState.update()
             this._state = PlaneState.Crashed;
 
+            // play sound if enabled
             if (Settings.IS_SOUND_ENABLED)
                 this.explosion.play();
 
+            // dispatch crash signal
             Signals.onCrashBottom.dispatch(this);
+
+            // prepare the camera slide tween
+            this.crashSlideObj.x = 1 / (this.game.world.width / this.body.x);
+            this.crashSlideTween = this.game.add.tween(this.crashSlideObj);
+            this.crashSlideTween.to({x: this.startRatio}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
+            this.crashSlideTween.start();
+
+            // prepare the restart timeout
+            // used to wait until the camera slide is done
+            this.restartTimeout = this.game.time.create();
+            this.restartTimeout.add(Settings.GAME_RESTART_TIMEOUT, this.restart, this);
+            this.restartTimeout.start();
         }
     }
 
