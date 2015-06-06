@@ -337,6 +337,15 @@ class Plane extends Phaser.Sprite {
     }
 
 
+    /**
+     * Get screen X ratio
+     * @return {number} Screen X ratio
+     */
+    public get screenRatio():number {
+        return 1 / (this.game.canvas.width / (this.body.x - this.game.camera.x));
+    }
+
+
     // EVENT LISTENERS
     // ---------------
 
