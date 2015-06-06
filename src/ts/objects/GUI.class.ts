@@ -1,6 +1,7 @@
 /// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
 /// <reference path="../data/Data.class.ts"/>
 /// <reference path="../state/GameState.class.ts"/>
+/// <reference path="PlaneOffscreenMarker.class.ts"/>
 
 
 /**
@@ -15,21 +16,17 @@ class GUI extends Phaser.Group {
     private local2PlayersModeLabel:Phaser.Image;
     private remoteXPlayersModeButton:Phaser.Button;
     private remoteXPlayersModeLabel:Phaser.Image;
-    private playerOffscreenLeftImage:Phaser.Image;
-    private playerOffscreenRightImage:Phaser.Image;
-    private playerOffscreenUpImage:Phaser.Image;
+    private planeOffscreenMarkerList:PlaneOffscreenMarker[] = [];
 
 
     constructor(game:Phaser.Game) {
-        var x = 0;
-
         super(game, game.world, "gui");
+
+        var x = 0;
 
         x += this.createScenicSingleModeButton(x) + 5;
         x += this.createLocal2PlayersModeButton(x) + 5;
         x += this.createRemoteXPlayersModeButton(x) + 5;
-
-        this.createPlayerOffscreenImages();
 
         this.refresh();
     }
@@ -67,33 +64,17 @@ class GUI extends Phaser.Group {
 
 
     /**
-     * Update offscreen arrows.
-     * @param plane Plane to show arrows for
-     * TODO: More players, more images
+     * Add a plane reference.
+     * Used to display markers etc.
+     * @param plane Plane reference
      */
-    updateOffscreenArrows(plane:Plane):void {
-        var mx = plane.position.x - this.game.camera.x;
-        var my = plane.position.y;
+    public addPlaneReference(plane:Plane) {
+        // add a marker
+        var marker:PlaneOffscreenMarker = new PlaneOffscreenMarker(this.game, plane);
 
-        if (plane.state == PlaneState.Flying) {
-            this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = false;
+        this.planeOffscreenMarkerList.push(marker);
 
-            this.playerOffscreenLeftImage.y = this.playerOffscreenRightImage.y = my;
-            this.playerOffscreenLeftImage.x = 0;
-            this.playerOffscreenRightImage.x = this.game.canvas.width;
-            this.playerOffscreenUpImage.x = mx;
-
-            this.playerOffscreenLeftImage.visible = mx < 0;
-            this.playerOffscreenRightImage.visible = mx > this.game.canvas.width;
-            this.playerOffscreenUpImage.visible = my < 0;
-
-            this.playerOffscreenLeftImage.fixedToCamera = this.playerOffscreenRightImage.fixedToCamera = this.playerOffscreenUpImage.fixedToCamera = true;
-        }
-        else {
-            this.playerOffscreenLeftImage.visible = false;
-            this.playerOffscreenRightImage.visible = false;
-            this.playerOffscreenUpImage.visible = false;
-        }
+        this.add(marker);
     }
 
 
@@ -104,7 +85,7 @@ class GUI extends Phaser.Group {
     /**
      * Create the scenic single mode button
      * @param x Current x position
-     * @return {any} Length
+     * @return {number} Length
      */
     private createScenicSingleModeButton(x:number) {
         this.scenicSingleModeButton = new Phaser.Button(this.game, x, this.game.world.height, "game", this.switchGameModeState, this, "gui/scenic-single-over.png", "gui/scenic-single-out.png");
@@ -164,29 +145,6 @@ class GUI extends Phaser.Group {
         this.add(this.remoteXPlayersModeLabel);
 
         return this.remoteXPlayersModeButton.width;
-    }
-
-
-    /**
-     * Create player offscreen images.
-     * TODO: More players, more images
-     */
-    private createPlayerOffscreenImages() {
-        this.playerOffscreenLeftImage = new Phaser.Image(this.game, 0, 0, "game", "gui/player-offscreen-left.png");
-        this.playerOffscreenLeftImage.fixedToCamera = true;
-        this.playerOffscreenLeftImage.anchor.set(0, 0.5);
-
-        this.playerOffscreenRightImage = new Phaser.Image(this.game, this.game.canvas.width, 0, "game", "gui/player-offscreen-right.png");
-        this.playerOffscreenRightImage.fixedToCamera = true;
-        this.playerOffscreenRightImage.anchor.set(1, 0.5);
-
-        this.playerOffscreenUpImage = new Phaser.Image(this.game, this.game.canvas.width / 2, 0, "game", "gui/player-offscreen-up.png");
-        this.playerOffscreenUpImage.fixedToCamera = true;
-        this.playerOffscreenUpImage.anchor.set(0.5, 0);
-
-        this.add(this.playerOffscreenLeftImage);
-        this.add(this.playerOffscreenRightImage);
-        this.add(this.playerOffscreenUpImage);
     }
 
 

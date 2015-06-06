@@ -98,9 +98,6 @@ class GameState extends Phaser.State {
 
             // update parallax
             this.updateParallax();
-
-            // update offscreen arrows
-            this.gui.updateOffscreenArrows(plane);
         }
     }
 
@@ -226,8 +223,10 @@ class GameState extends Phaser.State {
 
             plane = new Plane(this.game, sr, framePrefix, trailColor, a);
 
+            // add to stage
             this.add.existing(plane);
 
+            // add to list
             this.planeList.push(plane);
         }
     }
@@ -288,7 +287,18 @@ class GameState extends Phaser.State {
      * Create GUI.
      */
     private createGUI() {
+        var i = 0;
+        var plane;
+
         this.gui = new GUI(this.game);
+
+        // check for all planes
+        for (; i < this.planeList.length; i++) {
+            plane = this.planeList[i];
+
+            // add offscreen markers and other gui elements
+            this.gui.addPlaneReference(plane);
+        }
     }
 
 
