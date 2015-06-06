@@ -382,29 +382,40 @@ class GameState extends Phaser.State {
 
     /**
      * Handle parallax scrolling.
-     * FIXME: More planes
      */
     private updateParallax() {
-        var parallaxRatioPlane2:number;
+        var r:number, rp1:number, rp2:number;
 
         // if main plane is flying, set the parallax ratio to it's distance in world, 0..1
         // otherwise use the crash slide value (plane crashed)
-        var parallaxRatio:number = this.planeList[0].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[0].body.x) : this.planeList[0].crashSlidePos;
+        rp1 = this.planeList[0].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[0].body.x) : this.planeList[0].crashSlidePos;
+
+        switch (Data.gameMode) {
+            case GameMode.ScenicSingle:
+                // in single scenic mode we have only one plane
+                r = rp1;
+                break;
+
+            case GameMode.Local2Players:
+                // in local two players mode we need to calculate both positions and find the middle
+                rp2 = this.planeList[1].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[1].body.x) : this.planeList[1].crashSlidePos;
+                r = (rp1 + rp2) / 2;
+                break;
+
+            case GameMode.RemoteXPlayers:
+                // FIXME: Implementation
+                break;
+        }
 
         if (Data.gameMode == GameMode.Local2Players) {
-            // in local two players mode we need
-            // to calculate both positions
-            // and find the middle
-            parallaxRatioPlane2 = this.planeList[1].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[1].body.x) : this.planeList[1].crashSlidePos;
-            parallaxRatio = (parallaxRatio + parallaxRatioPlane2) / 2;
         }
 
         // scroll now
-        if (parallaxRatio >= 0 && parallaxRatio <= 1) {
-            this.groundBack.scroll(parallaxRatio);
-            this.groundFront.scroll(parallaxRatio);
+        if (r >= 0 && r <= 1) {
+            this.groundBack.scroll(r);
+            this.groundFront.scroll(r);
 
-            this.game.camera.x = (this.world.width - this.originalWidth) * parallaxRatio;
+            this.game.camera.x = (this.world.width - this.originalWidth) * r;
         }
     }
 
