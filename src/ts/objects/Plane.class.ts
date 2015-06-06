@@ -193,9 +193,11 @@ class Plane extends Phaser.Sprite {
 
     /**
      * Backpedal button down, thrust down.
+     * @param multiplier (optional) Backpedal multiplier (Settings.PLANE_THRUST_MULTIPLIER_DOWN by default)
+     * @see Settings.PLANE_THRUST_MULTIPLIER_DOWN
      */
-    backPedal() {
-        this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
+    backPedal(multiplier:number = Settings.PLANE_THRUST_MULTIPLIER_DOWN) {
+        this.currentThrust *= multiplier;
         this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
         this.body.thrust(this.currentThrust);
@@ -219,13 +221,10 @@ class Plane extends Phaser.Sprite {
      */
     shoot() {
         // first slow down
-        this.backPedal();
+        this.backPedal(0.01);
 
-        // then randomly rotate
-        if ((this.game.rnd.frac() > 0.5))
-            this.rotateLeft(this.game.rnd.frac() * 10);
-        else
-            this.rotateRight(this.game.rnd.frac() * 10);
+        // then rotate
+        this.rotateLeft(300);
     }
 
 
