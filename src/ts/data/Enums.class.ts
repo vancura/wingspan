@@ -12,3 +12,11 @@ const enum PlaneState {
     Flying,
     Crashed
 }
+
+
+const enum PlaneDirection {
+    Up,
+    Left,
+    Right,
+    OnScreen
+}

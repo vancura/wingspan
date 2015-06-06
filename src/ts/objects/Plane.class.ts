@@ -31,6 +31,7 @@ class Plane extends Phaser.Sprite {
     private _degree:number;
     private _trailColor:string;
     private _state:PlaneState;
+    private _direction:PlaneDirection;
 
 
     /**
@@ -51,6 +52,7 @@ class Plane extends Phaser.Sprite {
         this._idx = idx;
         this._trailColor = trailColor;
         this._state = PlaneState.Flying;
+        this._direction = PlaneDirection.Up; // starting above the top fold
         this.crashSlideObj = new Phaser.Point();
 
         // physics settings
@@ -128,6 +130,17 @@ class Plane extends Phaser.Sprite {
         // store the degree and vel
         this._degree = rot;
         this._velocity = vel;
+
+        // set direction
+        // noinspection IfStatementWithTooManyBranchesJS
+        if (this.body.y < 0)
+            this._direction = PlaneDirection.Up;
+        else if (this.screenRatio < 0)
+            this._direction = PlaneDirection.Left;
+        else if (this.screenRatio > 1)
+            this._direction = PlaneDirection.Right;
+        else
+            this._direction = PlaneDirection.OnScreen;
 
         // play sounds
         if (Settings.IS_SOUND_ENABLED) {
@@ -293,6 +306,16 @@ class Plane extends Phaser.Sprite {
      */
     public get state():PlaneState {
         return this._state;
+    }
+
+
+    /**
+     * Get current plane direction.
+     * @return {PlaneDirection} Current plane direction
+     * @see PlaneDirection
+     */
+    public get direction():PlaneDirection {
+        return this._direction;
     }
 
 
