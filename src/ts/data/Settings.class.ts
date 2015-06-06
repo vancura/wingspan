@@ -7,7 +7,7 @@ class Settings {
     static IS_DEBUG_ENABLED:boolean = false;
     static IS_TRAILS_RENDERING_ENABLED:boolean = true;
     static IS_PLANE_WEAPON_ENABLED:boolean = true;
-    static IS_SOUND_ENABLED:boolean = true;
+    static IS_SOUND_ENABLED:boolean = false;
     static IS_MUSIC_ENABLED:boolean = false;
 
     static WORLD_GRAVITY:number = 75;
@@ -38,9 +38,9 @@ class Settings {
     static PLANE_BULLET_LIFESPAN:number = 1000;
     static PLANE_TRAIL_THICKNESS:number = 0.8;
 
-    static PLANE_TRAIL_COLOR_LIST:string[] = [
-        "rgba(255,255,0,1)",
-        "rgba(255,0,255,1)"
+    static PLANE_TINT_COLOR_LIST:string[] = [
+        "#FFFF00",
+        "#FF00FF"
     ];
 
 

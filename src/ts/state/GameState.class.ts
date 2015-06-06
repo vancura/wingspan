@@ -179,7 +179,7 @@ class GameState extends Phaser.State {
      */
     private createPlanes() {
         var framePrefix:string;
-        var trailColor:string;
+        var tintColor:string;
         var plane:Plane;
         var a:number, count:number, sr:number;
 
@@ -201,7 +201,7 @@ class GameState extends Phaser.State {
 
         for (a = 0; a < count; a++) {
             framePrefix = `plane${a + 1}`;
-            trailColor = Settings.PLANE_TRAIL_COLOR_LIST[a];
+            tintColor = Settings.PLANE_TINT_COLOR_LIST[a];
 
             switch (Data.gameMode) {
                 case GameMode.ScenicSingle:
@@ -221,7 +221,7 @@ class GameState extends Phaser.State {
                     break;
             }
 
-            plane = new Plane(this.game, sr, framePrefix, trailColor, a);
+            plane = new Plane(this.game, sr, framePrefix, tintColor, a);
 
             // add to stage
             this.add.existing(plane);

@@ -29,7 +29,9 @@ class Plane extends Phaser.Sprite {
     private _weapon:Weapon;
     private _velocity:number;
     private _degree:number;
-    private _trailColor:string;
+    private _tintColor:any;
+    private _tintHex:number;
+    private _tintStyle:string;
     private _state:PlaneState;
     private _direction:PlaneDirection;
 
@@ -39,21 +41,25 @@ class Plane extends Phaser.Sprite {
      * @param game Game reference
      * @param sr Start ratio
      * @param framePrefix Sprite prefix
-     * @param trailColor Trail color
+     * @param tintColor Tint color
      * @param idx Plane index
      * @constructor
      */
-    constructor(game:Phaser.Game, sr:number, framePrefix:string, trailColor:string, idx:number) {
+    constructor(game:Phaser.Game, sr:number, framePrefix:string, tintColor:string, idx:number) {
         super(game, game.world.width * sr, Settings.WORLD_OVERFLOW, "game", `${framePrefix}/p1.png`);
 
         this.startRatio = sr;
         this.framePrefix = framePrefix;
         this.name = "plane";
         this._idx = idx;
-        this._trailColor = trailColor;
         this._state = PlaneState.Flying;
         this._direction = PlaneDirection.Up; // starting above the top fold
         this.crashSlideObj = new Phaser.Point();
+
+        // color caching
+        this._tintHex = parseInt(`0x${tintColor.substr(1)}`);
+        this._tintColor = Phaser.Color.hexToColor(tintColor);
+        this._tintStyle = `rgba(${this._tintColor.r}, ${this._tintColor.g}, ${this._tintColor.b}, 1)`;
 
         // physics settings
         game.physics["box2d"].enable(this);
@@ -289,11 +295,29 @@ class Plane extends Phaser.Sprite {
 
 
     /**
-     * Get the plane trail color.
-     * @return {string} Plane trail color
+     * Get the plane tint color in object format.
+     * @return {number} Plane tint color in object format
      */
-    public get trailColor():string {
-        return this._trailColor;
+    public get tintColor():Object {
+        return this._tintColor;
+    }
+
+
+    /**
+     * Get the plane tint color in hex format (0xRRGGBB).
+     * @return {string} Plane tint color in hex format
+     */
+    public get tintHex():number {
+        return this._tintHex;
+    }
+
+
+    /**
+     * Get the plane tint color in canvas style format.
+     * @return {string} Plane tint color in canvas style format
+     */
+    public get tintStyle():string {
+        return this._tintStyle;
     }
 
 

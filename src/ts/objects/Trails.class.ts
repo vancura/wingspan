@@ -38,8 +38,8 @@ class Trails extends Phaser.Sprite {
             pos = Trails.getPositions(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1);
 
             this.bitmap.fill(0, 0, 0, 0.05);
-            this.bitmap.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, plane.trailColor);
-            this.bitmap.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, plane.trailColor);
+            this.bitmap.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, plane.tintStyle);
+            this.bitmap.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, plane.tintStyle);
         }
     }
 
