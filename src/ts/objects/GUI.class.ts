@@ -22,11 +22,12 @@ class GUI extends Phaser.Group {
     constructor(game:Phaser.Game) {
         super(game, game.world, "gui");
 
-        var x = 0;
+        // noinspection JSDeclarationsAtScopeStart
+        var x:number = 0;
 
         x += this.createScenicSingleModeButton(x) + 5;
         x += this.createLocal2PlayersModeButton(x) + 5;
-        x += this.createRemoteXPlayersModeButton(x) + 5;
+        this.createRemoteXPlayersModeButton(x);
 
         this.refresh();
     }
