@@ -25,7 +25,7 @@ class PlaneOffscreenMarker extends Phaser.Group {
 
         this.plane = plane;
 
-        this.image = new Phaser.Image(this.game, 500, 200, "game", "gui/player-offscreen-up.png");
+        this.image = new Phaser.Image(this.game, 0, 0, "game", "gui/player-offscreen-up.png");
         this.image.fixedToCamera = true;
         this.image.anchor.set(0.5, 0);
         this.image.tint = plane.tintHex;

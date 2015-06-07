@@ -1,6 +1,7 @@
 /// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
 /// <reference path="../data/Data.class.ts"/>
 /// <reference path="../state/GameState.class.ts"/>
+/// <reference path="PlaneLabel.class.ts"/>
 /// <reference path="PlaneOffscreenMarker.class.ts"/>
 
 
@@ -17,6 +18,7 @@ class GUI extends Phaser.Group {
     private remoteXPlayersModeButton:Phaser.Button;
     private remoteXPlayersModeLabel:Phaser.Image;
     private planeOffscreenMarkerList:PlaneOffscreenMarker[] = [];
+    private planeLabelList:PlaneLabel[] = [];
 
 
     constructor(game:Phaser.Game) {
@@ -70,12 +72,14 @@ class GUI extends Phaser.Group {
      * @param plane Plane reference
      */
     public addPlaneReference(plane:Plane) {
-        // add a marker
         var marker:PlaneOffscreenMarker = new PlaneOffscreenMarker(this.game, plane);
+        var label:PlaneLabel = new PlaneLabel(this.game, plane);
 
         this.planeOffscreenMarkerList.push(marker);
+        this.planeLabelList.push(label);
 
         this.add(marker);
+        this.add(label);
     }
 
 
