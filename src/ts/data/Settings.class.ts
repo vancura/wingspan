@@ -39,8 +39,10 @@ class Settings {
     static PLANE_TRAIL_THICKNESS:number = 0.8;
 
     static PLANE_TINT_COLOR_LIST:string[] = [
-        "#FFFF00",
-        "#FF00FF"
+        "#ffff00",
+        "#00d8ff",
+        "#96ff00",
+        "#b958fd"
     ];
 
 
