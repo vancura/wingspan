@@ -4,6 +4,9 @@
 class BootState extends Phaser.State {
 
 
+    private debug: any;
+
+
     /**
      * Initialize the app.
      */
@@ -21,8 +24,10 @@ class BootState extends Phaser.State {
 
         this.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
 
-        if (this.game.device.desktop)
-            this.add.plugin(Phaser.Plugin["Debug"]);
+        if (this.game.device.desktop) {
+            this.debug = this.add.plugin(Phaser.Plugin["Debug"]);
+            this.debug.panels.performance.toggle();
+        }
     }
 
 
