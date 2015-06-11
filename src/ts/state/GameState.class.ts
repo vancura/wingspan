@@ -14,25 +14,25 @@
 class GameState extends Phaser.State {
 
 
-    private background:Phaser.Sprite;
-    private fireGroup:Phaser.Group;
-    private groundBack:GroundBack;
-    private groundFront:GroundFront;
-    private trails:Trails;
-    private gui:GUI;
+    private background: Phaser.Sprite;
+    private fireGroup: Phaser.Group;
+    private groundBack: GroundBack;
+    private groundFront: GroundFront;
+    private trails: Trails;
+    private gui: GUI;
 
-    private musicLoop:Phaser.Sound;
+    private musicLoop: Phaser.Sound;
 
-    private keyList:Phaser.Key[] = [];
+    private keyList: Phaser.Key[] = [];
 
-    private originalWidth:number;
-    private planeList:Plane[] = [];
+    private originalWidth: number;
+    private planeList: Plane[] = [];
 
 
     /**
      * Init.
      */
-    init():void {
+    init(): void {
         // setup physics
         this.physics.startSystem(Phaser.Physics.BOX2D);
 
@@ -178,10 +178,10 @@ class GameState extends Phaser.State {
      * Create the plane.
      */
     private createPlanes() {
-        var framePrefix:string;
-        var tintColor:string;
-        var plane:Plane;
-        var a:number, count:number, sr:number;
+        var framePrefix: string;
+        var tintColor: string;
+        var plane: Plane;
+        var a: number, count: number, sr: number;
 
         switch (Data.gameMode) {
             case GameMode.ScenicSingle:
@@ -306,7 +306,7 @@ class GameState extends Phaser.State {
      * Check bullet impacts.
      * @param e Bullet reference
      */
-    private checkBullets(e:Bullet) {
+    private checkBullets(e: Bullet) {
         var i = 0;
         var plane;
 
@@ -327,7 +327,7 @@ class GameState extends Phaser.State {
      * Control a plane, but only if it's not going to be restarted now.
      * @param plane Plane to control
      */
-    private controlPlane(plane:Plane) {
+    private controlPlane(plane: Plane) {
         // this is awkward, but IMO it's the easiest method when
         // we need to share the logic across all game modes
         // keyList[idx * 5 + 0] = left
@@ -364,9 +364,9 @@ class GameState extends Phaser.State {
      * Add a plane explosion.
      * @param x Plane X
      */
-    private addPlaneExplosion(x:number) {
+    private addPlaneExplosion(x: number) {
         var fire = new Phaser.Sprite(this.game, x, this.world.height, "game", "fire.png");
-        var tween:Phaser.Tween;
+        var tween: Phaser.Tween;
 
         fire.anchor.set(0.5, 1);
 
@@ -375,8 +375,8 @@ class GameState extends Phaser.State {
         // fadeout tween
         tween = this.add.tween(fire);
 
-        tween.to({alpha: 0}, 1000);
-        tween.onComplete.add(function () {
+        tween.to({ alpha: 0 }, 1000);
+        tween.onComplete.add(function() {
             fire.destroy();
         });
 
@@ -388,7 +388,7 @@ class GameState extends Phaser.State {
      * Handle parallax scrolling.
      */
     private updateParallax() {
-        var r:number, rp1:number, rp2:number;
+        var r: number, rp1: number, rp2: number;
 
         // if main plane is flying, set the parallax ratio to it's distance in world, 0..1
         // otherwise use the crash slide value (plane crashed)
@@ -432,7 +432,7 @@ class GameState extends Phaser.State {
      * Plane crash event handler.
      * @param e Plane reference
      */
-    private onPlaneCrashed(e:Plane) {
+    private onPlaneCrashed(e: Plane) {
         this.addPlaneExplosion(e.body.x);
     }
 
@@ -442,7 +442,7 @@ class GameState extends Phaser.State {
      * @param {GameMode} e New game mode state
      * @see GameMode
      */
-    private onGameModeStateSwitched(e:GameMode) {
+    private onGameModeStateSwitched(e: GameMode) {
         // FIXME: Game mode switch
     }
 

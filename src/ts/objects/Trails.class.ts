@@ -9,7 +9,7 @@
 class Trails extends Phaser.Sprite {
 
 
-    private bitmap:Phaser.BitmapData;
+    private bitmap: Phaser.BitmapData;
 
 
     /**
@@ -17,7 +17,7 @@ class Trails extends Phaser.Sprite {
      * @param game Game reference
      * @constructor
      */
-    constructor(game:Phaser.Game) {
+    constructor(game: Phaser.Game) {
         this.bitmap = game.add.bitmapData(game.world.width, game.world.height);
         this.bitmap.fill(0, 0, 0, 1);
 
@@ -31,8 +31,8 @@ class Trails extends Phaser.Sprite {
      * Draw trails.
      * @param plane Plane to draw a trail for
      */
-    draw(plane:Plane) {
-        var pos:number[];
+    draw(plane: Plane) {
+        var pos: number[];
 
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {
             pos = Trails.getPositions(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1);
@@ -54,9 +54,9 @@ class Trails extends Phaser.Sprite {
      * @param multiplier Distance multiplier (used when rotating)
      * @return Array of trail positions [x1, y1, x2, y2]
      */
-    static getPositions(plane:Plane, multiplier:number):number[] {
-        var x1:number, y1:number, x2:number, y2:number;
-        var d:number, m:number;
+    static getPositions(plane: Plane, multiplier: number): number[] {
+        var x1: number, y1: number, x2: number, y2: number;
+        var d: number, m: number;
         var out = null;
 
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {

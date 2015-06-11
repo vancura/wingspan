@@ -11,21 +11,21 @@
 class GUI extends Phaser.Group {
 
 
-    private scenicSingleModeButton:Phaser.Button;
-    private scenicSingleModeLabel:Phaser.Image;
-    private local2PlayersModeButton:Phaser.Button;
-    private local2PlayersModeLabel:Phaser.Image;
-    private remoteXPlayersModeButton:Phaser.Button;
-    private remoteXPlayersModeLabel:Phaser.Image;
-    private planeOffscreenMarkerList:PlaneOffscreenMarker[] = [];
-    private planeLabelList:PlaneLabel[] = [];
+    private scenicSingleModeButton: Phaser.Button;
+    private scenicSingleModeLabel: Phaser.Image;
+    private local2PlayersModeButton: Phaser.Button;
+    private local2PlayersModeLabel: Phaser.Image;
+    private remoteXPlayersModeButton: Phaser.Button;
+    private remoteXPlayersModeLabel: Phaser.Image;
+    private planeOffscreenMarkerList: PlaneOffscreenMarker[] = [];
+    private planeLabelList: PlaneLabel[] = [];
 
 
-    constructor(game:Phaser.Game) {
+    constructor(game: Phaser.Game) {
         super(game, game.world, "gui");
 
         // noinspection JSDeclarationsAtScopeStart
-        var x:number = 0;
+        var x: number = 0;
 
         x += this.createScenicSingleModeButton(x) + 5;
         x += this.createLocal2PlayersModeButton(x) + 5;
@@ -71,9 +71,9 @@ class GUI extends Phaser.Group {
      * Used to display markers etc.
      * @param plane Plane reference
      */
-    public addPlaneReference(plane:Plane) {
-        var marker:PlaneOffscreenMarker = new PlaneOffscreenMarker(this.game, plane);
-        var label:PlaneLabel = new PlaneLabel(this.game, plane);
+    public addPlaneReference(plane: Plane) {
+        var marker: PlaneOffscreenMarker = new PlaneOffscreenMarker(this.game, plane);
+        var label: PlaneLabel = new PlaneLabel(this.game, plane);
 
         this.planeOffscreenMarkerList.push(marker);
         this.planeLabelList.push(label);
@@ -92,7 +92,7 @@ class GUI extends Phaser.Group {
      * @param x Current x position
      * @return {number} Length
      */
-    private createScenicSingleModeButton(x:number) {
+    private createScenicSingleModeButton(x: number) {
         this.scenicSingleModeButton = new Phaser.Button(this.game, x, this.game.world.height, "game", this.switchGameModeState, this, "gui/scenic-single-over.png", "gui/scenic-single-out.png");
         this.scenicSingleModeButton.fixedToCamera = true;
         this.scenicSingleModeButton.anchor.y = 1;
@@ -114,7 +114,7 @@ class GUI extends Phaser.Group {
      * @param x Current x position
      * @return {number} Length
      */
-    private createLocal2PlayersModeButton(x:number) {
+    private createLocal2PlayersModeButton(x: number) {
         this.local2PlayersModeButton = new Phaser.Button(this.game, x, this.game.canvas.height, "game", this.switchGameModeState, this, "gui/local-2-players-over.png", "gui/local-2-players-out.png");
         this.local2PlayersModeButton.fixedToCamera = true;
         this.local2PlayersModeButton.anchor.y = 1;
@@ -136,7 +136,7 @@ class GUI extends Phaser.Group {
      * @param x Current x position
      * @return {number} Length
      */
-    private createRemoteXPlayersModeButton(x:number) {
+    private createRemoteXPlayersModeButton(x: number) {
         this.remoteXPlayersModeButton = new Phaser.Button(this.game, x, this.game.canvas.height, "game", this.switchGameModeState, this, "gui/remote-x-players-over.png", "gui/remote-x-players-out.png");
         this.remoteXPlayersModeButton.fixedToCamera = true;
         this.remoteXPlayersModeButton.anchor.y = 1;
@@ -157,7 +157,7 @@ class GUI extends Phaser.Group {
      * Switch game mode state.
      * @param e Button origin
      */
-    private switchGameModeState(e:Phaser.Button) {
+    private switchGameModeState(e: Phaser.Button) {
         switch (e) {
             case this.scenicSingleModeButton:
                 Signals.onSwitchGameModeState.dispatch(GameMode.ScenicSingle);

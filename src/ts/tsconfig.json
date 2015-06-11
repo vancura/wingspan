@@ -24,6 +24,8 @@
         "./objects/GroundBack.class.ts",
         "./objects/GroundFront.class.ts",
         "./objects/Plane.class.ts",
+        "./objects/PlaneLabel.class.ts",
+        "./objects/PlaneOffscreenMarker.class.ts",
         "./objects/Trails.class.ts",
         "./objects/Weapon.class.ts",
         "./state/BootState.class.ts",

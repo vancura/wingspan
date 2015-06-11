@@ -9,9 +9,9 @@
 class PlaneOffscreenMarker extends Phaser.Group {
 
 
-    private image:Phaser.Image;
+    private image: Phaser.Image;
 
-    private plane:Plane;
+    private plane: Plane;
 
 
     /**
@@ -20,7 +20,7 @@ class PlaneOffscreenMarker extends Phaser.Group {
      * @param plane Plane reference
      * @constructor
      */
-    constructor(game:Phaser.Game, plane:Plane) {
+    constructor(game: Phaser.Game, plane: Plane) {
         super(game, game.world, "marker");
 
         this.plane = plane;

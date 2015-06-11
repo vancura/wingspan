@@ -8,7 +8,7 @@
 class App {
 
 
-    private static game:Phaser.Game;
+    private static game: Phaser.Game;
 
 
     /**

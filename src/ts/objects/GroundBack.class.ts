@@ -7,9 +7,9 @@
 class GroundBack extends Phaser.Group {
 
 
-    private groundGroup2:Phaser.Group;
-    private groundGroup3:Phaser.Group;
-    private groundGroup4:Phaser.Group;
+    private groundGroup2: Phaser.Group;
+    private groundGroup3: Phaser.Group;
+    private groundGroup4: Phaser.Group;
 
 
     /**
@@ -18,10 +18,10 @@ class GroundBack extends Phaser.Group {
      * @constructor
      * TODO Optimize
      */
-    constructor(game:Phaser.Game) {
-        var l:Phaser.Sprite, m:Phaser.Sprite, n:Phaser.Sprite;
-        var i:number = 0, j:number = 0, k:number = 0;
-        var g2:Phaser.Sprite, g3:Phaser.Sprite, g4:Phaser.Sprite;
+    constructor(game: Phaser.Game) {
+        var l: Phaser.Sprite, m: Phaser.Sprite, n: Phaser.Sprite;
+        var i: number = 0, j: number = 0, k: number = 0;
+        var g2: Phaser.Sprite, g3: Phaser.Sprite, g4: Phaser.Sprite;
 
         super(game, game.world, "groundBack");
 
@@ -39,7 +39,7 @@ class GroundBack extends Phaser.Group {
 
         // add level 1 layer
         while (i < Math.ceil(this.game.world.width / 256)) {
-            l = this.groundGroup4.create(i * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            l = this.groundGroup4.create(i * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6) }.png`);
             l.tint = 0xf48f44;
 
             i++;
@@ -47,7 +47,7 @@ class GroundBack extends Phaser.Group {
 
         // add level 2 layer
         while (j < Math.ceil(this.game.world.width / 256) + 1) {
-            m = this.groundGroup3.create(j * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            m = this.groundGroup3.create(j * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6) }.png`);
             m.tint = 0x882d25;
 
             j++;
@@ -55,7 +55,7 @@ class GroundBack extends Phaser.Group {
 
         // add level 3 layer
         while (k < Math.ceil(this.game.world.width / 256) + 2) {
-            n = this.groundGroup2.create(k * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            n = this.groundGroup2.create(k * 256, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6) }.png`);
             n.tint = 0x5f0028;
 
             k++;
@@ -81,7 +81,7 @@ class GroundBack extends Phaser.Group {
      * Scroll to a position.
      * @param p New position in %
      */
-    scroll(p:number) {
+    scroll(p: number) {
         this.groundGroup2.x = (this.game.world.width - this.groundGroup2.width) * p;
         this.groundGroup3.x = (this.game.world.width - this.groundGroup3.width) * p;
         this.groundGroup4.x = (this.game.world.width - this.groundGroup4.width) * p;

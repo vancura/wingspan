@@ -11,29 +11,29 @@
 class Plane extends Phaser.Sprite {
 
 
-    private engineLoop:Phaser.Sound;
-    private engineStress:Phaser.Sound;
-    private explosion:Phaser.Sound;
+    private engineLoop: Phaser.Sound;
+    private engineStress: Phaser.Sound;
+    private explosion: Phaser.Sound;
 
-    private restartTimeout:Phaser.Timer;
-    private crashSlideObj:Phaser.Point;
-    private crashSlideTween:Phaser.Tween;
+    private restartTimeout: Phaser.Timer;
+    private crashSlideObj: Phaser.Point;
+    private crashSlideTween: Phaser.Tween;
 
-    private framePrefix:string;
-    private currentControlDegree:number;
-    private currentThrust:number;
-    private fireSensor:any; // TODO: Set type when Box2D has TS defs
-    private startRatio:number;
+    private framePrefix: string;
+    private currentControlDegree: number;
+    private currentThrust: number;
+    private fireSensor: any; // TODO: Set type when Box2D has TS defs
+    private startRatio: number;
 
-    private _idx:number;
-    private _weapon:Weapon;
-    private _velocity:number;
-    private _degree:number;
-    private _tintColor:any;
-    private _tintHex:number;
-    private _tintStyle:string;
-    private _state:PlaneState;
-    private _direction:PlaneDirection;
+    private _idx: number;
+    private _weapon: Weapon;
+    private _velocity: number;
+    private _degree: number;
+    private _tintColor: any;
+    private _tintHex: number;
+    private _tintStyle: string;
+    private _state: PlaneState;
+    private _direction: PlaneDirection;
 
 
     /**
@@ -45,7 +45,7 @@ class Plane extends Phaser.Sprite {
      * @param idx Plane index
      * @constructor
      */
-    constructor(game:Phaser.Game, sr:number, framePrefix:string, tintColor:string, idx:number) {
+    constructor(game: Phaser.Game, sr: number, framePrefix: string, tintColor: string, idx: number) {
         super(game, game.world.width * sr, Settings.WORLD_OVERFLOW, "game", `${framePrefix}/p1.png`);
 
         this.startRatio = sr;
@@ -57,7 +57,7 @@ class Plane extends Phaser.Sprite {
         this.crashSlideObj = new Phaser.Point();
 
         // color caching
-        this._tintHex = parseInt(`0x${tintColor.substr(1)}`);
+        this._tintHex = parseInt(`0x${tintColor.substr(1) }`);
         this._tintColor = Phaser.Color.hexToColor(tintColor);
         this._tintStyle = `rgba(${this._tintColor.r}, ${this._tintColor.g}, ${this._tintColor.b}, 1)`;
 
@@ -106,7 +106,7 @@ class Plane extends Phaser.Sprite {
      * Update.
      */
     update() {
-        var rot:number, vel:number, vol:number;
+        var rot: number, vel: number, vol: number;
 
         // clamp rotation degree to -1..+1
         this.currentControlDegree = Phaser.Math.clamp(this.currentControlDegree, -1, 1);
@@ -130,7 +130,7 @@ class Plane extends Phaser.Sprite {
         this.body.rotateLeft(rot);
 
         // switch the plane frame based on the rotation
-        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
+        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7))) }.png`;
 
         // store the degree and vel
         this._degree = rot;
@@ -161,7 +161,7 @@ class Plane extends Phaser.Sprite {
      * Rotating left, increase rotation degree until it's +1.
      * @param multiplier Multiplier (used when shooting)
      */
-    rotateLeft(multiplier:number) {
+    rotateLeft(multiplier: number) {
         this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
     }
 
@@ -170,7 +170,7 @@ class Plane extends Phaser.Sprite {
      * Rotating right, decrease rotation degree until it's -1.
      * @param multiplier Multiplier (used when shooting)
      */
-    rotateRight(multiplier:number) {
+    rotateRight(multiplier: number) {
         this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
     }
 
@@ -202,7 +202,7 @@ class Plane extends Phaser.Sprite {
      * @param multiplier (optional) Backpedal multiplier (Settings.PLANE_THRUST_MULTIPLIER_DOWN by default)
      * @see Settings.PLANE_THRUST_MULTIPLIER_DOWN
      */
-    backPedal(multiplier:number = Settings.PLANE_THRUST_MULTIPLIER_DOWN) {
+    backPedal(multiplier: number = Settings.PLANE_THRUST_MULTIPLIER_DOWN) {
         this.currentThrust *= multiplier;
         this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
@@ -271,7 +271,7 @@ class Plane extends Phaser.Sprite {
      * Get the plane weapon.
      * @return {Weapon} Plane weapon
      */
-    public get weapon():Weapon {
+    public get weapon(): Weapon {
         return this._weapon;
     }
 
@@ -280,7 +280,7 @@ class Plane extends Phaser.Sprite {
      * Get the plane velocity.
      * @return {number} Plane velocity
      */
-    public get velocity():number {
+    public get velocity(): number {
         return this._velocity;
     }
 
@@ -289,7 +289,7 @@ class Plane extends Phaser.Sprite {
      * Get the plane degree.
      * @return {number} Plane degree
      */
-    public get degree():number {
+    public get degree(): number {
         return this._degree;
     }
 
@@ -298,7 +298,7 @@ class Plane extends Phaser.Sprite {
      * Get the plane tint color in object format.
      * @return {number} Plane tint color in object format
      */
-    public get tintColor():Object {
+    public get tintColor(): Object {
         return this._tintColor;
     }
 
@@ -307,7 +307,7 @@ class Plane extends Phaser.Sprite {
      * Get the plane tint color in hex format (0xRRGGBB).
      * @return {string} Plane tint color in hex format
      */
-    public get tintHex():number {
+    public get tintHex(): number {
         return this._tintHex;
     }
 
@@ -316,7 +316,7 @@ class Plane extends Phaser.Sprite {
      * Get the plane tint color in canvas style format.
      * @return {string} Plane tint color in canvas style format
      */
-    public get tintStyle():string {
+    public get tintStyle(): string {
         return this._tintStyle;
     }
 
@@ -326,7 +326,7 @@ class Plane extends Phaser.Sprite {
      * @return {PlaneState} Current plane state
      * @see PlaneState
      */
-    public get state():PlaneState {
+    public get state(): PlaneState {
         return this._state;
     }
 
@@ -336,7 +336,7 @@ class Plane extends Phaser.Sprite {
      * @return {PlaneDirection} Current plane direction
      * @see PlaneDirection
      */
-    public get direction():PlaneDirection {
+    public get direction(): PlaneDirection {
         return this._direction;
     }
 
@@ -345,7 +345,7 @@ class Plane extends Phaser.Sprite {
      * Get plane index.
      * @return {number} Plane index
      */
-    public get idx():number {
+    public get idx(): number {
         return this._idx;
     }
 
@@ -354,7 +354,7 @@ class Plane extends Phaser.Sprite {
      * Get current slide position.
      * @return {number} Slide X position
      */
-    public get crashSlidePos():number {
+    public get crashSlidePos(): number {
         return this.crashSlideObj.x;
     }
 
@@ -363,7 +363,7 @@ class Plane extends Phaser.Sprite {
      * Get screen X ratio
      * @return {number} Screen X ratio
      */
-    public get screenRatio():number {
+    public get screenRatio(): number {
         return 1 / (this.game.canvas.width / (this.body.x - this.game.camera.x));
     }
 
@@ -382,7 +382,7 @@ class Plane extends Phaser.Sprite {
      * @param j The contact object itself
      * TODO: Set type when Box2D has TS defs
      */
-    private onPlaneCrashed(e:any, f:any, g:any, h:any, i:boolean, j:any) {
+    private onPlaneCrashed(e: any, f: any, g: any, h: any, i: boolean, j: any) {
         if (this._state == PlaneState.Flying && this.body.y > this.game.world.height - 100) {
             // crash the plane.
             // Crashed and RestartScheduled needed (in this order)
@@ -399,7 +399,7 @@ class Plane extends Phaser.Sprite {
             // prepare the camera slide tween
             this.crashSlideObj.x = 1 / (this.game.world.width / this.body.x);
             this.crashSlideTween = this.game.add.tween(this.crashSlideObj);
-            this.crashSlideTween.to({x: this.startRatio}, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
+            this.crashSlideTween.to({ x: this.startRatio }, Settings.GAME_RESTART_TIMEOUT, Phaser.Easing.Cubic.InOut);
             this.crashSlideTween.start();
 
             // prepare the restart timeout

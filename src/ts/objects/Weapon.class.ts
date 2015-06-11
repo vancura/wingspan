@@ -8,11 +8,11 @@
 class Weapon extends Phaser.Group {
 
 
-    private nextFire:number;
-    private bulletSpeed:number;
-    private flip:boolean;
-    private planeIdx:number;
-    private fx:Phaser.Sound;
+    private nextFire: number;
+    private bulletSpeed: number;
+    private flip: boolean;
+    private planeIdx: number;
+    private fx: Phaser.Sound;
 
 
     /**
@@ -21,9 +21,9 @@ class Weapon extends Phaser.Group {
      * @param planeIdx Plane index
      * @constructor
      */
-    constructor(game:Phaser.Game, planeIdx:number) {
-        var bullet:Bullet;
-        var i:number;
+    constructor(game: Phaser.Game, planeIdx: number) {
+        var bullet: Bullet;
+        var i: number;
 
         super(game, game.world, "weapon", false, true, Phaser.Physics.ARCADE);
 
@@ -49,9 +49,9 @@ class Weapon extends Phaser.Group {
      * Fire with the weapon.
      * @param source Sprite source
      */
-    fire(source:Phaser.Sprite) {
-        var x:number, y:number;
-        var d:number;
+    fire(source: Phaser.Sprite) {
+        var x: number, y: number;
+        var d: number;
 
         if (this.game.time.time >= this.game.rnd.between(this.nextFire - 10, this.nextFire)) {
             d = this.flip ? this.game.rnd.between(-7, -3) : this.game.rnd.between(3, 7);

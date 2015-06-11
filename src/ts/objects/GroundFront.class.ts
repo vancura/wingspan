@@ -7,7 +7,7 @@
 class GroundFront extends Phaser.Group {
 
 
-    private groundGroup1:Phaser.Group;
+    private groundGroup1: Phaser.Group;
 
 
     /**
@@ -16,9 +16,9 @@ class GroundFront extends Phaser.Group {
      * @constructor
      * TODO Optimize
      */
-    constructor(game:Phaser.Game) {
-        var l:Phaser.Sprite;
-        var i:number = 0;
+    constructor(game: Phaser.Game) {
+        var l: Phaser.Sprite;
+        var i: number = 0;
 
         super(game, game.world, "groundFront");
 
@@ -29,7 +29,7 @@ class GroundFront extends Phaser.Group {
         this.add(this.groundGroup1);
 
         while (i < Math.ceil(this.game.world.width / 254) + 3) {
-            l = this.groundGroup1.create(i * 254, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6)}.png`);
+            l = this.groundGroup1.create(i * 254, 0, "game", `ground/g${this.game.rnd.integerInRange(1, 6) }.png`);
             l.tint = 0x000000;
 
             i++;
@@ -43,7 +43,7 @@ class GroundFront extends Phaser.Group {
      * Scroll to a position.
      * @param p New position in %
      */
-    scroll(p:number) {
+    scroll(p: number) {
         this.groundGroup1.x = (this.game.world.width - this.groundGroup1.width) * p;
     }
 

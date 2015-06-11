@@ -8,7 +8,7 @@
 class Bullet extends Phaser.Sprite {
 
 
-    private _planeIdx:number;
+    private _planeIdx: number;
 
 
     /**
@@ -17,7 +17,7 @@ class Bullet extends Phaser.Sprite {
      * @param planeIdx Plane index
      * @constructor
      */
-    constructor(game:Phaser.Game, planeIdx:number) {
+    constructor(game: Phaser.Game, planeIdx: number) {
         super(game, 0, 0, "game", "bullet.png");
 
         this.checkWorldBounds = true;
@@ -37,7 +37,7 @@ class Bullet extends Phaser.Sprite {
      * @param angle Angle in degrees
      * @param speed Speed
      */
-    fire(x:number, y:number, angle:number, speed:number) {
+    fire(x: number, y: number, angle: number, speed: number) {
         this.reset(x, y);
 
         this.scale.set(1);
@@ -59,7 +59,7 @@ class Bullet extends Phaser.Sprite {
      * Get the index of plane which has fired this bullet.
      * @return {number} Plane index
      */
-    public get planeIdx():number {
+    public get planeIdx(): number {
         return this._planeIdx;
     }
 

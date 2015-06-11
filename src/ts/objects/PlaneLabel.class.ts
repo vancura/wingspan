@@ -9,9 +9,9 @@
 class PlaneLabel extends Phaser.Group {
 
 
-    private label:Phaser.BitmapText;
+    private label: Phaser.BitmapText;
 
-    private plane:Plane;
+    private plane: Plane;
 
 
     /**
@@ -20,7 +20,7 @@ class PlaneLabel extends Phaser.Group {
      * @param plane Plane reference
      * @constructor
      */
-    constructor(game:Phaser.Game, plane:Plane) {
+    constructor(game: Phaser.Game, plane: Plane) {
         super(game, game.world, "label");
 
         this.plane = plane;
@@ -33,7 +33,7 @@ class PlaneLabel extends Phaser.Group {
 
 
     public update() {
-        var x:number, y:number;
+        var x: number, y: number;
 
         if (this.plane.state == PlaneState.Flying) {
             this.label.visible = true;

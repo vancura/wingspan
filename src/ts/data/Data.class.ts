@@ -5,7 +5,7 @@
 class Data {
 
 
-    static gameMode:GameMode;
+    static gameMode: GameMode;
 
 
 }
