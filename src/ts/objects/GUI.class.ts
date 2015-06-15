@@ -15,6 +15,8 @@ class GUI extends Phaser.Group {
     private planeLabelList: PlaneLabel[] = [];
     private logo: Phaser.Image;
     private label: Phaser.BitmapText;
+    private logoFadeOutTween: Phaser.Tween;
+    private labelFadeOutTween: Phaser.Tween;
 
 
     constructor(game: Phaser.Game) {
@@ -27,6 +29,13 @@ class GUI extends Phaser.Group {
         this.label.anchor.set(0.5, 0.5);
         this.label.tint = 0x010101;
         this.label.alpha = 0.5;
+
+        // fadeout tweens
+        this.logoFadeOutTween = this.game.add.tween(this.logo);
+        this.logoFadeOutTween.to({ alpha: 0 }, 7000, Phaser.Easing.Cubic.InOut, true, 1000);
+
+        this.labelFadeOutTween = this.game.add.tween(this.label);
+        this.labelFadeOutTween.to({ alpha: 0 }, 7000, Phaser.Easing.Cubic.InOut, true);
 
         this.addMultiple([this.logo, this.label]);
     }
