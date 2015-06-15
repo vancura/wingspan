@@ -279,7 +279,6 @@ class GameState extends Phaser.State {
      */
     private createSignals() {
         Signals.onCrashBottom.add(this.onPlaneCrashed, this);
-        Signals.onSwitchGameModeState.add(this.onGameModeStateSwitched, this);
     }
 
 
@@ -434,16 +433,6 @@ class GameState extends Phaser.State {
      */
     private onPlaneCrashed(e: Plane) {
         this.addPlaneExplosion(e.body.x);
-    }
-
-
-    /**
-     * Game mode state switched from GUI.
-     * @param {GameMode} e New game mode state
-     * @see GameMode
-     */
-    private onGameModeStateSwitched(e: GameMode) {
-        // FIXME: Game mode switch
     }
 
 
