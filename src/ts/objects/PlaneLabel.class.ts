@@ -26,8 +26,8 @@ class PlaneLabel extends Phaser.Group {
         this.plane = plane;
 
         this.label = new Phaser.BitmapText(this.game, 0, 0, "futura-9", `PLANE ${this.plane.idx + 1}`, 9);
-        this.label.tint = 0x010101;
-        this.label.alpha = 0.5;
+        this.label.tint = this.plane.tintHex;
+        this.label.visible = false; // visible only when offscreen
 
         this.add(this.label);
     }
@@ -42,19 +42,11 @@ class PlaneLabel extends Phaser.Group {
             x = Math.round(this.plane.position.x - this.label.width / 2);
             y = Math.round(this.plane.position.y) - 35;
 
-            if (x < this.game.camera.x + 5 || x > this.game.camera.x + this.game.canvas.width - 5 - this.label.width || y < 22) {
-                this.label.tint = this.plane.tintHex;
-                this.label.alpha = 1;
-            }
-            else {
-                this.label.tint = 0x010101;
-                this.label.alpha = 0.5;
-            }
-
             x = Phaser.Math.clamp(x, this.game.camera.x + 5, this.game.camera.x + this.game.canvas.width - 5 - this.label.width);
             y = Phaser.Math.clampBottom(y, 22);
 
             this.label.position.set(x, y);
+            this.label.visible = !!(x < this.game.camera.x + 5 || x > this.game.camera.x + this.game.canvas.width - 5 - this.label.width || y < 22);
         }
 
         else {
