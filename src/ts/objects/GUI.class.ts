@@ -13,10 +13,22 @@ class GUI extends Phaser.Group {
 
     private planeOffscreenMarkerList: PlaneOffscreenMarker[] = [];
     private planeLabelList: PlaneLabel[] = [];
+    private logo: Phaser.Image;
+    private label: Phaser.BitmapText;
 
 
     constructor(game: Phaser.Game) {
         super(game, game.world, "gui");
+
+        this.logo = new Phaser.Image(this.game, this.game.world.centerX, this.game.world.centerY - 20, "game", "gui/logo-1015.png");
+        this.logo.anchor.set(0.5, 0.5);
+
+        this.label = new Phaser.BitmapText(this.game, this.game.world.centerX, this.game.world.centerY - 150, "futura-16", "CREEPTOWN GAMES PRESENTS", 16);
+        this.label.anchor.set(0.5, 0.5);
+        this.label.tint = 0x010101;
+        this.label.alpha = 0.5;
+
+        this.addMultiple([this.logo, this.label]);
     }
 
 

@@ -27,6 +27,7 @@ class PreloadState extends Phaser.State {
         this.load.audio("music-parapet", ["assets/audio/music-parapet.mp3", "assets/audio/music-parapet.ogg"]);
         this.load.image("forestBackground", "assets/forest-bg-1920x1080.jpg");
         this.load.bitmapFont("standard-07_55", "assets/fonts/standard-07_55.png", "assets/fonts/standard-07_55.xml");
+        this.load.bitmapFont("futura-9", "assets/fonts/futura-9.png", "assets/fonts/futura-9.xml");
         this.load.bitmapFont("futura-16", "assets/fonts/futura-16.png", "assets/fonts/futura-16.xml");
     }
 
