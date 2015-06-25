@@ -120,7 +120,6 @@ class GameState extends Phaser.State {
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.DOWN));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
 
                 break;
 
@@ -129,13 +128,11 @@ class GameState extends Phaser.State {
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.D));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.W));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.S));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.F));
 
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.DOWN));
-                this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.ALT));
 
                 break;
         }
@@ -329,26 +326,24 @@ class GameState extends Phaser.State {
     private controlPlane(plane: Plane) {
         // this is awkward, but IMO it's the easiest method when
         // we need to share the logic across all game modes
-        // keyList[idx * 5 + 0] = left
-        // keyList[idx * 5 + 1] = right
-        // keyList[idx * 5 + 2] = thrust
-        // keyList[idx * 5 + 3] = backpedal
-        // keyList[idx * 5 + 4] = fire
+        // keyList[idx * 4 + 0] = left
+        // keyList[idx * 4 + 1] = right
+        // keyList[idx * 4 + 2] = thrust
+        // keyList[idx * 4 + 3] = fire
 
         if (plane.state == PlaneState.Flying) {
             // turn sideways
-            if (this.keyList[plane.idx * 5].isDown && !this.keyList[plane.idx * 5 + 1].isDown) plane.rotateLeft(1); // left && !right
-            else if (!this.keyList[plane.idx * 5].isDown && this.keyList[plane.idx * 5 + 1].isDown) plane.rotateRight(1); // !left && right
+            if (this.keyList[plane.idx * 4].isDown && !this.keyList[plane.idx * 4 + 1].isDown) plane.rotateLeft(1); // left && !right
+            else if (!this.keyList[plane.idx * 4].isDown && this.keyList[plane.idx * 4 + 1].isDown) plane.rotateRight(1); // !left && right
             else plane.leaveRotation();
 
             // thrust or backpedal
             // after a while revert to original power
-            if (this.keyList[plane.idx * 5 + 2].isDown) plane.thrust();
-            else if (this.keyList[plane.idx * 5 + 3].isDown) plane.backPedal();
-            else plane.leaveThrust();
+            if (this.keyList[plane.idx * 4 + 2].isDown) plane.thrustUp();
+            else plane.thrustDown();
 
             // firing
-            if (Settings.IS_PLANE_WEAPON_ENABLED && this.keyList[plane.idx * 5 + 4].isDown) plane.weapon.fire(plane);
+            if (Settings.IS_PLANE_WEAPON_ENABLED && this.keyList[plane.idx * 4 + 3].isDown) plane.weapon.fire(plane);
 
             // update trails
             this.trails.draw(plane);

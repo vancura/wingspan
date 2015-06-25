@@ -24,11 +24,8 @@ class Settings {
     // thrust multiplier when thrust button down
     static PLANE_THRUST_MULTIPLIER_UP: number = 1.9;
 
-    // thrust multiplier when backpedal button down
+    // thrust step when no direction or thrust keys down
     static PLANE_THRUST_MULTIPLIER_DOWN: number = 0.96;
-
-    // thrust step when both thrust and backpedal buttons released
-    static PLANE_THRUST_MULTIPLIER_NONE: number = 0.995;
 
     static PLANE_ANGULAR_DAMPING_FACTOR: number = 20;
     static PLANE_KEYBOARD_ROTATION_STEP: number = 60;
