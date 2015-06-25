@@ -22,10 +22,10 @@ class GUI extends Phaser.Group {
     constructor(game: Phaser.Game) {
         super(game, game.world, "gui");
 
-        this.logo = new Phaser.Image(this.game, this.game.world.centerX, this.game.world.centerY - 20, "game", "gui/logo-1015.png");
+        this.logo = new Phaser.Image(this.game, this.game.world.centerX, this.game.world.centerY - 90, "game", "gui/logo-1015.png");
         this.logo.anchor.set(0.5, 0.5);
 
-        this.label = new Phaser.BitmapText(this.game, this.game.world.centerX, this.game.world.centerY - 150, "futura-16", "CREEPTOWN GAMES PRESENTS", 16);
+        this.label = new Phaser.BitmapText(this.game, this.game.world.centerX, this.game.world.centerY - 180, "futura-16", "CREEPTOWN GAMES PRESENTS", 16);
         this.label.anchor.set(0.5, 0.5);
         this.label.tint = 0x010101;
         this.label.alpha = 0.5;
