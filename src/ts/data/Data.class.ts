@@ -1,5 +1,5 @@
-/// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-/// <reference path="Enums.class.ts"/>
+///<reference path="../../ts-vendor/phaser.comments.d.ts" />
+///<reference path="Enums.class.ts"/>
 
 
 class Data {

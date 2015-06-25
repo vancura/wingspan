@@ -1,4 +1,4 @@
-/// <reference path="App.class.ts" />
+///<reference path="../ts-vendor/phaser.comments.d.ts" />
 
 
 App.init();

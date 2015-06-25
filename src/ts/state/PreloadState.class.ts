@@ -1,4 +1,4 @@
-/// <reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
+///<reference path="../../ts-vendor/phaser.comments.d.ts" />
 
 
 class PreloadState extends Phaser.State {
