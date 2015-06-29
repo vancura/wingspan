@@ -18,7 +18,7 @@ class Settings {
     static GAME_RESTART_TIMEOUT: number = 2000;
 
     // min and max plane thrust
-    static MIN_PLANE_THRUST: number = 120;
+    static MIN_PLANE_THRUST: number = 100;
     static MAX_PLANE_THRUST: number = 210;
 
     // thrust multiplier when thrust button down
@@ -34,6 +34,9 @@ class Settings {
     static PLANE_BULLET_FIRE_RATE: number = 70;
     static PLANE_BULLET_LIFESPAN: number = 1000;
     static PLANE_TRAIL_THICKNESS: number = 0.8;
+
+    // gravity makes the plane go down faster
+    static PLANE_GRAVITY_STALL_RATIO: number = 0.9;
 
     static PLANE_TINT_COLOR_LIST: string[] = [
         "#ffff00",

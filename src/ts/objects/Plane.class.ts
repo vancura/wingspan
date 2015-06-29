@@ -158,6 +158,35 @@ class Plane extends Phaser.Sprite {
 
 
     /**
+     * Post-update loop to fine tune plane rotation towards ground.
+     */
+    postUpdate() {
+        super.postUpdate();
+
+        // first calculate normalized rotation of the
+        // plane rotation, coming directly from Box2D
+        var a: number = Phaser.Math.normalizeAngle(this.body.sprite.rotation);
+
+        // reduce the rotation so it's not so big
+        // we'll use this flag to see if the direction is left or right
+        var f: number = (a - Math.PI) / Math.PI;
+
+        // we'll use only absolute angle, since we already know the direction
+        var x: number = Math.abs(f);
+
+        // calculate sin, so the rotation is close to 0 on both poles
+        // if you know how to do it better, I am one big ear
+        var q: number = (Math.sin((x - 0.25) * Math.PI * 2) + 1) / Settings.PLANE_GRAVITY_STALL_RATIO;
+
+        // the less velocity the more the gravity wins
+        var s: number = q * (1 - (1 / (200 / this._velocity)));
+
+        // apply the rotation, following the direction flag
+        this.body.sprite.rotation = f > 0 ? a - s : a + s;
+    }
+
+
+    /**
      * Rotating left, increase rotation degree until it's +1.
      * @param multiplier Multiplier (used when shooting)
      */
