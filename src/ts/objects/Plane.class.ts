@@ -149,10 +149,12 @@ class Plane extends Phaser.Sprite {
 
         // play sounds
         if (Settings.IS_SOUND_ENABLED) {
-            vol = this._velocity / 60;
+            // calculate real thrust (0..1)
+            // TODO: Does it make sense to export it?
+            vol = 1 / ((Settings.MAX_PLANE_THRUST - Settings.MIN_PLANE_THRUST) / (this.currentThrust - Settings.MIN_PLANE_THRUST));
 
-            this.engineLoop.volume = 1 - vol / 2;
-            this.engineStress.volume = vol / 4;
+            this.engineLoop.volume = vol / 2 + 0.25;
+            this.engineStress.volume = (1 - vol) / 2;
         }
     }
 
@@ -172,6 +174,7 @@ class Plane extends Phaser.Sprite {
         var f: number = (a - Math.PI) / Math.PI;
 
         // we'll use only absolute angle, since we already know the direction
+        // TODO: Does it make sense to export it?
         var x: number = Math.abs(f);
 
         // calculate sin, so the rotation is close to 0 on both poles
