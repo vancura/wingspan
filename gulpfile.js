@@ -4,9 +4,11 @@ var cleants = require("gulp-clean-ts-extends");
 var concat = require("gulp-concat");
 var del = require("del");
 var filelog = require("gulp-filelog");
+var frep = require('gulp-frep');
 var gulp = require("gulp");
 var imagemin = require("gulp-imagemin");
 var minifycss = require("gulp-minify-css");
+var pkg = require('./package.json');
 var pngcrush = require("imagemin-pngcrush");
 var rename = require("gulp-rename");
 var runSequence = require("run-sequence");
@@ -91,6 +93,10 @@ gulp.task("sprites", function () {
 gulp.task("scripts-debug", function () {
     "use strict";
 
+    var patterns = [
+        {pattern: /%VERSION%/g, replacement: pkg.version + " (" + new Date().toGMTString() + ")"}
+    ];
+
     var tsResult = gulp.src(paths.srcTS, {base: "src/ts"})
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
@@ -100,6 +106,7 @@ gulp.task("scripts-debug", function () {
         .pipe(concat("main.js"))
         .pipe(cleants())
         .pipe(sourcemaps.write(".", {sourceRoot: srcRoot + "src/ts", includeContent: false}))
+        .pipe(frep(patterns))
         .pipe(gulp.dest(paths.distJS))
         .pipe(browserSync.reload({stream: true}));
 });
