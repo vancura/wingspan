@@ -24,9 +24,12 @@ class GameState extends Phaser.State {
     private musicLoop: Phaser.Sound;
 
     private keyList: Phaser.Key[] = [];
+    private hackKey: Phaser.Key;
 
     private originalWidth: number;
     private planeList: Plane[] = [];
+    private hackKeyTimeout: Phaser.Timer;
+    private isHackKeyEnabled: boolean = true;
 
 
     /**
@@ -99,6 +102,21 @@ class GameState extends Phaser.State {
             // update parallax
             this.updateParallax();
         }
+
+        // check the hack key
+        if (this.isHackKeyEnabled && this.hackKey.isDown) {
+            console.log("Hackityhack");
+
+            // handle the timeout to prevent another immediate hack
+            this.isHackKeyEnabled = false;
+
+            this.hackKeyTimeout = this.game.time.create(false);
+            this.hackKeyTimeout.add(1000, function() {
+                this.isHackKeyEnabled = true;
+            }, this);
+
+            this.hackKeyTimeout.start();
+        }
     }
 
 
@@ -136,6 +154,9 @@ class GameState extends Phaser.State {
 
                 break;
         }
+
+        // prepare the hackkey
+        this.hackKey = this.input.keyboard.addKey(Phaser.Keyboard.F15);
     }
 
 
