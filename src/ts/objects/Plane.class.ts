@@ -184,6 +184,10 @@ class Plane extends Phaser.Sprite {
         // the less velocity the more the gravity wins
         var s: number = q * (1 - (1 / (200 / this._velocity)));
 
+        // rotate towards ground,
+        // the less the velocity the more grounding
+        this.body.rotation -= f * 0.005;
+
         // apply the rotation, following the direction flag
         this.body.sprite.rotation = f > 0 ? a - s : a + s;
     }
