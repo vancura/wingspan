@@ -7,7 +7,7 @@ class Settings {
     static IS_DEBUG_ENABLED: boolean = false;
     static IS_TRAILS_RENDERING_ENABLED: boolean = true;
     static IS_PLANE_WEAPON_ENABLED: boolean = true;
-    static IS_SOUND_ENABLED: boolean = true;
+    static IS_SOUND_ENABLED: boolean = false;
     static IS_MUSIC_ENABLED: boolean = false;
 
     static WORLD_GRAVITY: number = 75;
@@ -18,8 +18,8 @@ class Settings {
     static GAME_RESTART_TIMEOUT: number = 2000;
 
     // min and max plane thrust
-    static MIN_PLANE_THRUST: number = 100;
-    static MAX_PLANE_THRUST: number = 210;
+    static MIN_PLANE_THRUST: number = 40;
+    static MAX_PLANE_THRUST: number = 240;
 
     // thrust multiplier when thrust button down
     static PLANE_THRUST_MULTIPLIER_UP: number = 1.9;
@@ -27,7 +27,7 @@ class Settings {
     // thrust step when no direction or thrust keys down
     static PLANE_THRUST_MULTIPLIER_DOWN: number = 0.96;
 
-    static PLANE_ANGULAR_DAMPING_FACTOR: number = 20;
+    static PLANE_ANGULAR_DAMPING_FACTOR: number = 10;
     static PLANE_KEYBOARD_ROTATION_STEP: number = 60;
     static PLANE_CONTROL_DEGREE_STEP: number = 0.05;
     static PLANE_BULLET_SPEED: number = 350;
