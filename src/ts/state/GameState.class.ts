@@ -52,7 +52,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        Data.gameMode = GameMode.ScenicSingle;
+        Data.gameMode = GameMode.Local2Players;
     }
 
 
@@ -111,11 +111,14 @@ class GameState extends Phaser.State {
             this.isHackKeyEnabled = false;
 
             this.hackKeyTimeout = this.game.time.create(false);
-            this.hackKeyTimeout.add(1000, function() {
+            this.hackKeyTimeout.add(100, function() {
                 this.isHackKeyEnabled = true;
             }, this);
 
             this.hackKeyTimeout.start();
+
+            // process the hack now
+            this.planeList[0].shoot();
         }
     }
 

@@ -16,6 +16,7 @@ class Plane extends Phaser.Sprite {
     private explosion: Phaser.Sound;
 
     private restartTimeout: Phaser.Timer;
+    private shotTimeout: Phaser.Timer;
     private crashSlideObj: Phaser.Point;
     private crashSlideTween: Phaser.Tween;
 
@@ -24,6 +25,7 @@ class Plane extends Phaser.Sprite {
     private currentThrust: number;
     private fireSensor: any; // TODO: Set type when Box2D has TS defs
     private startRatio: number;
+    private engineLevel: number = 1; // set to lower value when shot
 
     private _idx: number;
     private _weapon: Weapon;
@@ -33,6 +35,7 @@ class Plane extends Phaser.Sprite {
     private _tintHex: number;
     private _tintStyle: string;
     private _state: PlaneState;
+    private _shotState: PlaneShotState;
     private _direction: PlaneDirection;
 
 
@@ -53,6 +56,7 @@ class Plane extends Phaser.Sprite {
         this.name = "plane";
         this._idx = idx;
         this._state = PlaneState.Flying;
+        this._shotState = PlaneShotState.Rocking;
         this._direction = PlaneDirection.Up; // starting above the top fold
         this.crashSlideObj = new Phaser.Point();
 
@@ -153,8 +157,8 @@ class Plane extends Phaser.Sprite {
             // TODO: Does it make sense to export it?
             vol = 1 / ((Settings.MAX_PLANE_THRUST - Settings.MIN_PLANE_THRUST) / (this.currentThrust - Settings.MIN_PLANE_THRUST));
 
-            this.engineLoop.volume = vol / 2 + 0.25;
-            this.engineStress.volume = (1 - vol) / 2;
+            this.engineLoop.volume = (vol / 2 + 0.25) * this.engineLevel;
+            this.engineStress.volume = ((1 - vol) / 2) * this.engineLevel;
         }
     }
 
@@ -198,7 +202,9 @@ class Plane extends Phaser.Sprite {
      * @param multiplier Multiplier (used when shooting)
      */
     rotateLeft(multiplier: number) {
-        this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
+        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+            this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
+        }
     }
 
 
@@ -207,7 +213,9 @@ class Plane extends Phaser.Sprite {
      * @param multiplier Multiplier (used when shooting)
      */
     rotateRight(multiplier: number) {
-        this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
+        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+            this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
+        }
     }
 
 
@@ -217,8 +225,10 @@ class Plane extends Phaser.Sprite {
      * @author Adrian Cleave (@acleave)
      */
     leaveRotation() {
-        if (Math.abs(this.currentControlDegree) >= 0.01)
-            this.currentControlDegree -= this.currentControlDegree / Math.abs(this.currentControlDegree) * Settings.PLANE_CONTROL_DEGREE_STEP;
+        if (this.state == PlaneState.Flying) {
+            if (Math.abs(this.currentControlDegree) >= 0.01)
+                this.currentControlDegree -= this.currentControlDegree / Math.abs(this.currentControlDegree) * Settings.PLANE_CONTROL_DEGREE_STEP;
+        }
     }
 
 
@@ -226,10 +236,12 @@ class Plane extends Phaser.Sprite {
      * Thrust button down, thrust up.
      */
     thrustUp() {
-        this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
-        this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
+        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
+            this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
-        this.body.thrust(this.currentThrust);
+            this.body.thrust(this.currentThrust);
+        }
     }
 
 
@@ -237,10 +249,12 @@ class Plane extends Phaser.Sprite {
      * Thrust button released, slowly decrease thrust.
      */
     thrustDown() {
-        this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
-        this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
+        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+            this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
+            this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
-        this.body.thrust(this.currentThrust);
+            this.body.thrust(this.currentThrust);
+        }
     }
 
 
@@ -248,13 +262,49 @@ class Plane extends Phaser.Sprite {
      * Shoot this plane.
      */
     shoot() {
-        // first slow down
-        this.currentThrust *= 0.01;
-        this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
-        this.body.thrust(this.currentThrust);
+        // only when the plane is flying
+        if (this._state == PlaneState.Flying) {
+            switch (this._shotState) {
+                case PlaneShotState.Rocking:
+                    // plane was flying, was not shot before
+                    // now we stop the engine for one second and then we'll see
+                    this.engineLevel = 0;
+                    this._shotState = PlaneShotState.FirstHit;
 
-        // then rotate
-        this.rotateLeft(300);
+                    this.currentThrust = Settings.MIN_PLANE_THRUST;
+                    this.body.thrust(this.currentThrust);
+
+                    // create the timeout
+                    this.shotTimeout = this.game.time.create();
+                    this.shotTimeout.add(1000, this.restartEngine, this);
+                    this.shotTimeout.start();
+
+                    break;
+
+                case PlaneShotState.FirstHit:
+                    // plane was hit for the second time
+                    // now we stop the engine for three more seconds
+                    this._shotState = PlaneShotState.SecondHit;
+
+                    // change the timeout
+                    this.shotTimeout.stop();
+                    this.shotTimeout = this.game.time.create();
+                    this.shotTimeout.add(3000, this.restartEngine, this);
+                    this.shotTimeout.start();
+
+                    break;
+
+                case PlaneShotState.SecondHit:
+                    // plane was hit for the third time
+                    // plane is K. O.
+                    this._shotState = PlaneShotState.KO;
+
+                    // change the timeout
+                    this.shotTimeout.stop();
+
+                    break;
+            }
+        }
     }
 
 
@@ -284,6 +334,19 @@ class Plane extends Phaser.Sprite {
 
         // plane is flying again
         this._state = PlaneState.Flying;
+
+        // restart the engine
+        this.restartEngine();
+    }
+
+
+    /**
+     * Restart engine after being shot.
+     * TODO: Restart sound
+     */
+    private restartEngine() {
+        this.engineLevel = 1;
+        this._shotState = PlaneShotState.Rocking;
     }
 
 
