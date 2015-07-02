@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.4.3](https://github.com/vancura/wingspan/tree/0.4.3) (2015-07-02)
+
+[Full Changelog](https://github.com/vancura/wingspan/compare/0.4.2...0.4.3)
+
 ## [0.4.2](https://github.com/vancura/wingspan/tree/0.4.2) (2015-07-01)
 
 [Full Changelog](https://github.com/vancura/wingspan/compare/0.4.1...0.4.2)
