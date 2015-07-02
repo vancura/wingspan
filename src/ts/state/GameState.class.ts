@@ -30,6 +30,7 @@ class GameState extends Phaser.State {
     private planeList: Plane[] = [];
     private hackKeyTimeout: Phaser.Timer;
     private isHackKeyEnabled: boolean = true;
+    private emitter: Phaser.Particles.Arcade.Emitter;
 
 
     /**
@@ -280,9 +281,31 @@ class GameState extends Phaser.State {
      * Create fire.
      */
     private createFire() {
+        // create fire sprite
         this.fireGroup = new Phaser.Group(this.game, null, "fire", false, false);
 
         this.add.existing(this.fireGroup);
+
+        // create splosion emitter
+        this.emitter = this.game.add.emitter(this.game.world.centerX, this.game.world.centerY + 330);
+
+        this.emitter.makeParticles("game", [
+            "shrapnel/s1.png",
+            "shrapnel/s2.png",
+            "shrapnel/s3.png",
+            "shrapnel/s4.png",
+            "shrapnel/s5.png",
+            "shrapnel/s6.png",
+            "shrapnel/s7.png",
+            "shrapnel/s8.png",
+            "shrapnel/s9.png",
+            "shrapnel/s10.png"
+        ]);
+
+        this.emitter.gravity = 150;
+        this.emitter.minParticleScale = 0.5;
+        this.emitter.maxParticleScale = 1.2;
+        this.emitter.maxParticleSpeed.setTo(120, -210);
     }
 
 
@@ -383,6 +406,7 @@ class GameState extends Phaser.State {
      * @param x Plane X
      */
     private addPlaneExplosion(x: number) {
+        // add fire
         var fire = new Phaser.Sprite(this.game, x, this.world.height, "game", "fire.png");
         var tween: Phaser.Tween;
 
@@ -400,6 +424,10 @@ class GameState extends Phaser.State {
         });
 
         tween.start();
+
+        // start the splosion
+        this.emitter.x = x;
+        this.emitter.start(true, 3000, 5, 1000);
     }
 
 
