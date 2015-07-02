@@ -52,7 +52,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        Data.gameMode = GameMode.Local2Players;
+        Data.gameMode = GameMode.ScenicSingle;
     }
 
 
@@ -387,13 +387,14 @@ class GameState extends Phaser.State {
         var tween: Phaser.Tween;
 
         fire.anchor.set(0.5, 1);
+        fire.blendMode = PIXI.blendModes.ADD;
 
         this.fireGroup.addChild(fire);
 
         // fadeout tween
         tween = this.add.tween(fire);
 
-        tween.to({ alpha: 0 }, 1000);
+        tween.to({ alpha: 0 }, 1500);
         tween.onComplete.add(function() {
             fire.destroy();
         });
