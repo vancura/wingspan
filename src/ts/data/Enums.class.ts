@@ -21,7 +21,7 @@ const enum PlaneState {
 
 
 /**
- * Plane state.
+ * Plane shot state.
  */
 const enum PlaneShotState {
     Rocking, // plane is flying, was not shot before

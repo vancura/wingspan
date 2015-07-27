@@ -53,7 +53,7 @@ class GameState extends Phaser.State {
         }
 
         // setup states
-        Data.gameMode = GameMode.ScenicSingle;
+        Data.gameMode = GameMode.Local2Players;
     }
 
 
