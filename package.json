@@ -3,7 +3,7 @@
   "title": "Wingspan",
   "author": "Vaclav Vancura <vaclav@vancura.org>",
   "homepage": "http://vancura.org",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/vancura/wingspan"
