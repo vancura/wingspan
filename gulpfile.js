@@ -12,7 +12,7 @@ var pkg = require('./package.json');
 var pngcrush = require("imagemin-pngcrush");
 var rename = require("gulp-rename");
 var runSequence = require("run-sequence");
-var sass = require("gulp-sass");
+var scss = require("gulp-scss");
 var sourcemaps = require("gulp-sourcemaps");
 var sprite = require("gulp-sprite-generator");
 var ts = require("gulp-typescript");
@@ -55,7 +55,7 @@ gulp.task("styles", function () {
 
     // Compile SCSS.
     return gulp.src(paths.srcSCSS)
-        .pipe(sass({errLogToConsole: false, outputStyle: "expanded"}))
+        .pipe(scss())
         .pipe(autoprefixer("last 2 versions", "safari 6", "ie 10", "opera 12.1", "ios 6", "android 4", "blackberry 10"))
         .pipe(gulp.dest(paths.distCSS));
 });
