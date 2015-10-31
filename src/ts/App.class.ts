@@ -1,4 +1,4 @@
-///<reference path="../ts-vendor/phaser.comments.d.ts" />
+///<reference path="../../components/phaser/typescript/phaser.comments.d.ts" />
 ///<reference path="state/BootState.class.ts" />
 ///<reference path='state/GameState.class.ts'/>
 ///<reference path='state/PreloadState.class.ts'/>

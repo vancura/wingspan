@@ -13,7 +13,8 @@
         "normalize-scss": "^3.0.2",
         "vancura-scss-libs": "git@github.com:vancura/vancura-scss-libs.git#ae6ee3c775f5dbcf7238b0943d051f3987b521e0",
         "colors": "^2.2.0",
-        "normalize-opentype.css": "^0.2.1"
+        "normalize-opentype.css": "^0.2.1",
+        "phaser": "~2.4.4"
     },
     "resolutions": {
         "phaser": "~2.3.0"

@@ -1,4 +1,4 @@
-///<reference path="../../ts-vendor/phaser.comments.d.ts" />
+///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
 ///<reference path="../data/Settings.class.ts" />
 ///<reference path="Plane.class.ts" />
 
