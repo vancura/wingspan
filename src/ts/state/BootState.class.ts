@@ -10,8 +10,8 @@ class BootState extends Phaser.State {
     /**
      * Initialize the app.
      */
-    init() {
-        this.game.renderer["renderSession"].roundPixels = false;
+    init(): void {
+        this.game.renderer.renderSession.roundPixels = false;
 
         this.stage.backgroundColor = 0x000000;
         this.stage.smoothed = true;
