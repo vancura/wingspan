@@ -25,7 +25,10 @@ class BootState extends Phaser.State {
         this.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
 
         if (this.game.device.desktop) {
+            /* tslint:disable no-string-literal */
             this.debug = this.add.plugin(Phaser.Plugin["Debug"]);
+            /* tslint:enable no-string-literal */
+
             this.debug.panels.performance.toggle();
         }
     }
@@ -34,7 +37,7 @@ class BootState extends Phaser.State {
     /**
      * Preload (the preloader).
      */
-    preload() {
+    preload(): void {
         // this.load.image("preload-bar", "assets/preload-bar.png");
     }
 
@@ -42,7 +45,7 @@ class BootState extends Phaser.State {
     /**
      * Create.
      */
-    create() {
+    create(): void {
         this.game.state.start("Preload");
     }
 

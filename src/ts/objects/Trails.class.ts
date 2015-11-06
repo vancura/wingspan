@@ -28,27 +28,6 @@ class Trails extends Phaser.Sprite {
 
 
     /**
-     * Draw trails.
-     * @param plane Plane to draw a trail for
-     */
-    draw(plane: Plane) {
-        var pos: number[];
-
-        if (Settings.IS_TRAILS_RENDERING_ENABLED) {
-            pos = Trails.getPositions(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1);
-
-            this.bitmap.fill(0, 0, 0, 0.05);
-            this.bitmap.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, plane.tintStyle);
-            this.bitmap.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, plane.tintStyle);
-        }
-    }
-
-
-    // STATIC
-    // ------
-
-
-    /**
      * Get trail positions.
      * @param plane The plane
      * @param multiplier Distance multiplier (used when rotating)
@@ -57,7 +36,7 @@ class Trails extends Phaser.Sprite {
     static getPositions(plane: Plane, multiplier: number): number[] {
         var x1: number, y1: number, x2: number, y2: number;
         var d: number, m: number;
-        var out = null;
+        var out: number[] = null;
 
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {
             d = plane.rotation * -1 - 90 * (Math.PI / 180);
@@ -72,6 +51,23 @@ class Trails extends Phaser.Sprite {
         }
 
         return out;
+    }
+
+
+    /**
+     * Draw trails.
+     * @param plane Plane to draw a trail for
+     */
+    draw(plane: Plane): void {
+        var pos: number[];
+
+        if (Settings.IS_TRAILS_RENDERING_ENABLED) {
+            pos = Trails.getPositions(plane, 1 - Math.abs(plane.degree / Settings.PLANE_KEYBOARD_ROTATION_STEP) - 0.1);
+
+            this.bitmap.fill(0, 0, 0, 0.05);
+            this.bitmap.circle(pos[0], pos[1], Settings.PLANE_TRAIL_THICKNESS, plane.tintStyle);
+            this.bitmap.circle(pos[2], pos[3], Settings.PLANE_TRAIL_THICKNESS, plane.tintStyle);
+        }
     }
 
 

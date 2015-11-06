@@ -43,7 +43,7 @@ class GroundFront extends Phaser.Group {
      * Scroll to a position.
      * @param p New position in %
      */
-    scroll(p: number) {
+    scroll(p: number): void {
         this.groundGroup1.x = (this.game.world.width - this.groundGroup1.width) * p;
     }
 

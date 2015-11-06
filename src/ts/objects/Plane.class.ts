@@ -61,12 +61,12 @@ class Plane extends Phaser.Sprite {
         this.crashSlideObj = new Phaser.Point();
 
         // color caching
-        this._tintHex = parseInt(`0x${tintColor.substr(1) }`);
+        this._tintHex = parseInt(`0x${tintColor.substr(1)}`, 10);
         this._tintColor = Phaser.Color.hexToColor(tintColor);
         this._tintStyle = `rgba(${this._tintColor.r}, ${this._tintColor.g}, ${this._tintColor.b}, 1)`;
 
         // physics settings
-        game.physics["box2d"].enable(this);
+        game.physics.box2d.enable(this);
 
         this.body.angle = 180;
         this.body.linearDamping = 1;
@@ -109,7 +109,7 @@ class Plane extends Phaser.Sprite {
     /**
      * Update.
      */
-    update() {
+    update(): void {
         var rot: number, vel: number, vol: number;
 
         // clamp rotation degree to -1..+1
@@ -134,7 +134,7 @@ class Plane extends Phaser.Sprite {
         this.body.rotateLeft(rot);
 
         // switch the plane frame based on the rotation
-        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7))) }.png`;
+        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
 
         // store the degree and vel
         this._degree = rot;
@@ -166,7 +166,7 @@ class Plane extends Phaser.Sprite {
     /**
      * Post-update loop to fine tune plane rotation towards ground.
      */
-    postUpdate() {
+    postUpdate(): void {
         super.postUpdate();
 
         // first calculate normalized rotation of the
@@ -201,8 +201,8 @@ class Plane extends Phaser.Sprite {
      * Rotating left, increase rotation degree until it's +1.
      * @param multiplier Multiplier (used when shooting)
      */
-    rotateLeft(multiplier: number) {
-        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+    rotateLeft(multiplier: number): void {
+        if (this.state === PlaneState.Flying && this._shotState === PlaneShotState.Rocking) {
             this.currentControlDegree += Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
         }
     }
@@ -212,8 +212,8 @@ class Plane extends Phaser.Sprite {
      * Rotating right, decrease rotation degree until it's -1.
      * @param multiplier Multiplier (used when shooting)
      */
-    rotateRight(multiplier: number) {
-        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+    rotateRight(multiplier: number): void {
+        if (this.state === PlaneState.Flying && this._shotState === PlaneShotState.Rocking) {
             this.currentControlDegree -= Settings.PLANE_CONTROL_DEGREE_STEP * multiplier;
         }
     }
@@ -224,8 +224,8 @@ class Plane extends Phaser.Sprite {
      * slowly decrease rotation.
      * @author Adrian Cleave (@acleave)
      */
-    leaveRotation() {
-        if (this.state == PlaneState.Flying) {
+    leaveRotation(): void {
+        if (this.state === PlaneState.Flying) {
             if (Math.abs(this.currentControlDegree) >= 0.01)
                 this.currentControlDegree -= this.currentControlDegree / Math.abs(this.currentControlDegree) * Settings.PLANE_CONTROL_DEGREE_STEP;
         }
@@ -235,8 +235,8 @@ class Plane extends Phaser.Sprite {
     /**
      * Thrust button down, thrust up.
      */
-    thrustUp() {
-        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+    thrustUp(): void {
+        if (this.state === PlaneState.Flying && this._shotState === PlaneShotState.Rocking) {
             this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_UP;
             this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
@@ -248,8 +248,8 @@ class Plane extends Phaser.Sprite {
     /**
      * Thrust button released, slowly decrease thrust.
      */
-    thrustDown() {
-        if (this.state == PlaneState.Flying && this._shotState == PlaneShotState.Rocking) {
+    thrustDown(): void {
+        if (this.state === PlaneState.Flying && this._shotState === PlaneShotState.Rocking) {
             this.currentThrust *= Settings.PLANE_THRUST_MULTIPLIER_DOWN;
             this.currentThrust = Phaser.Math.clamp(this.currentThrust, Settings.MIN_PLANE_THRUST, Settings.MAX_PLANE_THRUST);
 
@@ -261,9 +261,9 @@ class Plane extends Phaser.Sprite {
     /**
      * Shoot this plane.
      */
-    shoot() {
+    shoot(): void {
         // only when the plane is flying
-        if (this._state == PlaneState.Flying) {
+        if (this._state === PlaneState.Flying) {
             switch (this._shotState) {
                 case PlaneShotState.Rocking:
                     // plane was flying, was not shot before
@@ -318,7 +318,7 @@ class Plane extends Phaser.Sprite {
      * Sets the state to PlaneState.Flying
      * @see PlaneState
      */
-    private restart() {
+    private restart(): void {
         // reset physics
         this.body.x = this.game.world.width * this.startRatio;
         this.body.y = Settings.WORLD_OVERFLOW;
@@ -344,7 +344,7 @@ class Plane extends Phaser.Sprite {
      * Restart engine after being shot.
      * TODO: Restart sound
      */
-    private restartEngine() {
+    private restartEngine(): void {
         this.engineLevel = 1;
         this._shotState = PlaneShotState.Rocking;
     }
@@ -469,8 +469,8 @@ class Plane extends Phaser.Sprite {
      * @param j The contact object itself
      * TODO: Set type when Box2D has TS defs
      */
-    private onPlaneCrashed(e: any, f: any, g: any, h: any, i: boolean, j: any) {
-        if (this._state == PlaneState.Flying && this.body.y > this.game.world.height - 100) {
+    private onPlaneCrashed(e: any, f: any, g: any, h: any, i: boolean, j: any): void {
+        if (this._state === PlaneState.Flying && this.body.y > this.game.world.height - 100) {
             // crash the plane.
             // Crashed and RestartScheduled needed (in this order)
             // due to separation of frames in GameState.update()

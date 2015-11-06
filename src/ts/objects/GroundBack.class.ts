@@ -81,7 +81,7 @@ class GroundBack extends Phaser.Group {
      * Scroll to a position.
      * @param p New position in %
      */
-    scroll(p: number) {
+    scroll(p: number): void {
         this.groundGroup2.x = (this.game.world.width - this.groundGroup2.width) * p;
         this.groundGroup3.x = (this.game.world.width - this.groundGroup3.width) * p;
         this.groundGroup4.x = (this.game.world.width - this.groundGroup4.width) * p;

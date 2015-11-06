@@ -34,8 +34,8 @@ class PlaneOffscreenMarker extends Phaser.Group {
     }
 
 
-    public update() {
-        if (this.plane.state == PlaneState.Flying && this.plane.direction !== PlaneDirection.OnScreen) {
+    public update(): void {
+        if (this.plane.state === PlaneState.Flying && this.plane.direction !== PlaneDirection.OnScreen) {
             this.image.visible = true;
             this.image.fixedToCamera = false;
 

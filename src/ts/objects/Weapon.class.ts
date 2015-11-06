@@ -49,7 +49,7 @@ class Weapon extends Phaser.Group {
      * Fire with the weapon.
      * @param source Sprite source
      */
-    fire(source: Phaser.Sprite) {
+    fire(source: Phaser.Sprite): void {
         var x: number, y: number;
         var d: number;
 

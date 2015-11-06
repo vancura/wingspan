@@ -37,7 +37,7 @@ class Bullet extends Phaser.Sprite {
      * @param angle Angle in degrees
      * @param speed Speed
      */
-    fire(x: number, y: number, angle: number, speed: number) {
+    fire(x: number, y: number, angle: number, speed: number): void {
         this.reset(x, y);
 
         this.scale.set(1);
@@ -49,10 +49,6 @@ class Bullet extends Phaser.Sprite {
 
         this.body.gravity.set(0, 100);
     }
-
-
-    // GETTERS & SETTERS
-    // -----------------
 
 
     /**

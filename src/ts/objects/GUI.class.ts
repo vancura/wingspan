@@ -51,7 +51,7 @@ class GUI extends Phaser.Group {
      * Used to display markers etc.
      * @param plane Plane reference
      */
-    public addPlaneReference(plane: Plane) {
+    public addPlaneReference(plane: Plane): void {
         var marker: PlaneOffscreenMarker = new PlaneOffscreenMarker(this.game, plane);
         var label: PlaneLabel = new PlaneLabel(this.game, plane);
 

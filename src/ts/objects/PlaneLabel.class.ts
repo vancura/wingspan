@@ -33,10 +33,10 @@ class PlaneLabel extends Phaser.Group {
     }
 
 
-    public update() {
+    public update(): void {
         var x: number, y: number;
 
-        if (this.plane.state == PlaneState.Flying) {
+        if (this.plane.state === PlaneState.Flying) {
             this.label.visible = true;
 
             x = Math.round(this.plane.position.x - this.label.width / 2);

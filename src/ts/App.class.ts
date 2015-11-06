@@ -14,7 +14,7 @@ class App {
      * Master constructor.
      * @constructor
      */
-    static init() {
+    static init(): void {
         console.log("Wingspan version %VERSION%");
 
         this.game = new Phaser.Game(1280, 720, Phaser.AUTO, document.getElementById("app"), null, false, false);

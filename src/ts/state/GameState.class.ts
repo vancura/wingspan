@@ -40,16 +40,16 @@ class GameState extends Phaser.State {
         // setup physics
         this.physics.startSystem(Phaser.Physics.BOX2D);
 
-        this.physics["box2d"].setBoundsToWorld(true, true, false, true);
-        this.physics["box2d"].gravity.y = Settings.WORLD_GRAVITY;
-        this.physics["box2d"].restitution = 0.4;
+        this.physics.box2d.setBoundsToWorld(true, true, false, true);
+        this.physics.box2d.gravity.y = Settings.WORLD_GRAVITY;
+        this.physics.box2d.restitution = 0.4;
 
         if (Settings.IS_DEBUG_ENABLED) {
-            this.game.physics["box2d"].debugDraw.shapes = true;
-            this.game.physics["box2d"].debugDraw.joints = true;
-            this.game.physics["box2d"].debugDraw.aabbs = true;
-            this.game.physics["box2d"].debugDraw.pairs = true;
-            this.game.physics["box2d"].debugDraw.centerOfMass = true;
+            this.game.physics.box2d.debugDraw.shapes = true;
+            this.game.physics.box2d.debugDraw.joints = true;
+            this.game.physics.box2d.debugDraw.aabbs = true;
+            this.game.physics.box2d.debugDraw.pairs = true;
+            this.game.physics.box2d.debugDraw.centerOfMass = true;
         }
 
         // setup states
@@ -60,7 +60,7 @@ class GameState extends Phaser.State {
     /**
      * Create.
      */
-    create() {
+    create(): void {
         this.createControls();
         this.createParallax();
         this.createBackground();
@@ -78,7 +78,7 @@ class GameState extends Phaser.State {
     /**
      * Render.
      */
-    render() {
+    render(): void {
         if (Settings.IS_DEBUG_ENABLED) {
             this.game.debug.box2dWorld();
             this.game.debug.cameraInfo(this.game.camera, 10, this.world.height - 82);
@@ -89,9 +89,9 @@ class GameState extends Phaser.State {
     /**
      * Update.
      */
-    update() {
-        var i = 0;
-        var plane;
+    update(): void {
+        var i: number = 0;
+        var plane: Plane;
 
         // check for all planes
         for (; i < this.planeList.length; i++) {
@@ -111,10 +111,12 @@ class GameState extends Phaser.State {
             // handle the timeout to prevent another immediate hack
             this.isHackKeyEnabled = false;
 
-            this.hackKeyTimeout = this.game.time.create(false);
-            this.hackKeyTimeout.add(100, function() {
+            var fn: Function = function(): void {
                 this.isHackKeyEnabled = true;
-            }, this);
+            };
+
+            this.hackKeyTimeout = this.game.time.create(false);
+            this.hackKeyTimeout.add(100, fn, this);
 
             this.hackKeyTimeout.start();
 
@@ -124,14 +126,10 @@ class GameState extends Phaser.State {
     }
 
 
-    // PRIVATE
-    // -------
-
-
     /**
      * Create controls.
      */
-    private createControls() {
+    private createControls(): void {
         // this is awkward, but IMO it's the easiest method when
         // we need to share the logic across all game modes
 
@@ -167,7 +165,7 @@ class GameState extends Phaser.State {
     /**
      * Create the parallax effect.
      */
-    private createParallax() {
+    private createParallax(): void {
         this.originalWidth = this.world.width;
         this.game.world.setBounds(0, 0, this.originalWidth * 2.2, this.world.height);
     }
@@ -176,7 +174,7 @@ class GameState extends Phaser.State {
     /**
      * Create the background.
      */
-    private createBackground() {
+    private createBackground(): void {
         this.background = this.add.sprite(0, 0, "forestBackground");
         this.background.name = "background";
         this.background.smoothed = true;
@@ -191,7 +189,7 @@ class GameState extends Phaser.State {
      * Create ground in back.
      * It needs to be called separately to allow proper z-sorting.
      */
-    private createGroundBack() {
+    private createGroundBack(): void {
         this.groundBack = new GroundBack(this.game);
     }
 
@@ -199,7 +197,7 @@ class GameState extends Phaser.State {
     /**
      * Create the plane.
      */
-    private createPlanes() {
+    private createPlanes(): void {
         var framePrefix: string;
         var tintColor: string;
         var plane: Plane;
@@ -257,7 +255,7 @@ class GameState extends Phaser.State {
     /**
      * Create sounds. For the science!
      */
-    private createSounds() {
+    private createSounds(): void {
         if (Settings.IS_MUSIC_ENABLED) {
             this.musicLoop = this.game.add.audio("music-parapet");
             this.musicLoop.play("", 0, 0.8, true);
@@ -268,7 +266,7 @@ class GameState extends Phaser.State {
     /**
      * Create trails.
      */
-    private createTrails() {
+    private createTrails(): void {
         if (Settings.IS_TRAILS_RENDERING_ENABLED) {
             this.trails = new Trails(this.game);
 
@@ -280,7 +278,7 @@ class GameState extends Phaser.State {
     /**
      * Create fire.
      */
-    private createFire() {
+    private createFire(): void {
         // create fire sprite
         this.fireGroup = new Phaser.Group(this.game, null, "fire", false, false);
 
@@ -313,7 +311,7 @@ class GameState extends Phaser.State {
      * Create ground in front.
      * It needs to be called separately to allow proper z-sorting.
      */
-    private createGroundFront() {
+    private createGroundFront(): void {
         this.groundFront = new GroundFront(this.game);
     }
 
@@ -321,7 +319,7 @@ class GameState extends Phaser.State {
     /**
      * Create signals.
      */
-    private createSignals() {
+    private createSignals(): void {
         Signals.onCrashBottom.add(this.onPlaneCrashed, this);
     }
 
@@ -329,9 +327,9 @@ class GameState extends Phaser.State {
     /**
      * Create GUI.
      */
-    private createGUI() {
-        var i = 0;
-        var plane;
+    private createGUI(): void {
+        var i: number = 0;
+        var plane: Plane;
 
         this.gui = new GUI(this.game);
 
@@ -349,9 +347,9 @@ class GameState extends Phaser.State {
      * Check bullet impacts.
      * @param e Bullet reference
      */
-    private checkBullets(e: Bullet) {
-        var i = 0;
-        var plane;
+    private checkBullets(e: Bullet): void {
+        var i: number = 0;
+        var plane: Plane;
 
         // check for all planes
         for (; i < this.planeList.length; i++) {
@@ -370,7 +368,7 @@ class GameState extends Phaser.State {
      * Control a plane, but only if it's not going to be restarted now.
      * @param plane Plane to control
      */
-    private controlPlane(plane: Plane) {
+    private controlPlane(plane: Plane): void {
         // this is awkward, but IMO it's the easiest method when
         // we need to share the logic across all game modes
         // keyList[idx * 4 + 0] = left
@@ -378,7 +376,7 @@ class GameState extends Phaser.State {
         // keyList[idx * 4 + 2] = thrust
         // keyList[idx * 4 + 3] = fire
 
-        if (plane.state == PlaneState.Flying) {
+        if (plane.state === PlaneState.Flying) {
             // turn sideways
             if (this.keyList[plane.idx * 4].isDown && !this.keyList[plane.idx * 4 + 1].isDown) plane.rotateLeft(1); // left && !right
             else if (!this.keyList[plane.idx * 4].isDown && this.keyList[plane.idx * 4 + 1].isDown) plane.rotateRight(1); // !left && right
@@ -405,9 +403,9 @@ class GameState extends Phaser.State {
      * Add a plane explosion.
      * @param x Plane X
      */
-    private addPlaneExplosion(x: number) {
+    private addPlaneExplosion(x: number): void {
         // add fire
-        var fire = new Phaser.Sprite(this.game, x, this.world.height, "game", "fire.png");
+        var fire: Phaser.Sprite = new Phaser.Sprite(this.game, x, this.world.height, "game", "fire.png");
         var tween: Phaser.Tween;
 
         fire.anchor.set(0.5, 1);
@@ -419,7 +417,7 @@ class GameState extends Phaser.State {
         tween = this.add.tween(fire);
 
         tween.to({ alpha: 0 }, 1500);
-        tween.onComplete.add(function() {
+        tween.onComplete.add(function(): void {
             fire.destroy();
         });
 
@@ -434,7 +432,7 @@ class GameState extends Phaser.State {
     /**
      * Handle parallax scrolling.
      */
-    private updateParallax() {
+    private updateParallax(): void {
         var r: number, rp1: number, rp2: number;
 
         // if main plane is flying, set the parallax ratio to it's distance in world, 0..1
@@ -458,7 +456,8 @@ class GameState extends Phaser.State {
                 break;
         }
 
-        if (Data.gameMode == GameMode.Local2Players) {
+        if (Data.gameMode === GameMode.Local2Players) {
+            // TODO: Implementation
         }
 
         // scroll now
@@ -479,7 +478,7 @@ class GameState extends Phaser.State {
      * Plane crash event handler.
      * @param e Plane reference
      */
-    private onPlaneCrashed(e: Plane) {
+    private onPlaneCrashed(e: Plane): void {
         this.addPlaneExplosion(e.body.x);
     }
 

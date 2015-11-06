@@ -35,7 +35,7 @@ class PreloadState extends Phaser.State {
     /**
      * Create.
      */
-    create() {
+    create(): void {
         // var tween = this.add.tween(this.preloadBar).to({alpha: 0}, 300, Phaser.Easing.Linear.None, true);
 
         // tween.onComplete.add(function() {
