@@ -78,26 +78,36 @@ gulp.task("sprites", function () {
 
     // Generate sprite sheet images and optimize them.
     spriteOutput.img
-        .pipe(imagemin({optimizationLevel: 0, use: [pngcrush()]}))
+        .pipe(imagemin({
+            optimizationLevel: 0,
+            use: [pngcrush()]
+        }))
         .pipe(gulp.dest(paths.distImages));
 
     // Minify main.css.
     spriteOutput.css
-        .pipe(rename({suffix: ".min"}))
+        .pipe(rename({
+            suffix: ".min"
+        }))
         .pipe(minifycss())
         .pipe(gulp.dest(paths.distCSS))
-        .pipe(browserSync.reload({stream: true}));
+        .pipe(browserSync.reload({
+            stream: true
+        }));
 });
 
 
 gulp.task("scripts-debug", function () {
     "use strict";
 
-    var patterns = [
-        {pattern: /%VERSION%/g, replacement: pkg.version + " (" + new Date().toGMTString() + ")"}
-    ];
+    var patterns = [{
+        pattern: /%VERSION%/g,
+        replacement: pkg.version + " (" + new Date().toGMTString() + ")"
+    }];
 
-    var tsResult = gulp.src(paths.srcTS, {base: "src/ts"})
+    var tsResult = gulp.src(paths.srcTS, {
+            base: "src/ts"
+        })
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
 
@@ -105,10 +115,15 @@ gulp.task("scripts-debug", function () {
         .pipe(filelog("concat-debug"))
         .pipe(concat("main.js"))
         .pipe(cleants())
-        .pipe(sourcemaps.write(".", {sourceRoot: srcRoot + "src/ts", includeContent: false}))
+        .pipe(sourcemaps.write(".", {
+            sourceRoot: srcRoot + "src/ts",
+            includeContent: false
+        }))
         .pipe(frep(patterns))
         .pipe(gulp.dest(paths.distJS))
-        .pipe(browserSync.reload({stream: true}));
+        .pipe(browserSync.reload({
+            stream: true
+        }));
 });
 
 
@@ -118,7 +133,9 @@ gulp.task("scripts-dist", ["scripts-debug"], function () {
     return gulp.src(paths.distJSList)
         .pipe(filelog("concat-dist"))
         .pipe(concat("main.js"))
-        .pipe(rename({suffix: ".min"}))
+        .pipe(rename({
+            suffix: ".min"
+        }))
         .pipe(uglify())
         .pipe(gulp.dest(paths.distJS));
 });
@@ -140,7 +157,11 @@ gulp.task("docs", function () {
 gulp.task("browser-sync", function () {
     "use strict";
 
-    browserSync({proxy: proxy, logConnections: true, open: false});
+    browserSync({
+        proxy: proxy,
+        logConnections: true,
+        open: false
+    });
 });
 
 
@@ -166,7 +187,10 @@ gulp.task("clean", function () {
 gulp.task("tsd", function (callback) {
     "use strict";
 
-    tsd({command: "reinstall", config: "./tsd.json"}, callback);
+    tsd({
+        command: "reinstall",
+        config: "./tsd.json"
+    }, callback);
 });
 
 
