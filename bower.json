@@ -15,8 +15,5 @@
         "colors": "^2.2.0",
         "normalize-opentype.css": "^0.2.1",
         "phaser": "~2.4.4"
-    },
-    "resolutions": {
-        "phaser": "~2.3.0"
     }
 }
