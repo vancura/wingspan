@@ -1,0 +1,22 @@
+{
+    "version": "0.1.0",
+    "ignoreWordsList": [
+        "schleifer",
+        "vancura",
+        "alexoid"
+    ],
+    "mistakeTypeToStatus": {
+        "Passive voice": "Error",
+        "Spelling": "Error",
+        "Complex Expression": "Warning",
+        "Hidden Verbs": "Information",
+        "Hyphen Required": "Error",
+        "Redundant Expression": "Information",
+        "Did you mean...": "Information",
+        "Repeated Word": "Error",
+        "Missing apostrophe": "Error",
+        "Cliches": "Warning",
+        "Missing Word": "Warning",
+        "Make I uppercase": "Error"
+    }
+}
