@@ -61,7 +61,7 @@ class Plane extends Phaser.Sprite {
         this.crashSlideObj = new Phaser.Point();
 
         // color caching
-        this._tintHex = parseInt(`0x${tintColor.substr(1)}`, 10);
+        this._tintHex = parseInt(`0x${tintColor.substr(1) }`, 10);
         this._tintColor = Phaser.Color.hexToColor(tintColor);
         this._tintStyle = `rgba(${this._tintColor.r}, ${this._tintColor.g}, ${this._tintColor.b}, 1)`;
 
@@ -134,7 +134,7 @@ class Plane extends Phaser.Sprite {
         this.body.rotateLeft(rot);
 
         // switch the plane frame based on the rotation
-        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7)))}.png`;
+        this.frameName = this.framePrefix + `/p${(10 - Math.round(Math.abs(rot / 7))) }.png`;
 
         // store the degree and vel
         this._degree = rot;

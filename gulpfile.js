@@ -109,8 +109,8 @@ gulp.task("scripts-debug", function () {
     }];
 
     var tsResult = gulp.src(paths.srcTS, {
-            base: "src/ts"
-        })
+        base: "src/ts"
+    })
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
 
