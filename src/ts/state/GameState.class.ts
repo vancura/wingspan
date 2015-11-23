@@ -131,6 +131,7 @@ class GameState extends Phaser.State {
 
         switch (Settings.GAME_MODE) {
             case GameMode.ScenicSingle:
+            case GameMode.TestFlyBy:
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
@@ -208,11 +209,29 @@ class GameState extends Phaser.State {
                 // local two players mode has two planes
                 count = 2;
                 break;
+
+            case GameMode.TestFlyBy:
+                // test fly by has six ai-controlled planes
+                // three left and three right from center of the screen
+                count = 6 + 1;
+                break;
         }
 
         for (a = 0; a < count; a++) {
-            framePrefix = `plane${a + 1}`;
-            tintColor = Settings.PLANE_TINT_COLOR_LIST[a];
+            var isHuman: boolean;
+
+            switch (Settings.GAME_MODE) {
+                case GameMode.ScenicSingle:
+                case GameMode.Local2Players:
+                    framePrefix = `plane${a + 1}`;
+                    tintColor = Settings.PLANE_TINT_COLOR_LIST[a];
+                    break;
+
+                case GameMode.TestFlyBy:
+                    framePrefix = (a === 0) ? "plane1" : "plane2";
+                    tintColor = Settings.PLANE_TINT_COLOR_LIST[(a === 0) ? 0 : 1];
+                    break;
+            }
 
             switch (Settings.GAME_MODE) {
                 case GameMode.ScenicSingle:
@@ -226,9 +245,26 @@ class GameState extends Phaser.State {
                     // with a small distance between them
                     sr = 0.5 + (a === 0 ? -0.1 : 0.1);
                     break;
+
+                case GameMode.TestFlyBy:
+                    // first player starts in the center (same as GameMode.ScenicSingle),
+                    // the rest of planes start at positions around center of the screen
+                    if (a === 0) {
+                        sr = 0.5;
+                    }
+                    else {
+                        if (a <= 3)
+                            sr = 0.5 - a * 0.1;
+                        else
+                            sr = 0.5 + (a - 3) * 0.1;
+
+                        isHuman = false; // this plane is not a human
+                    }
+
+                    break;
             }
 
-            plane = new Plane(this.game, sr, framePrefix, tintColor, a);
+            plane = new Plane(this.game, sr, framePrefix, tintColor, a, isHuman);
 
             // add to stage
             this.add.existing(plane);
@@ -363,20 +399,36 @@ class GameState extends Phaser.State {
         // keyList[idx * 4 + 2] = thrust
         // keyList[idx * 4 + 3] = fire
 
+        if (plane.isHuman) {
+            // human-controlled plane
+            if (plane.state === PlaneState.Flying) {
+                // turn sideways
+                if (this.keyList[plane.idx * 4].isDown && !this.keyList[plane.idx * 4 + 1].isDown) plane.rotateLeft(1); // left && !right
+                else if (!this.keyList[plane.idx * 4].isDown && this.keyList[plane.idx * 4 + 1].isDown) plane.rotateRight(1); // !left && right
+                else plane.leaveRotation();
+
+                // thrust or backpedal
+                // after a while revert to original power
+                if (this.keyList[plane.idx * 4 + 2].isDown) plane.thrustUp();
+                else plane.thrustDown();
+
+                // firing
+                if (Settings.IS_PLANE_WEAPON_ENABLED && this.keyList[plane.idx * 4 + 3].isDown) plane.weapon.fire(plane);
+            }
+        }
+        else {
+            // ai-controlled plane
+            // sort-of ai :)
+            switch (Settings.GAME_MODE) {
+                case GameMode.TestFlyBy:
+                    plane.thrustUp();
+                    plane.rotateLeft(0.1 * (plane.idx - 3));
+                    break;
+            }
+        }
+
         if (plane.state === PlaneState.Flying) {
-            // turn sideways
-            if (this.keyList[plane.idx * 4].isDown && !this.keyList[plane.idx * 4 + 1].isDown) plane.rotateLeft(1); // left && !right
-            else if (!this.keyList[plane.idx * 4].isDown && this.keyList[plane.idx * 4 + 1].isDown) plane.rotateRight(1); // !left && right
-            else plane.leaveRotation();
-
-            // thrust or backpedal
-            // after a while revert to original power
-            if (this.keyList[plane.idx * 4 + 2].isDown) plane.thrustUp();
-            else plane.thrustDown();
-
-            // firing
-            if (Settings.IS_PLANE_WEAPON_ENABLED && this.keyList[plane.idx * 4 + 3].isDown) plane.weapon.fire(plane);
-
+            // do the things all planes do
             // update trails
             this.trails.draw(plane);
 
@@ -428,7 +480,10 @@ class GameState extends Phaser.State {
 
         switch (Settings.GAME_MODE) {
             case GameMode.ScenicSingle:
+            case GameMode.TestFlyBy:
                 // in single scenic mode we have only one plane
+                // same as testing modes, where we have only one user-controlled plane,
+                // and the other plane is controlled by computer (so no need to tune parallax)
                 r = rp1;
                 break;
 
@@ -437,10 +492,6 @@ class GameState extends Phaser.State {
                 rp2 = this.planeList[1].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[1].body.x) : this.planeList[1].crashSlidePos;
                 r = (rp1 + rp2) / 2;
                 break;
-        }
-
-        if (Settings.GAME_MODE === GameMode.Local2Players) {
-            // TODO: Implementation
         }
 
         // scroll now

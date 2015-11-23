@@ -1,4 +1,5 @@
 ///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
+///<reference path="Enums.class.ts" />
 
 
 class Settings {
@@ -15,7 +16,7 @@ class Settings {
     static MAX_TRAIL_DISTANCE: number = 15;
 
     // game mode to run
-    static GAME_MODE: GameMode = GameMode.ScenicSingle;
+    static GAME_MODE: GameMode = GameMode.TestFlyBy;
 
     // delay between dying and restarting (also speed of the camera slide after dying)
     static GAME_RESTART_TIMEOUT: number = 2000;

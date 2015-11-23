@@ -37,6 +37,7 @@ class Plane extends Phaser.Sprite {
     private _state: PlaneState;
     private _shotState: PlaneShotState;
     private _direction: PlaneDirection;
+    private _isHuman: boolean;
 
 
     /**
@@ -46,14 +47,16 @@ class Plane extends Phaser.Sprite {
      * @param framePrefix Sprite prefix
      * @param tintColor Tint color
      * @param idx Plane index
+     * @param isHuman true if plane is human-controled (true by default)
      * @constructor
      */
-    constructor(game: Phaser.Game, sr: number, framePrefix: string, tintColor: string, idx: number) {
+    constructor(game: Phaser.Game, sr: number, framePrefix: string, tintColor: string, idx: number, isHuman: boolean = true) {
         super(game, game.world.width * sr, Settings.WORLD_OVERFLOW, "game", `${framePrefix}/p1.png`);
 
         this.startRatio = sr;
         this.framePrefix = framePrefix;
         this.name = "plane";
+        this._isHuman = isHuman;
         this._idx = idx;
         this._state = PlaneState.Flying;
         this._shotState = PlaneShotState.Rocking;
@@ -452,6 +455,15 @@ class Plane extends Phaser.Sprite {
      */
     public get screenRatio(): number {
         return 1 / (this.game.canvas.width / (this.body.x - this.game.camera.x));
+    }
+
+
+    /**
+     * Returns true if plane is human-controlled.
+     * @returns boolean Human-controlled plane if true
+     */
+    public get isHuman(): boolean {
+        return this._isHuman;
     }
 
 

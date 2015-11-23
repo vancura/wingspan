@@ -7,6 +7,7 @@
 const enum GameMode {
     ScenicSingle,
     Local2Players,
+    TestFlyBy
 }
 
 
