@@ -8,8 +8,8 @@ class Settings {
     static IS_DEBUG_ENABLED: boolean = false;
     static IS_TRAILS_RENDERING_ENABLED: boolean = true;
     static IS_PLANE_WEAPON_ENABLED: boolean = true;
-    static IS_SOUND_ENABLED: boolean = true;
-    static IS_MUSIC_ENABLED: boolean = true;
+    static IS_SOUND_ENABLED: boolean = false;
+    static IS_MUSIC_ENABLED: boolean = false;
 
     static WORLD_GRAVITY: number = 75;
     static WORLD_OVERFLOW: number = -30;
