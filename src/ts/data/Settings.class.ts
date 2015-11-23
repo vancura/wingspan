@@ -14,6 +14,9 @@ class Settings {
     static WORLD_OVERFLOW: number = -30;
     static MAX_TRAIL_DISTANCE: number = 15;
 
+    // game mode to run
+    static GAME_MODE: GameMode = GameMode.ScenicSingle;
+
     // delay between dying and restarting (also speed of the camera slide after dying)
     static GAME_RESTART_TIMEOUT: number = 2000;
 

@@ -1,5 +1,4 @@
 ///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-///<reference path="../data/Data.class.ts"/>
 ///<reference path="../state/GameState.class.ts"/>
 ///<reference path="PlaneLabel.class.ts"/>
 ///<reference path="PlaneOffscreenMarker.class.ts"/>

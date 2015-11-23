@@ -1,5 +1,4 @@
 ///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-///<reference path="../data/Data.class.ts"/>
 ///<reference path="../data/Enums.class.ts"/>
 ///<reference path="../data/Settings.class.ts" />
 ///<reference path="../objects/Bullet.class.ts" />
@@ -51,9 +50,6 @@ class GameState extends Phaser.State {
             this.game.physics.box2d.debugDraw.pairs = true;
             this.game.physics.box2d.debugDraw.centerOfMass = true;
         }
-
-        // setup states
-        Data.gameMode = GameMode.Local2Players;
     }
 
 
@@ -133,7 +129,7 @@ class GameState extends Phaser.State {
         // this is awkward, but IMO it's the easiest method when
         // we need to share the logic across all game modes
 
-        switch (Data.gameMode) {
+        switch (Settings.GAME_MODE) {
             case GameMode.ScenicSingle:
             case GameMode.RemoteXPlayers:
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
@@ -203,7 +199,7 @@ class GameState extends Phaser.State {
         var plane: Plane;
         var a: number, count: number, sr: number;
 
-        switch (Data.gameMode) {
+        switch (Settings.GAME_MODE) {
             case GameMode.ScenicSingle:
                 // single player scenic mode has only one plane
                 count = 1;
@@ -223,7 +219,7 @@ class GameState extends Phaser.State {
             framePrefix = `plane${a + 1}`;
             tintColor = Settings.PLANE_TINT_COLOR_LIST[a];
 
-            switch (Data.gameMode) {
+            switch (Settings.GAME_MODE) {
                 case GameMode.ScenicSingle:
                     // one plane starting in the middle of the screen
                     sr = 0.5;
@@ -439,7 +435,7 @@ class GameState extends Phaser.State {
         // otherwise use the crash slide value (plane crashed)
         rp1 = this.planeList[0].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[0].body.x) : this.planeList[0].crashSlidePos;
 
-        switch (Data.gameMode) {
+        switch (Settings.GAME_MODE) {
             case GameMode.ScenicSingle:
                 // in single scenic mode we have only one plane
                 r = rp1;
@@ -456,7 +452,7 @@ class GameState extends Phaser.State {
                 break;
         }
 
-        if (Data.gameMode === GameMode.Local2Players) {
+        if (Settings.GAME_MODE === GameMode.Local2Players) {
             // TODO: Implementation
         }
 
