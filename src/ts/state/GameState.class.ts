@@ -131,7 +131,6 @@ class GameState extends Phaser.State {
 
         switch (Settings.GAME_MODE) {
             case GameMode.ScenicSingle:
-            case GameMode.RemoteXPlayers:
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.LEFT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.RIGHT));
                 this.keyList.push(this.input.keyboard.addKey(Phaser.Keyboard.UP));
@@ -209,10 +208,6 @@ class GameState extends Phaser.State {
                 // local two players mode has two planes
                 count = 2;
                 break;
-
-            case GameMode.RemoteXPlayers:
-                // FIXME: Implementation
-                break;
         }
 
         for (a = 0; a < count; a++) {
@@ -230,10 +225,6 @@ class GameState extends Phaser.State {
                     // in the middle of the screen,
                     // with a small distance between them
                     sr = 0.5 + (a === 0 ? -0.1 : 0.1);
-                    break;
-
-                case GameMode.RemoteXPlayers:
-                    // FIXME: Implementation
                     break;
             }
 
@@ -445,10 +436,6 @@ class GameState extends Phaser.State {
                 // in local two players mode we need to calculate both positions and find the middle
                 rp2 = this.planeList[1].state === PlaneState.Flying ? 1 / (this.world.width / this.planeList[1].body.x) : this.planeList[1].crashSlidePos;
                 r = (rp1 + rp2) / 2;
-                break;
-
-            case GameMode.RemoteXPlayers:
-                // FIXME: Implementation
                 break;
         }
 

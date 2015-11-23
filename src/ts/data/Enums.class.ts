@@ -7,7 +7,6 @@
 const enum GameMode {
     ScenicSingle,
     Local2Players,
-    RemoteXPlayers
 }
 
 
