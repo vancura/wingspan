@@ -1,6 +1,6 @@
 var autoprefixer = require("gulp-autoprefixer");
 var browserSync = require("browser-sync");
-var cleants = require("gulp-clean-ts-extends");
+// var cleants = require("gulp-clean-ts-extends"); // TODO: Fix currently broken sourcemaps after cleants
 var concat = require("gulp-concat");
 var del = require("del");
 var filelog = require("gulp-filelog");
@@ -23,7 +23,7 @@ var typedoc = require("gulp-typedoc");
 
 
 var proxy = "http://wingspan.192.168.1.111.xip.io";
-var srcRoot = "../../";
+var srcRoot = "file:///Users/Vancura/Repos/Projects/Wingspan/wingspan/src/ts/";
 
 var paths = {
     src: "src",
@@ -35,8 +35,7 @@ var paths = {
     distImages: "dist/images",
     distJS: "dist/js",
     distJSList: [
-        "components/phaser/build/custom/phaser-no-physics.js",
-        "src/js-vendor/box2d-plugin-full-scrambled.js",
+        // TODO: Phaser & Physics inside?
         "dist/js/main.js"
     ]
 };
@@ -117,9 +116,9 @@ gulp.task("scripts-debug", function () {
     return tsResult.js
         .pipe(filelog("concat-debug"))
         .pipe(concat("main.js"))
-        .pipe(cleants())
+        // .pipe(cleants())
         .pipe(sourcemaps.write(".", {
-            sourceRoot: srcRoot + "src/ts",
+            sourceRoot: srcRoot,
             includeContent: false
         }))
         .pipe(frep(patterns))
