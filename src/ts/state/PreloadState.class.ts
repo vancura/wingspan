@@ -1,6 +1,3 @@
-///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-
-
 class PreloadState extends Phaser.State {
 
 
@@ -10,7 +7,7 @@ class PreloadState extends Phaser.State {
     /**
      * Preload.
      */
-    preload() {
+    preload(): void {
         // CodePen
         // this.load.baseURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/1397/";
         // this.load.crossOrigin = "anonymous";

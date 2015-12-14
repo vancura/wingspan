@@ -2,13 +2,13 @@
     "version": "0.1.0",
     "configurations": [
         {
-            "name": "Launch Wingspan",
+            "name": "Launch as file",
             "type": "chrome",
             "request": "launch",
             "file": "index.html"
         },
         {
-            "name": "Launch Wingspan with sourcemaps",
+            "name": "Launch with sourcemaps",
             "type": "chrome",
             "request": "launch",
             "url": "http://wingspan.192.168.1.111.xip.io/",
@@ -17,7 +17,7 @@
             "runtimeExecutable": "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
         },
         {
-            "name": "Attach to Wingspan",
+            "name": "Attach to Chrome",
             "type": "chrome",
             "request": "attach",
             "port": 9223,

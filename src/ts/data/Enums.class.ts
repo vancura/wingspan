@@ -1,6 +1,3 @@
-///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-
-
 /**
  * Game mode.
  */

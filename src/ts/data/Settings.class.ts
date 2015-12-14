@@ -1,7 +1,3 @@
-///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-///<reference path="Enums.class.ts" />
-
-
 class Settings {
 
 
@@ -46,7 +42,7 @@ class Settings {
         "#ffff00",
         "#00d8ff",
         "#96ff00",
-        "#b958fd"
+        "#b958fd",
     ];
 
 

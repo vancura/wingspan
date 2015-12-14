@@ -20,6 +20,7 @@
     "scripturl": true,
     "white": false,
     "indent": 4,
+    "quotmark": "double",
     "globals": {
         "require": false
     }

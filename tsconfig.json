@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": false,
+        "sourceMap": true,
+        "noLib": false,
+        "noResolve": true,
+        "outFile": "dist/js/main.js"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "components/phaser/typescript/pixi.comments.d.ts",
+        "components/phaser/typescript/p2.d.ts",
+        "components/phaser/typescript/phaser.comments.d.ts",
+
+        "src/ts/data/Enums.class.ts",
+        "src/ts/data/Settings.class.ts",
+        "src/ts/data/Signals.class.ts",
+
+        "src/ts/objects/Bullet.class.ts",
+        "src/ts/objects/GroundBack.class.ts",
+        "src/ts/objects/GroundFront.class.ts",
+        "src/ts/objects/GUI.class.ts",
+        "src/ts/objects/Plane.class.ts",
+        "src/ts/objects/PlaneLabel.class.ts",
+        "src/ts/objects/PlaneOffscreenMarker.class.ts",
+        "src/ts/objects/Trails.class.ts",
+        "src/ts/objects/Weapon.class.ts",
+
+        "src/ts/state/BootState.class.ts",
+        "src/ts/state/GameState.class.ts",
+        "src/ts/state/PreloadState.class.ts",
+
+        "src/ts/App.class.ts",
+        "src/ts/main.ts"
+    ]
+}

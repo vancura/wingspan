@@ -1,7 +1,3 @@
-///<reference path="../../../components/phaser/typescript/phaser.comments.d.ts" />
-///<reference path="Bullet.class.ts" />
-
-
 /**
  * Weapon.
  */

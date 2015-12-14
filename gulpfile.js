@@ -1,25 +1,21 @@
 var autoprefixer = require("gulp-autoprefixer");
 var browserSync = require("browser-sync");
-// var cleants = require("gulp-clean-ts-extends"); // TODO: Fix currently broken sourcemaps after cleants
 var concat = require("gulp-concat");
 var del = require("del");
 var filelog = require("gulp-filelog");
-var frep = require('gulp-frep');
+var frep = require("gulp-frep");
 var gulp = require("gulp");
-var imagemin = require("gulp-imagemin");
 var minifycss = require("gulp-minify-css");
-var pkg = require('./package.json');
-var pngcrush = require("imagemin-pngcrush");
+var pkg = require("./package.json");
 var rename = require("gulp-rename");
 var runSequence = require("run-sequence");
 var sass = require("gulp-sass");
 var sourcemaps = require("gulp-sourcemaps");
-var sprite = require("gulp-sprite-generator");
 var ts = require("gulp-typescript");
+var tsLint = require("gulp-tslint");
 var uglify = require("gulp-uglify");
 var vinylPaths = require("vinyl-paths");
 var tsd = require("gulp-tsd");
-var typedoc = require("gulp-typedoc");
 
 
 var proxy = "http://wingspan.192.168.1.111.xip.io";
@@ -35,18 +31,14 @@ var paths = {
     distImages: "dist/images",
     distJS: "dist/js",
     distJSList: [
-        // TODO: Phaser & Physics inside?
+        "components/phaser/build/custom/phaser-no-physics.js",
+        "src/js-vendor/box2d-plugin-full-scrambled.js",
+        "src/js-vendor/particle-storm-scrambled.js",
         "dist/js/main.js"
     ]
 };
 
-var tsProject = ts.createProject({
-    target: "ES5",
-    removeComments: false,
-    sortOutput: true,
-    sourceRoot: "../../../src/ts",
-    module: "commonjs"
-});
+var tsProject = ts.createProject("tsconfig.json", { typescript: require("typescript") });
 
 
 gulp.task("styles", function () {
@@ -59,35 +51,6 @@ gulp.task("styles", function () {
             outputStyle: "expanded"
         }))
         .pipe(autoprefixer("last 2 versions", "safari 6", "ie 10", "opera 12.1", "ios 6", "android 4", "blackberry 10"))
-        .pipe(gulp.dest(paths.distCSS));
-});
-
-
-gulp.task("sprites", function () {
-    "use strict";
-
-    var spriteOutput;
-
-    // Generate sprite sheets.
-    spriteOutput = gulp.src(paths.distCSS + "/main.css")
-        .pipe(sprite({
-            spriteSheetName: "sprite-sheet.png",
-            spriteSheetPath: "../images",
-            algorithm: "binary-tree",
-            baseUrl: "../../",
-            padding: 0
-        }));
-
-    // Generate sprite sheet images and optimize them.
-    spriteOutput.img
-        .pipe(imagemin({
-            optimizationLevel: 0,
-            use: [pngcrush()]
-        }))
-        .pipe(gulp.dest(paths.distImages));
-
-    // Minify main.css.
-    spriteOutput.css
         .pipe(rename({
             suffix: ".min"
         }))
@@ -99,6 +62,15 @@ gulp.task("sprites", function () {
 });
 
 
+gulp.task("tslint", function () {
+    "use strict";
+
+    return gulp.src(paths.srcTS)
+        .pipe(tsLint({}))
+        .pipe(tsLint.report("verbose"));
+});
+
+
 gulp.task("scripts-debug", function () {
     "use strict";
 
@@ -107,22 +79,17 @@ gulp.task("scripts-debug", function () {
         replacement: pkg.version + " (" + new Date().toGMTString() + ")"
     }];
 
-    var tsResult = gulp.src(paths.srcTS, {
-        base: "src/ts"
-    })
+    var tsResult = tsProject.src()
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
 
     return tsResult.js
-        .pipe(filelog("concat-debug"))
-        .pipe(concat("main.js"))
-        // .pipe(cleants())
         .pipe(sourcemaps.write(".", {
             sourceRoot: srcRoot,
             includeContent: false
         }))
         .pipe(frep(patterns))
-        .pipe(gulp.dest(paths.distJS))
+        .pipe(gulp.dest("."))
         .pipe(browserSync.reload({
             stream: true
         }));
@@ -143,19 +110,6 @@ gulp.task("scripts-dist", ["scripts-debug"], function () {
 });
 
 
-gulp.task("docs", function () {
-    "use strict";
-
-    return gulp.src(paths.srcTS)
-        .pipe(typedoc({
-            module: "commonjs",
-            out: "./docs",
-            name: "px",
-            target: "es5"
-        }));
-});
-
-
 gulp.task("browser-sync", function () {
     "use strict";
 
@@ -170,10 +124,9 @@ gulp.task("browser-sync", function () {
 gulp.task("watch", function () {
     "use strict";
 
-    runSequence("clean", ["styles", "scripts-debug"], "sprites", "browser-sync");
+    runSequence("clean", ["styles", "scripts-debug"], "browser-sync");
 
     gulp.watch(paths.srcSCSS, ["styles"]);
-    gulp.watch(paths.distCSS + "/main.css", ["sprites"]);
     gulp.watch(paths.srcTS, ["scripts-debug"]);
 });
 
@@ -199,5 +152,5 @@ gulp.task("tsd", function (callback) {
 gulp.task("default", function (callback) {
     "use strict";
 
-    runSequence("clean", ["styles", "scripts-dist"], "sprites", callback);
+    runSequence("clean", "tslint", ["styles", "scripts-dist"], callback);
 });
